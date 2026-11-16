@@ -53,6 +53,7 @@ data class ReviewUiState(
     val feedbackMessage: String? = null,
     val isFeedbackError: Boolean = false,
     val shakeTrigger: Int = 0,
+    val successOverlayText: String? = null,
 
     // Kết quả phiên ôn tập
     val firstAttemptCorrectCount: Int = 0,
@@ -450,7 +451,17 @@ class ReviewViewModel(
         if (result.passed) {
             val passedFirstTry = !hadErrorOnCurrentItem
             updateSrsForChar(target, result.score, passedFirstTry)
-            advanceToNextQuestion(result.score, passedFirstTry)
+            audioProvider.speak(target.char, target.romaji)
+            viewModelScope.launch {
+                _uiState.update {
+                    it.copy(
+                        successOverlayText = "${target.char} (${target.romaji}) • ${result.score} điểm"
+                    )
+                }
+                delay(650L)
+                _uiState.update { it.copy(successOverlayText = null) }
+                advanceToNextQuestion(result.score, passedFirstTry)
+            }
             return true
         } else {
             hadErrorOnCurrentItem = true
@@ -514,8 +525,18 @@ class ReviewViewModel(
                 }
             }
             updateSrsForWord(word, avgWordScore, passedFirstTry)
+            audioProvider.speak(word.word, word.romaji)
 
-            advanceToNextQuestion(avgWordScore, passedFirstTry)
+            viewModelScope.launch {
+                _uiState.update {
+                    it.copy(
+                        successOverlayText = "${word.word} (${word.meaningVi}) • $avgWordScore điểm"
+                    )
+                }
+                delay(650L)
+                _uiState.update { it.copy(successOverlayText = null) }
+                advanceToNextQuestion(avgWordScore, passedFirstTry)
+            }
             return true
         } else {
             hadErrorOnCurrentItem = true

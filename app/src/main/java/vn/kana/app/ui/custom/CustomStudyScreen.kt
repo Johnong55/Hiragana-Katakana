@@ -605,6 +605,7 @@ private fun CustomWordWritingPracticeView(
     var feedbackText by remember(word.id, word.word) { mutableStateOf<String?>(null) }
     var isFeedbackError by remember(word.id, word.word) { mutableStateOf(false) }
     var shakeTrigger by remember { mutableIntStateOf(0) }
+    var successOverlayText by remember(word.id, word.word) { mutableStateOf<String?>(null) }
 
     Column(
         modifier = modifier
@@ -750,6 +751,7 @@ private fun CustomWordWritingPracticeView(
                 templateStrokes = activeSlot?.templateStrokes.orEmpty(),
                 showGhostTemplate = false,
                 shakeTrigger = shakeTrigger,
+                successOverlayText = successOverlayText,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -800,8 +802,14 @@ private fun CustomWordWritingPracticeView(
                     val failed = evaluated.firstOrNull { it.evaluation?.passed != true }
                     if (failed == null) {
                         isFeedbackError = false
-                        feedbackText = "Chính xác! Từ '${word.word}' (${word.meaningVi}) đã viết đúng."
+                        feedbackText = "✓ Chính xác! Bạn đã viết đúng từ '${word.word}' (${word.meaningVi})."
+                        localView.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                         onSpeakWord()
+                        scope.launch {
+                            successOverlayText = "${word.word} (${word.meaningVi})"
+                            delay(750L)
+                            successOverlayText = null
+                        }
                     } else {
                         isFeedbackError = true
                         activeSlotIndex = failed.index

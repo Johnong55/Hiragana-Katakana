@@ -271,6 +271,8 @@ fun ReviewScreen(
                     showTemplateComparison = false,
                     nextHintStrokeIndex = null,
                     shakeTrigger = uiState.shakeTrigger,
+                    successOverlayText = uiState.successOverlayText,
+                    enabled = uiState.successOverlayText == null,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -305,10 +307,14 @@ fun ReviewScreen(
                     text = "Kiểm tra",
                     filled = true,
                     onClick = {
-                        val passed = viewModel.checkCurrentSubmission()
-                        if (!passed) {
-                            localView.performHapticFeedback(HapticFeedbackConstants.REJECT)
-                            vibrateReviewError(context)
+                        if (uiState.successOverlayText == null) {
+                            val passed = viewModel.checkCurrentSubmission()
+                            if (passed) {
+                                localView.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                            } else {
+                                localView.performHapticFeedback(HapticFeedbackConstants.REJECT)
+                                vibrateReviewError(context)
+                            }
                         }
                     },
                     modifier = Modifier.weight(1f)

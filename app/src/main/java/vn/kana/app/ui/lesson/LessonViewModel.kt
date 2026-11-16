@@ -63,6 +63,7 @@ data class LessonUiState(
     val feedbackMessage: String? = null,
     val isFeedbackError: Boolean = false,
     val shakeTrigger: Int = 0,
+    val successOverlayText: String? = null,
 
     // Kiểm tra nhanh 1 chữ đã biết (viết đúng 1 lần là pass chữ đó và qua chữ mới ngay!)
     val isCharQuickCheckMode: Boolean = false,
@@ -540,52 +541,76 @@ class LessonViewModel(
         }
     }
 
+    private fun showSuccessThenAdvance(
+        overlayText: String,
+        onAfterDelay: () -> Unit
+    ) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    successOverlayText = overlayText,
+                    feedbackMessage = "✓ Chính xác! $overlayText",
+                    isFeedbackError = false
+                )
+            }
+            delay(650L)
+            _uiState.update { it.copy(successOverlayText = null) }
+            onAfterDelay()
+        }
+    }
+
     private fun handleSingleCharacterResult(
         target: KanaStrokeTemplate,
         result: RecognitionResult
     ): Boolean {
         val state = _uiState.value
         if (result.passed) {
+            val successLabel = "${target.char} (${target.romaji}) • ${result.score} điểm"
             when (state.stepType) {
                 LessonStepType.STEP_2_TRACE -> {
-                    _uiState.update {
-                        it.copy(
-                            stepType = LessonStepType.STEP_3_GUIDED,
-                            singleCharStrokes = emptyList(),
-                            lastSingleEvaluation = null,
-                            showingCorrectionAnimation = false,
-                            mustRewriteAfterError = false,
-                            feedbackMessage = "Đồ nét tốt (${result.score}đ)! Sang Bước 3: Viết có gợi ý.",
-                            isFeedbackError = false
-                        )
+                    showSuccessThenAdvance(successLabel) {
+                        _uiState.update {
+                            it.copy(
+                                stepType = LessonStepType.STEP_3_GUIDED,
+                                singleCharStrokes = emptyList(),
+                                lastSingleEvaluation = null,
+                                showingCorrectionAnimation = false,
+                                mustRewriteAfterError = false,
+                                feedbackMessage = "Sang Bước 3: Viết có gợi ý điểm đặt bút.",
+                                isFeedbackError = false
+                            )
+                        }
                     }
                 }
 
                 LessonStepType.STEP_3_GUIDED -> {
-                    _uiState.update {
-                        it.copy(
-                            stepType = LessonStepType.STEP_4_RECALL,
-                            singleCharStrokes = emptyList(),
-                            lastSingleEvaluation = null,
-                            showingCorrectionAnimation = false,
-                            mustRewriteAfterError = false,
-                            feedbackMessage = "Tốt lắm (${result.score}đ)! Sang Bước 4: Tự viết từ trí nhớ.",
-                            isFeedbackError = false
-                        )
+                    showSuccessThenAdvance(successLabel) {
+                        _uiState.update {
+                            it.copy(
+                                stepType = LessonStepType.STEP_4_RECALL,
+                                singleCharStrokes = emptyList(),
+                                lastSingleEvaluation = null,
+                                showingCorrectionAnimation = false,
+                                mustRewriteAfterError = false,
+                                feedbackMessage = "Sang Bước 4: Tự viết lại từ trí nhớ.",
+                                isFeedbackError = false
+                            )
+                        }
+                        speakIfEnabled(target.char, target.romaji)
                     }
-                    speakIfEnabled(target.char, target.romaji)
                 }
 
                 LessonStepType.STEP_4_RECALL -> {
-                    // Đánh dấu chữ này ĐÃ HỌC XONG và lưu ngay vào DB!
                     learnedCharsSet.add(target.char)
                     markCharacterLearnedInDb(target, result.score)
+                    speakIfEnabled(target.char, target.romaji)
 
-                    if (state.isCharQuickCheckMode) {
-                        // Trong chế độ Kiểm tra nhanh chữ đã biết: viết đúng 1 lần là QUA NGAY chữ mới tiếp theo!
-                        advanceToNextCharacterOrQuiz()
-                    } else {
-                        startStep5VocabForCurrentCharacter(wordIdx = 0)
+                    showSuccessThenAdvance(successLabel) {
+                        if (state.isCharQuickCheckMode) {
+                            advanceToNextCharacterOrQuiz()
+                        } else {
+                            startStep5VocabForCurrentCharacter(wordIdx = 0)
+                        }
                     }
                 }
 
@@ -674,11 +699,16 @@ class LessonViewModel(
         }
 
         if (firstFailedSlot == null) {
-            val nextWordIdx = state.currentWordIndex + 1
-            if (nextWordIdx < state.currentCharWords.size) {
-                startStep5VocabForCurrentCharacter(nextWordIdx)
-            } else {
-                advanceToNextCharacterOrQuiz()
+            val word = state.currentVocabWord
+            val label = if (word != null) "${word.word} (${word.meaningVi})" else "Hoàn thành từ"
+            word?.let { speakIfEnabled(it.word, it.romaji) }
+            showSuccessThenAdvance(label) {
+                val nextWordIdx = state.currentWordIndex + 1
+                if (nextWordIdx < state.currentCharWords.size) {
+                    startStep5VocabForCurrentCharacter(nextWordIdx)
+                } else {
+                    advanceToNextCharacterOrQuiz()
+                }
             }
             return true
         } else {
@@ -853,7 +883,10 @@ class LessonViewModel(
     ): Boolean {
         if (result.passed) {
             markCharacterLearnedInDb(target, result.score)
-            advanceToNextQuizQuestion()
+            speakIfEnabled(target.char, target.romaji)
+            showSuccessThenAdvance("${target.char} (${target.romaji}) • ${result.score} điểm") {
+                advanceToNextQuizQuestion()
+            }
             return true
         } else {
             hadErrorOnCurrentQuizItem = true
@@ -893,7 +926,11 @@ class LessonViewModel(
         }
 
         if (firstFailedSlot == null) {
-            advanceToNextQuizQuestion()
+            val w = state.currentQuizQuestion?.targetWord
+            w?.let { speakIfEnabled(it.word, it.romaji) }
+            showSuccessThenAdvance(w?.let { "${it.word} (${it.meaningVi})" } ?: "Đúng") {
+                advanceToNextQuizQuestion()
+            }
             return true
         } else {
             hadErrorOnCurrentQuizItem = true

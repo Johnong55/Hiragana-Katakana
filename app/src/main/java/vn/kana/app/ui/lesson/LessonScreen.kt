@@ -259,6 +259,8 @@ fun LessonScreen(
                     showTemplateComparison = false,
                     nextHintStrokeIndex = nextHintIdx,
                     shakeTrigger = uiState.shakeTrigger,
+                    successOverlayText = uiState.successOverlayText,
+                    enabled = uiState.successOverlayText == null,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -331,10 +333,14 @@ fun LessonScreen(
                         text = "Kiểm tra →",
                         filled = true,
                         onClick = {
-                            val passed = viewModel.checkCurrentSubmission()
-                            if (!passed) {
-                                localView.performHapticFeedback(HapticFeedbackConstants.REJECT)
-                                vibrateOnError(context)
+                            if (uiState.successOverlayText == null) {
+                                val passed = viewModel.checkCurrentSubmission()
+                                if (passed) {
+                                    localView.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                                } else {
+                                    localView.performHapticFeedback(HapticFeedbackConstants.REJECT)
+                                    vibrateOnError(context)
+                                }
                             }
                         },
                         modifier = Modifier.weight(1.2f)
