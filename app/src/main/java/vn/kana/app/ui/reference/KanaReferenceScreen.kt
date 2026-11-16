@@ -40,6 +40,7 @@ import vn.kana.app.ui.components.KanaStrokeAnimatorCanvas
 import vn.kana.app.ui.components.drawSmoothStrokePath
 import vn.kana.app.ui.home.EXTENDED_KANA_LAYOUT
 import vn.kana.app.ui.home.HIRAGANA_GOJUON_LAYOUT
+import vn.kana.app.ui.home.KANJI_N5_LAYOUT
 import vn.kana.app.ui.home.KATAKANA_GOJUON_LAYOUT
 import vn.kana.app.ui.map.CurriculumTab
 import vn.kana.app.ui.map.LessonMapViewModel
@@ -258,6 +259,7 @@ fun KanaReferenceScreen(
                                 CurriculumTab.HIRAGANA_BASIC -> "あ"
                                 CurriculumTab.KATAKANA_BASIC -> "ア"
                                 CurriculumTab.EXTENDED -> "が"
+                                CurriculumTab.KANJI_N5 -> "一"
                             }
                             selectedChar = firstCharInTab
                         }
@@ -279,6 +281,7 @@ fun KanaReferenceScreen(
             CurriculumTab.HIRAGANA_BASIC -> HIRAGANA_GOJUON_LAYOUT
             CurriculumTab.KATAKANA_BASIC -> KATAKANA_GOJUON_LAYOUT
             CurriculumTab.EXTENDED -> EXTENDED_KANA_LAYOUT
+            CurriculumTab.KANJI_N5 -> KANJI_N5_LAYOUT
         }
 
         Column(

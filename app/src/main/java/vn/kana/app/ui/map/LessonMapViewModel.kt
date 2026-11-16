@@ -25,15 +25,17 @@ import vn.kana.recognizer.KanaStrokeTemplate
 import vn.kana.recognizer.StrictnessLevel
 
 /**
- * 3 nhóm chương trình học chính:
+ * 4 nhóm chương trình học chính:
  * 1. HIRAGANA_BASIC (46 chữ Hiragana cơ bản)
  * 2. KATAKANA_BASIC (46 chữ Katakana cơ bản)
  * 3. EXTENDED (Dakuten/Handakuten, Yōon, っ, ー)
+ * 4. KANJI_N5 (80 chữ Kanji JLPT N5 cốt lõi)
  */
 enum class CurriculumTab(val titleVi: String) {
-    HIRAGANA_BASIC("Hiragana (46)"),
-    KATAKANA_BASIC("Katakana (46)"),
-    EXTENDED("Dakuten • 拗音 • ー")
+    HIRAGANA_BASIC("Hiragana"),
+    KATAKANA_BASIC("Katakana"),
+    EXTENDED("Âm đục/ghép"),
+    KANJI_N5("Kanji N5")
 }
 
 data class LessonMapUiState(
@@ -43,9 +45,11 @@ data class LessonMapUiState(
     val basicHiragana: List<KanaStrokeTemplate> = emptyList(),
     val basicKatakana: List<KanaStrokeTemplate> = emptyList(),
     val extendedCharacters: List<KanaStrokeTemplate> = emptyList(),
+    val n5KanjiCharacters: List<KanaStrokeTemplate> = emptyList(),
     val allCurriculumCharacters: List<KanaStrokeTemplate> = emptyList(),
     val wordsByChar: Map<String, List<KanaVocabWord>> = emptyMap(),
     val characterProgressByChar: Map<String, CharacterProgressEntity> = emptyMap(),
+    val lessonProgressByRowId: Map<String, Boolean> = emptyMap(),
     val masteryByChar: Map<String, MasteryLevel> = emptyMap(),
     val dueSrsCardsCount: Int = 0,
     val totalLearnedCount: Int = 0,
@@ -61,7 +65,10 @@ data class LessonMapUiState(
                     lesson.script == "katakana" && lesson.characters.firstOrNull()?.category == "basic"
 
                 CurriculumTab.EXTENDED ->
-                    lesson.characters.firstOrNull()?.category != "basic"
+                    lesson.script != "kanji" && lesson.characters.firstOrNull()?.category != "basic"
+
+                CurriculumTab.KANJI_N5 ->
+                    lesson.script == "kanji"
             }
         }
 }
@@ -97,7 +104,8 @@ class LessonMapViewModel(
             val extendedChars = allChars.filter {
                 it.category == "dakuten" || (it.category == "small" && it.char in learnedSmallChars)
             }
-            val curriculumChars = basicHiragana + basicKatakana + extendedChars
+            val kanjiN5Chars = allChars.filter { it.script == "kanji" }
+            val curriculumChars = basicHiragana + basicKatakana + extendedChars + kanjiN5Chars
 
             val allWords = vocabRepository.getAllWords()
             val wordsByIntro = allWords.groupBy { it.introduces }
@@ -142,7 +150,18 @@ class LessonMapViewModel(
                 ("hiragana" to "促音") to ("Hiragana • Âm ngắt Sokuon (促音)" to "Chữ つ nhỏ gấp đôi phụ âm: っ"),
                 ("katakana" to "拗音") to ("Katakana • Âm ghép Yōon (拗音)" to "Chữ nhỏ ghép âm: ャ ュ ョ"),
                 ("katakana" to "促音") to ("Katakana • Âm ngắt Sokuon (促音)" to "Chữ ツ nhỏ gấp đôi phụ âm: ッ"),
-                ("katakana" to "長音") to ("Katakana • Trường âm (長音)" to "Dấu kéo dài nguyên âm: ー")
+                ("katakana" to "長音") to ("Katakana • Trường âm (長音)" to "Dấu kéo dài nguyên âm: ー"),
+                // 6. Kanji JLPT N5 (Chặng 06 & Chặng 08)
+                ("kanji" to "Kanji Số đếm") to ("Kanji N5 • Số đếm (1–10)" to "一 二 三 四 五 六 七 八 九 十"),
+                ("kanji" to "Kanji Số lớn") to ("Kanji N5 • Số lớn & Tiền tệ" to "百 千 万 円"),
+                ("kanji" to "Kanji Tự nhiên") to ("Kanji N5 • Tự nhiên & Thứ ngày" to "日 月 火 水 木 金 土 山 川 田"),
+                ("kanji" to "Kanji Con người") to ("Kanji N5 • Con người & Gia đình" to "人 子 女 男 父 母 友"),
+                ("kanji" to "Kanji Trường học") to ("Kanji N5 • Trường học & Ngôn ngữ" to "先 生 学 校 本 名 語"),
+                ("kanji" to "Kanji Thời gian") to ("Kanji N5 • Thời gian" to "時 分 半 年 今"),
+                ("kanji" to "Kanji Phương hướng") to ("Kanji N5 • Phương hướng & Vị trí" to "前 後 上 下 中 外 右 左 北 南 東 西"),
+                ("kanji" to "Kanji Động từ N5") to ("Kanji N5 • Động từ cốt lõi" to "行 来 食 飲 見 聞 読 書 話 買 休 出 入"),
+                ("kanji" to "Kanji Tính từ N5") to ("Kanji N5 • Tính từ & Màu sắc" to "大 小 高 安 新 古 多 少 白"),
+                ("kanji" to "Kanji Đời sống N5") to ("Kanji N5 • Giao thông & Đời sống" to "車 電 駅")
             )
 
             val groupedByScriptAndRow = curriculumChars.groupBy { it.script to it.row }
@@ -191,7 +210,9 @@ class LessonMapViewModel(
                     val isStageStarter = (script == "hiragana" && rowName == "あ行") ||
                         (script == "katakana" && rowName == "ア行") ||
                         (script == "hiragana" && rowName == "が行") ||
-                        (script == "hiragana" && rowName == "拗音")
+                        (script == "hiragana" && rowName == "拗音") ||
+                        (script == "kanji" && rowName == "Kanji Số đếm") ||
+                        (script == "kanji" && rowName == "Kanji Thời gian")
                     val isUnlocked = isStageStarter ||
                         prevCompleted ||
                         isRowDone ||
@@ -218,9 +239,11 @@ class LessonMapViewModel(
                     basicHiragana = basicHiragana,
                     basicKatakana = basicKatakana,
                     extendedCharacters = extendedChars,
+                    n5KanjiCharacters = kanjiN5Chars,
                     allCurriculumCharacters = curriculumChars,
                     wordsByChar = wordsByIntro,
                     characterProgressByChar = charMap,
+                    lessonProgressByRowId = lessonMap.mapValues { it.value.completed },
                     masteryByChar = masteryMap,
                     dueSrsCardsCount = dueCount,
                     totalLearnedCount = charList.count { it.learned },
@@ -276,6 +299,40 @@ class LessonMapViewModel(
         viewModelScope.launch {
             val nextMode = if (currentlyDark) ThemeMode.LIGHT else ThemeMode.DARK
             settingsRepository.setThemeMode(nextMode)
+        }
+    }
+
+    /**
+     * Đánh dấu hoàn thành một Chặng (Stage 01..08) trên Lộ trình N5 sau khi người dùng vượt qua bài Kiểm tra Mở khoá.
+     */
+    fun markRoadmapStagePassed(stageNumber: Int, charsToMarkLearned: List<KanaStrokeTemplate> = emptyList()) {
+        viewModelScope.launch {
+            val now = System.currentTimeMillis()
+            kanaDao.upsertLessonProgress(
+                 vn.kana.app.data.local.LessonProgressEntity(
+                    rowId = "roadmap_stage_$stageNumber",
+                    script = "roadmap",
+                    rowName = "Stage $stageNumber",
+                    completed = true,
+                    bestQuizScore = 100,
+                    completedAtEpochMs = now
+                )
+            )
+            for (tmpl in charsToMarkLearned) {
+                kanaDao.upsertCharacterProgress(
+                    CharacterProgressEntity(
+                        char = tmpl.char,
+                        script = tmpl.script,
+                        rowName = tmpl.row,
+                        learned = true,
+                        lastScore = 90,
+                        practiceCount = 1,
+                        errorCount = 0,
+                        updatedAtEpochMs = now
+                    )
+                )
+            }
+            settingsRepository.recordStudyActivityToday()
         }
     }
 

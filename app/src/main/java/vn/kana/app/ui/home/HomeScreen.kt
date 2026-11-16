@@ -165,29 +165,29 @@ fun HomeScreen(
                     )
                 }
 
-                // Thẻ "ÔN HÔM NAY"
+                // Thẻ "LỘ TRÌNH N5" (Bản đồ con đường 01 -> 08)
                 Column(
                     modifier = Modifier
-                        .weight(0.85f)
+                        .weight(0.95f)
                         .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                        .clickable(onClick = onStartReview)
+                        .clickable(onClick = onOpenLessonMap)
                         .padding(14.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
-                        text = "ÔN HÔM NAY",
+                        text = "LỘ TRÌNH JLPT N5 🚩",
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onBackground,
                         maxLines = 1
                     )
                     Text(
-                        text = "${uiState.dueSrsCardsCount} thẻ",
+                        text = "01 → 08 Chặng",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground,
                         maxLines = 1
                     )
                     Text(
-                        text = "Bấm để ôn tập →",
+                        text = "Kana • Ngữ pháp • Kanji →",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1
@@ -303,6 +303,16 @@ fun HomeScreen(
                             onClickCharacter = { ch -> onOpenReference(ch) }
                         )
                     }
+
+                    CurriculumTab.KANJI_N5 -> {
+                        GojuonMasteryGrid(
+                            templates = uiState.n5KanjiCharacters,
+                            rowsLayout = KANJI_N5_LAYOUT,
+                            masteryByChar = uiState.masteryByChar,
+                            isDark = isDark,
+                            onClickCharacter = { ch -> onOpenReference(ch) }
+                        )
+                    }
                 }
             }
         }
@@ -348,6 +358,25 @@ internal val EXTENDED_KANA_LAYOUT = listOf(
     "パ行" to listOf("パ", "ピ", "プ", "ペ", "ポ"),
     "拗・促" to listOf("ゃ", "ゅ", "ょ", "っ", null),
     "拗・長" to listOf("ャ", "ュ", "ョ", "ッ", "ー")
+)
+
+internal val KANJI_N5_LAYOUT = listOf(
+    "Số 1" to listOf("一", "二", "三", "四", "五"),
+    "Số 2" to listOf("六", "七", "八", "九", "十"),
+    "Số lớn" to listOf("百", "千", "万", "円", "年"),
+    "Tự nhiên" to listOf("日", "月", "火", "水", "木"),
+    "Đất trời" to listOf("金", "土", "山", "川", "田"),
+    "Người" to listOf("人", "子", "女", "男", "友"),
+    "Gia đình" to listOf("父", "母", "先", "生", "名"),
+    "Trường" to listOf("学", "校", "本", "語", "時"),
+    "Giờ giấc" to listOf("分", "半", "今", "前", "後"),
+    "Vị trí" to listOf("上", "下", "中", "外", "右"),
+    "Hướng" to listOf("左", "北", "南", "東", "西"),
+    "Động từ" to listOf("行", "来", "食", "飲", "見"),
+    "Động 2" to listOf("聞", "読", "書", "話", "買"),
+    "Động 3" to listOf("休", "出", "入", "車", "電"),
+    "Tính từ" to listOf("大", "小", "高", "安", "新"),
+    "Tính 2" to listOf("古", "多", "少", "白", "駅")
 )
 
 internal fun masteryColors(level: MasteryLevel, isDark: Boolean): Pair<Color, Color> {

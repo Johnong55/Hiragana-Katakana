@@ -42,11 +42,13 @@ import vn.kana.app.ui.map.LessonMapViewModel
 import vn.kana.app.ui.reference.KanaReferenceScreen
 import vn.kana.app.ui.review.ReviewScreen
 import vn.kana.app.ui.review.ReviewViewModel
+import vn.kana.app.ui.roadmap.N5RoadmapScreen
 import vn.kana.app.ui.settings.SettingsScreen
 import vn.kana.app.ui.theme.KanaTheme
 
 private enum class AppDestination(val isMainTab: Boolean, val tabLabelVi: String = "") {
     HOME(isMainTab = true, tabLabelVi = "Trang chủ"),
+    ROADMAP_N5(isMainTab = true, tabLabelVi = "Lộ trình N5"),
     CUSTOM_STUDY(isMainTab = true, tabLabelVi = "Chọn hàng"),
     REVIEW(isMainTab = true, tabLabelVi = "Ôn tập"),
     SETTINGS(isMainTab = true, tabLabelVi = "Cài đặt"),
@@ -124,7 +126,7 @@ class MainActivity : ComponentActivity() {
                                             destination = AppDestination.ACTIVE_LESSON
                                         },
                                         onOpenLessonMap = {
-                                            destination = AppDestination.CUSTOM_STUDY
+                                            destination = AppDestination.ROADMAP_N5
                                         },
                                         onOpenCustomStudy = {
                                             destination = AppDestination.CUSTOM_STUDY
@@ -135,6 +137,24 @@ class MainActivity : ComponentActivity() {
                                         },
                                         onOpenSettings = {
                                             destination = AppDestination.SETTINGS
+                                        }
+                                    )
+                                }
+
+                                AppDestination.ROADMAP_N5 -> {
+                                    N5RoadmapScreen(
+                                        viewModel = mapViewModel,
+                                        onStartRowLesson = { rowName, script ->
+                                            selectedRowName = rowName
+                                            selectedScript = script
+                                            startLessonInTestOutMode = false
+                                            lessonInitialFocusChar = null
+                                            sessionCounter++
+                                            destination = AppDestination.ACTIVE_LESSON
+                                        },
+                                        onOpenTabWithFilter = { tab ->
+                                            mapViewModel.selectTab(tab)
+                                            destination = AppDestination.CUSTOM_STUDY
                                         }
                                     )
                                 }
@@ -312,6 +332,7 @@ private fun MainBottomNavigationBar(
 ) {
     val mainTabs = listOf(
         AppDestination.HOME,
+        AppDestination.ROADMAP_N5,
         AppDestination.CUSTOM_STUDY,
         AppDestination.REVIEW,
         AppDestination.SETTINGS

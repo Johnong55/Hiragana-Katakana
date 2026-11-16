@@ -34,8 +34,14 @@ def build_charset() -> str:
     # Katakana (U+30A1..U+30FC)
     for c in range(0x30A1, 0x30FD):
         chars.add(chr(c))
-    # Dấu câu Nhật + Chữ Hán dùng trong UI
-    extra = "、。「」『』（）・〜ー行原稿用紙拗音促長小書濁半清日本語文字画数順練習復習設定"
+    # Dấu câu Nhật + Chữ Hán dùng trong UI + 80 chữ Kanji JLPT N5
+    extra = (
+        "、。「」『』（）・〜ー行原稿用紙拗音促長小書濁半清日本語文字画数順練習復習設定漢文法"
+        "一二三四五六七八九十百千万日"
+        "月火水木金土山川田人子女男父母友先生学校本名語"
+        "時分半年今前後上下中外右左北南東西"
+        "来食飲見聞読書話買休出入大小高安新古多少白車電駅円"
+    )
     for ch in extra:
         chars.add(ch)
     return "".join(sorted(chars))
