@@ -1,0 +1,3885 @@
+{
+  "totalWords": 302,
+  "words": [
+    {
+      "id": "vocab_001",
+      "word": "あめ",
+      "romaji": "ame",
+      "meaning_vi": "cơn mưa / cái kẹo",
+      "chars": [
+        "あ",
+        "め"
+      ],
+      "introduces": "あ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_002",
+      "word": "あり",
+      "romaji": "ari",
+      "meaning_vi": "con kiến",
+      "chars": [
+        "あ",
+        "り"
+      ],
+      "introduces": "あ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_003",
+      "word": "いぬ",
+      "romaji": "inu",
+      "meaning_vi": "con chó",
+      "chars": [
+        "い",
+        "ぬ"
+      ],
+      "introduces": "い",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_004",
+      "word": "いす",
+      "romaji": "isu",
+      "meaning_vi": "cái ghế",
+      "chars": [
+        "い",
+        "す"
+      ],
+      "introduces": "い",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_005",
+      "word": "うみ",
+      "romaji": "umi",
+      "meaning_vi": "biển",
+      "chars": [
+        "う",
+        "み"
+      ],
+      "introduces": "う",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_006",
+      "word": "うし",
+      "romaji": "ushi",
+      "meaning_vi": "con bò",
+      "chars": [
+        "う",
+        "し"
+      ],
+      "introduces": "う",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_007",
+      "word": "うえ",
+      "romaji": "ue",
+      "meaning_vi": "phía trên",
+      "chars": [
+        "う",
+        "え"
+      ],
+      "introduces": "え",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_008",
+      "word": "えび",
+      "romaji": "ebi",
+      "meaning_vi": "con tôm",
+      "chars": [
+        "え",
+        "び"
+      ],
+      "introduces": "え",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_009",
+      "word": "あおい",
+      "romaji": "aoi",
+      "meaning_vi": "màu xanh dương",
+      "chars": [
+        "あ",
+        "お",
+        "い"
+      ],
+      "introduces": "お",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_010",
+      "word": "おに",
+      "romaji": "oni",
+      "meaning_vi": "con quỷ (truyện cổ tích)",
+      "chars": [
+        "お",
+        "に"
+      ],
+      "introduces": "お",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_011",
+      "word": "かさ",
+      "romaji": "kasa",
+      "meaning_vi": "cái ô (dù)",
+      "chars": [
+        "か",
+        "さ"
+      ],
+      "introduces": "か",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_012",
+      "word": "かお",
+      "romaji": "kao",
+      "meaning_vi": "khuôn mặt",
+      "chars": [
+        "か",
+        "お"
+      ],
+      "introduces": "か",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_013",
+      "word": "えき",
+      "romaji": "eki",
+      "meaning_vi": "nhà ga",
+      "chars": [
+        "え",
+        "き"
+      ],
+      "introduces": "き",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_014",
+      "word": "きつね",
+      "romaji": "kitsune",
+      "meaning_vi": "con cáo",
+      "chars": [
+        "き",
+        "つ",
+        "ね"
+      ],
+      "introduces": "き",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_015",
+      "word": "くつ",
+      "romaji": "kutsu",
+      "meaning_vi": "đôi giày",
+      "chars": [
+        "く",
+        "つ"
+      ],
+      "introduces": "く",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_016",
+      "word": "きく",
+      "romaji": "kiku",
+      "meaning_vi": "hoa cúc",
+      "chars": [
+        "き",
+        "く"
+      ],
+      "introduces": "く",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_017",
+      "word": "いけ",
+      "romaji": "ike",
+      "meaning_vi": "cái ao",
+      "chars": [
+        "い",
+        "け"
+      ],
+      "introduces": "け",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_018",
+      "word": "けむし",
+      "romaji": "kemushi",
+      "meaning_vi": "con sâu róm",
+      "chars": [
+        "け",
+        "む",
+        "し"
+      ],
+      "introduces": "け",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_019",
+      "word": "こい",
+      "romaji": "koi",
+      "meaning_vi": "cá chép",
+      "chars": [
+        "こ",
+        "い"
+      ],
+      "introduces": "こ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_020",
+      "word": "こま",
+      "romaji": "koma",
+      "meaning_vi": "con quay (đồ chơi)",
+      "chars": [
+        "こ",
+        "ま"
+      ],
+      "introduces": "こ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_021",
+      "word": "さかな",
+      "romaji": "sakana",
+      "meaning_vi": "con cá",
+      "chars": [
+        "さ",
+        "か",
+        "な"
+      ],
+      "introduces": "さ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_022",
+      "word": "さる",
+      "romaji": "saru",
+      "meaning_vi": "con khỉ",
+      "chars": [
+        "さ",
+        "る"
+      ],
+      "introduces": "さ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_023",
+      "word": "しか",
+      "romaji": "shika",
+      "meaning_vi": "con hươu / nai",
+      "chars": [
+        "し",
+        "か"
+      ],
+      "introduces": "し",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_024",
+      "word": "あし",
+      "romaji": "ashi",
+      "meaning_vi": "đôi chân",
+      "chars": [
+        "あ",
+        "し"
+      ],
+      "introduces": "し",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_025",
+      "word": "すいか",
+      "romaji": "suika",
+      "meaning_vi": "quả dưa hấu",
+      "chars": [
+        "す",
+        "い",
+        "か"
+      ],
+      "introduces": "す",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_026",
+      "word": "すし",
+      "romaji": "sushi",
+      "meaning_vi": "món sushi",
+      "chars": [
+        "す",
+        "し"
+      ],
+      "introduces": "す",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_027",
+      "word": "せみ",
+      "romaji": "semi",
+      "meaning_vi": "con ve sầu",
+      "chars": [
+        "せ",
+        "み"
+      ],
+      "introduces": "せ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_028",
+      "word": "あせ",
+      "romaji": "ase",
+      "meaning_vi": "mồ hôi",
+      "chars": [
+        "あ",
+        "せ"
+      ],
+      "introduces": "せ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_029",
+      "word": "そら",
+      "romaji": "sora",
+      "meaning_vi": "bầu trời",
+      "chars": [
+        "そ",
+        "ら"
+      ],
+      "introduces": "そ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_030",
+      "word": "うそ",
+      "romaji": "uso",
+      "meaning_vi": "lời nói dối",
+      "chars": [
+        "う",
+        "そ"
+      ],
+      "introduces": "そ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_031",
+      "word": "たこ",
+      "romaji": "tako",
+      "meaning_vi": "bạch tuộc / cánh diều",
+      "chars": [
+        "た",
+        "こ"
+      ],
+      "introduces": "た",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_032",
+      "word": "うた",
+      "romaji": "uta",
+      "meaning_vi": "bài hát",
+      "chars": [
+        "う",
+        "た"
+      ],
+      "introduces": "た",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_033",
+      "word": "くち",
+      "romaji": "kuchi",
+      "meaning_vi": "cái miệng",
+      "chars": [
+        "く",
+        "ち"
+      ],
+      "introduces": "ち",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_034",
+      "word": "いち",
+      "romaji": "ichi",
+      "meaning_vi": "số một (1)",
+      "chars": [
+        "い",
+        "ち"
+      ],
+      "introduces": "ち",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_035",
+      "word": "つき",
+      "romaji": "tsuki",
+      "meaning_vi": "mặt trăng",
+      "chars": [
+        "つ",
+        "き"
+      ],
+      "introduces": "つ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_036",
+      "word": "つくえ",
+      "romaji": "tsukue",
+      "meaning_vi": "cái bàn học",
+      "chars": [
+        "つ",
+        "く",
+        "え"
+      ],
+      "introduces": "つ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_037",
+      "word": "て",
+      "romaji": "te",
+      "meaning_vi": "bàn tay",
+      "chars": [
+        "て"
+      ],
+      "introduces": "て",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_038",
+      "word": "てがみ",
+      "romaji": "tegami",
+      "meaning_vi": "lá thư",
+      "chars": [
+        "て",
+        "が",
+        "み"
+      ],
+      "introduces": "て",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_039",
+      "word": "とけい",
+      "romaji": "tokei",
+      "meaning_vi": "đồng hồ",
+      "chars": [
+        "と",
+        "け",
+        "い"
+      ],
+      "introduces": "と",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_040",
+      "word": "とり",
+      "romaji": "tori",
+      "meaning_vi": "con chim",
+      "chars": [
+        "と",
+        "り"
+      ],
+      "introduces": "と",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_041",
+      "word": "なつ",
+      "romaji": "natsu",
+      "meaning_vi": "mùa hè",
+      "chars": [
+        "な",
+        "つ"
+      ],
+      "introduces": "な",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_042",
+      "word": "なし",
+      "romaji": "nashi",
+      "meaning_vi": "quả lê",
+      "chars": [
+        "な",
+        "し"
+      ],
+      "introduces": "な",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_043",
+      "word": "にく",
+      "romaji": "niku",
+      "meaning_vi": "thịt",
+      "chars": [
+        "に",
+        "く"
+      ],
+      "introduces": "に",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_044",
+      "word": "かに",
+      "romaji": "kani",
+      "meaning_vi": "con cua",
+      "chars": [
+        "か",
+        "に"
+      ],
+      "introduces": "に",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_045",
+      "word": "ぬの",
+      "romaji": "nuno",
+      "meaning_vi": "tấm vải",
+      "chars": [
+        "ぬ",
+        "の"
+      ],
+      "introduces": "ぬ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_046",
+      "word": "たぬき",
+      "romaji": "tanuki",
+      "meaning_vi": "con lửng chó (tanuki)",
+      "chars": [
+        "た",
+        "ぬ",
+        "き"
+      ],
+      "introduces": "ぬ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_047",
+      "word": "ねこ",
+      "romaji": "neko",
+      "meaning_vi": "con mèo",
+      "chars": [
+        "ね",
+        "こ"
+      ],
+      "introduces": "ね",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_048",
+      "word": "ふね",
+      "romaji": "fune",
+      "meaning_vi": "con thuyền",
+      "chars": [
+        "ふ",
+        "ね"
+      ],
+      "introduces": "ね",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_049",
+      "word": "つの",
+      "romaji": "tsuno",
+      "meaning_vi": "cái sừng",
+      "chars": [
+        "つ",
+        "の"
+      ],
+      "introduces": "の",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_050",
+      "word": "きのこ",
+      "romaji": "kinoko",
+      "meaning_vi": "cây nấm",
+      "chars": [
+        "き",
+        "の",
+        "こ"
+      ],
+      "introduces": "の",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_051",
+      "word": "はな",
+      "romaji": "hana",
+      "meaning_vi": "bông hoa / cái mũi",
+      "chars": [
+        "は",
+        "な"
+      ],
+      "introduces": "は",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_052",
+      "word": "はこ",
+      "romaji": "hako",
+      "meaning_vi": "cái hộp",
+      "chars": [
+        "は",
+        "こ"
+      ],
+      "introduces": "は",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_053",
+      "word": "ひと",
+      "romaji": "hito",
+      "meaning_vi": "con người",
+      "chars": [
+        "ひ",
+        "と"
+      ],
+      "introduces": "ひ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_054",
+      "word": "ひこうき",
+      "romaji": "hikouki",
+      "meaning_vi": "máy bay",
+      "chars": [
+        "ひ",
+        "こ",
+        "う",
+        "き"
+      ],
+      "introduces": "ひ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_055",
+      "word": "ふく",
+      "romaji": "fuku",
+      "meaning_vi": "quần áo",
+      "chars": [
+        "ふ",
+        "く"
+      ],
+      "introduces": "ふ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_056",
+      "word": "ふえ",
+      "romaji": "fue",
+      "meaning_vi": "cái sáo / còi",
+      "chars": [
+        "ふ",
+        "え"
+      ],
+      "introduces": "ふ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_057",
+      "word": "へび",
+      "romaji": "hebi",
+      "meaning_vi": "con rắn",
+      "chars": [
+        "へ",
+        "び"
+      ],
+      "introduces": "へ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_058",
+      "word": "へそ",
+      "romaji": "heso",
+      "meaning_vi": "cái rốn",
+      "chars": [
+        "へ",
+        "そ"
+      ],
+      "introduces": "へ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_059",
+      "word": "ほし",
+      "romaji": "hoshi",
+      "meaning_vi": "ngôi sao",
+      "chars": [
+        "ほ",
+        "し"
+      ],
+      "introduces": "ほ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_060",
+      "word": "ほね",
+      "romaji": "hone",
+      "meaning_vi": "cái xương",
+      "chars": [
+        "ほ",
+        "ね"
+      ],
+      "introduces": "ほ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_061",
+      "word": "まくら",
+      "romaji": "makura",
+      "meaning_vi": "cái gối",
+      "chars": [
+        "ま",
+        "く",
+        "ら"
+      ],
+      "introduces": "ま",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_062",
+      "word": "まめ",
+      "romaji": "mame",
+      "meaning_vi": "hạt đậu",
+      "chars": [
+        "ま",
+        "め"
+      ],
+      "introduces": "ま",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_063",
+      "word": "みみ",
+      "romaji": "mimi",
+      "meaning_vi": "đôi tai",
+      "chars": [
+        "み",
+        "み"
+      ],
+      "introduces": "み",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_064",
+      "word": "みかん",
+      "romaji": "mikan",
+      "meaning_vi": "quả quýt",
+      "chars": [
+        "み",
+        "か",
+        "ん"
+      ],
+      "introduces": "み",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_065",
+      "word": "むし",
+      "romaji": "mushi",
+      "meaning_vi": "côn trùng / sâu bọ",
+      "chars": [
+        "む",
+        "し"
+      ],
+      "introduces": "む",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_066",
+      "word": "むね",
+      "romaji": "mune",
+      "meaning_vi": "lồng ngực",
+      "chars": [
+        "む",
+        "ね"
+      ],
+      "introduces": "む",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_067",
+      "word": "め",
+      "romaji": "me",
+      "meaning_vi": "đôi mắt",
+      "chars": [
+        "め"
+      ],
+      "introduces": "め",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_068",
+      "word": "めがね",
+      "romaji": "megane",
+      "meaning_vi": "cặp kính mắt",
+      "chars": [
+        "め",
+        "が",
+        "ね"
+      ],
+      "introduces": "め",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_069",
+      "word": "もも",
+      "romaji": "momo",
+      "meaning_vi": "quả đào",
+      "chars": [
+        "も",
+        "も"
+      ],
+      "introduces": "も",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_070",
+      "word": "くも",
+      "romaji": "kumo",
+      "meaning_vi": "đám mây / con nhện",
+      "chars": [
+        "く",
+        "も"
+      ],
+      "introduces": "も",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_071",
+      "word": "やま",
+      "romaji": "yama",
+      "meaning_vi": "ngọn núi",
+      "chars": [
+        "や",
+        "ま"
+      ],
+      "introduces": "や",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_072",
+      "word": "やさい",
+      "romaji": "yasai",
+      "meaning_vi": "rau củ",
+      "chars": [
+        "や",
+        "さ",
+        "い"
+      ],
+      "introduces": "や",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_073",
+      "word": "ゆき",
+      "romaji": "yuki",
+      "meaning_vi": "tuyết",
+      "chars": [
+        "ゆ",
+        "き"
+      ],
+      "introduces": "ゆ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_074",
+      "word": "ゆび",
+      "romaji": "yubi",
+      "meaning_vi": "ngón tay",
+      "chars": [
+        "ゆ",
+        "び"
+      ],
+      "introduces": "ゆ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_075",
+      "word": "よる",
+      "romaji": "yoru",
+      "meaning_vi": "ban đêm",
+      "chars": [
+        "よ",
+        "る"
+      ],
+      "introduces": "よ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_076",
+      "word": "ひよこ",
+      "romaji": "hiyoko",
+      "meaning_vi": "gà con",
+      "chars": [
+        "ひ",
+        "よ",
+        "こ"
+      ],
+      "introduces": "よ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_077",
+      "word": "さくら",
+      "romaji": "sakura",
+      "meaning_vi": "hoa anh đào",
+      "chars": [
+        "さ",
+        "く",
+        "ら"
+      ],
+      "introduces": "ら",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_078",
+      "word": "とら",
+      "romaji": "tora",
+      "meaning_vi": "con hổ",
+      "chars": [
+        "と",
+        "ら"
+      ],
+      "introduces": "ら",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_079",
+      "word": "りす",
+      "romaji": "risu",
+      "meaning_vi": "con sóc",
+      "chars": [
+        "り",
+        "す"
+      ],
+      "introduces": "り",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_080",
+      "word": "りんご",
+      "romaji": "ringo",
+      "meaning_vi": "quả táo",
+      "chars": [
+        "り",
+        "ん",
+        "ご"
+      ],
+      "introduces": "り",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_081",
+      "word": "くるま",
+      "romaji": "kuruma",
+      "meaning_vi": "xe ô tô",
+      "chars": [
+        "く",
+        "る",
+        "ま"
+      ],
+      "introduces": "る",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_082",
+      "word": "かえる",
+      "romaji": "kaeru",
+      "meaning_vi": "con ếch",
+      "chars": [
+        "か",
+        "え",
+        "る"
+      ],
+      "introduces": "る",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_083",
+      "word": "れもん",
+      "romaji": "remon",
+      "meaning_vi": "quả chanh vàng",
+      "chars": [
+        "れ",
+        "も",
+        "ん"
+      ],
+      "introduces": "れ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_084",
+      "word": "すみれ",
+      "romaji": "sumire",
+      "meaning_vi": "hoa tím (violet)",
+      "chars": [
+        "す",
+        "み",
+        "れ"
+      ],
+      "introduces": "れ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_085",
+      "word": "しろ",
+      "romaji": "shiro",
+      "meaning_vi": "màu trắng",
+      "chars": [
+        "し",
+        "ろ"
+      ],
+      "introduces": "ろ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_086",
+      "word": "くろ",
+      "romaji": "kuro",
+      "meaning_vi": "màu đen",
+      "chars": [
+        "く",
+        "ろ"
+      ],
+      "introduces": "ろ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_087",
+      "word": "わに",
+      "romaji": "wani",
+      "meaning_vi": "con cá sấu",
+      "chars": [
+        "わ",
+        "に"
+      ],
+      "introduces": "わ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_088",
+      "word": "かわ",
+      "romaji": "kawa",
+      "meaning_vi": "dòng sông",
+      "chars": [
+        "か",
+        "わ"
+      ],
+      "introduces": "わ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_089",
+      "word": "ほんをよむ",
+      "romaji": "hon wo yomu",
+      "meaning_vi": "đọc sách (trợ từ を)",
+      "chars": [
+        "ほ",
+        "ん",
+        "を",
+        "よ",
+        "む"
+      ],
+      "introduces": "を",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_090",
+      "word": "えをかく",
+      "romaji": "e wo kaku",
+      "meaning_vi": "vẽ tranh (trợ từ を)",
+      "chars": [
+        "え",
+        "を",
+        "か",
+        "く"
+      ],
+      "introduces": "を",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_091",
+      "word": "ほん",
+      "romaji": "hon",
+      "meaning_vi": "quyển sách",
+      "chars": [
+        "ほ",
+        "ん"
+      ],
+      "introduces": "ん",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_092",
+      "word": "きりん",
+      "romaji": "kirin",
+      "meaning_vi": "hươu cao cổ",
+      "chars": [
+        "き",
+        "り",
+        "ん"
+      ],
+      "introduces": "ん",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_093",
+      "word": "アイス",
+      "romaji": "aisu",
+      "meaning_vi": "kem (ice cream)",
+      "chars": [
+        "ア",
+        "イ",
+        "ス"
+      ],
+      "introduces": "ア",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_094",
+      "word": "アニメ",
+      "romaji": "anime",
+      "meaning_vi": "phim hoạt hình",
+      "chars": [
+        "ア",
+        "ニ",
+        "メ"
+      ],
+      "introduces": "ア",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_095",
+      "word": "インク",
+      "romaji": "inku",
+      "meaning_vi": "mực viết",
+      "chars": [
+        "イ",
+        "ン",
+        "ク"
+      ],
+      "introduces": "イ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_096",
+      "word": "イチゴ",
+      "romaji": "ichigo",
+      "meaning_vi": "quả dâu tây",
+      "chars": [
+        "イ",
+        "チ",
+        "ゴ"
+      ],
+      "introduces": "イ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_097",
+      "word": "ウサギ",
+      "romaji": "usagi",
+      "meaning_vi": "con thỏ",
+      "chars": [
+        "ウ",
+        "サ",
+        "ギ"
+      ],
+      "introduces": "ウ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_098",
+      "word": "ウール",
+      "romaji": "uuru",
+      "meaning_vi": "len (wool)",
+      "chars": [
+        "ウ",
+        "ー",
+        "ル"
+      ],
+      "introduces": "ウ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_099",
+      "word": "エアコン",
+      "romaji": "eakon",
+      "meaning_vi": "máy điều hoà",
+      "chars": [
+        "エ",
+        "ア",
+        "コ",
+        "ン"
+      ],
+      "introduces": "エ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_100",
+      "word": "エプロン",
+      "romaji": "epuron",
+      "meaning_vi": "tạp dề",
+      "chars": [
+        "エ",
+        "プ",
+        "ロ",
+        "ン"
+      ],
+      "introduces": "エ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_101",
+      "word": "オレンジ",
+      "romaji": "orenji",
+      "meaning_vi": "quả cam",
+      "chars": [
+        "オ",
+        "レ",
+        "ン",
+        "ジ"
+      ],
+      "introduces": "オ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_102",
+      "word": "タオル",
+      "romaji": "taoru",
+      "meaning_vi": "khăn bông",
+      "chars": [
+        "タ",
+        "オ",
+        "ル"
+      ],
+      "introduces": "オ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_103",
+      "word": "カメラ",
+      "romaji": "kamera",
+      "meaning_vi": "máy ảnh",
+      "chars": [
+        "カ",
+        "メ",
+        "ラ"
+      ],
+      "introduces": "カ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_104",
+      "word": "カレー",
+      "romaji": "karee",
+      "meaning_vi": "món cà ri",
+      "chars": [
+        "カ",
+        "レ",
+        "ー"
+      ],
+      "introduces": "カ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_105",
+      "word": "キウイ",
+      "romaji": "kiui",
+      "meaning_vi": "quả kiwi",
+      "chars": [
+        "キ",
+        "ウ",
+        "イ"
+      ],
+      "introduces": "キ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_106",
+      "word": "スキー",
+      "romaji": "sukii",
+      "meaning_vi": "trượt tuyết",
+      "chars": [
+        "ス",
+        "キ",
+        "ー"
+      ],
+      "introduces": "キ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_107",
+      "word": "クラス",
+      "romaji": "kurasu",
+      "meaning_vi": "lớp học",
+      "chars": [
+        "ク",
+        "ラ",
+        "ス"
+      ],
+      "introduces": "ク",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_108",
+      "word": "マイク",
+      "romaji": "maiku",
+      "meaning_vi": "chiếc micro",
+      "chars": [
+        "マ",
+        "イ",
+        "ク"
+      ],
+      "introduces": "ク",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_109",
+      "word": "ケーキ",
+      "romaji": "keeki",
+      "meaning_vi": "bánh kem",
+      "chars": [
+        "ケ",
+        "ー",
+        "キ"
+      ],
+      "introduces": "ケ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_110",
+      "word": "バケツ",
+      "romaji": "baketsu",
+      "meaning_vi": "cái xô",
+      "chars": [
+        "バ",
+        "ケ",
+        "ツ"
+      ],
+      "introduces": "ケ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_111",
+      "word": "コーヒー",
+      "romaji": "koohii",
+      "meaning_vi": "cà phê",
+      "chars": [
+        "コ",
+        "ー",
+        "ヒ",
+        "ー"
+      ],
+      "introduces": "コ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_112",
+      "word": "コアラ",
+      "romaji": "koara",
+      "meaning_vi": "gấu túi koala",
+      "chars": [
+        "コ",
+        "ア",
+        "ラ"
+      ],
+      "introduces": "コ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_113",
+      "word": "サラダ",
+      "romaji": "sarada",
+      "meaning_vi": "món salad",
+      "chars": [
+        "サ",
+        "ラ",
+        "ダ"
+      ],
+      "introduces": "サ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_114",
+      "word": "サッカー",
+      "romaji": "sakkaa",
+      "meaning_vi": "bóng đá",
+      "chars": [
+        "サ",
+        "ッ",
+        "カ",
+        "ー"
+      ],
+      "introduces": "サ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_115",
+      "word": "シャツ",
+      "romaji": "shatsu",
+      "meaning_vi": "áo sơ mi",
+      "chars": [
+        "シ",
+        "ャ",
+        "ツ"
+      ],
+      "introduces": "シ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_116",
+      "word": "タクシー",
+      "romaji": "takushii",
+      "meaning_vi": "xe taxi",
+      "chars": [
+        "タ",
+        "ク",
+        "シ",
+        "ー"
+      ],
+      "introduces": "シ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_117",
+      "word": "スプーン",
+      "romaji": "supuun",
+      "meaning_vi": "cái thìa (muỗng)",
+      "chars": [
+        "ス",
+        "プ",
+        "ー",
+        "ン"
+      ],
+      "introduces": "ス",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_118",
+      "word": "バス",
+      "romaji": "basu",
+      "meaning_vi": "xe buýt",
+      "chars": [
+        "バ",
+        "ス"
+      ],
+      "introduces": "ス",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_119",
+      "word": "セーター",
+      "romaji": "seetaa",
+      "meaning_vi": "áo len",
+      "chars": [
+        "セ",
+        "ー",
+        "タ",
+        "ー"
+      ],
+      "introduces": "セ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_120",
+      "word": "セット",
+      "romaji": "setto",
+      "meaning_vi": "bộ (set)",
+      "chars": [
+        "セ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "セ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_121",
+      "word": "ソファ",
+      "romaji": "sofa",
+      "meaning_vi": "ghế sofa",
+      "chars": [
+        "ソ",
+        "フ",
+        "ァ"
+      ],
+      "introduces": "ソ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_122",
+      "word": "ソース",
+      "romaji": "soosu",
+      "meaning_vi": "nước sốt",
+      "chars": [
+        "ソ",
+        "ー",
+        "ス"
+      ],
+      "introduces": "ソ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_123",
+      "word": "タイヤ",
+      "romaji": "taiya",
+      "meaning_vi": "lốp xe",
+      "chars": [
+        "タ",
+        "イ",
+        "ヤ"
+      ],
+      "introduces": "タ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_124",
+      "word": "ギター",
+      "romaji": "gitaa",
+      "meaning_vi": "đàn ghi-ta",
+      "chars": [
+        "ギ",
+        "タ",
+        "ー"
+      ],
+      "introduces": "タ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_125",
+      "word": "チーズ",
+      "romaji": "chiizu",
+      "meaning_vi": "phô mai",
+      "chars": [
+        "チ",
+        "ー",
+        "ズ"
+      ],
+      "introduces": "チ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_126",
+      "word": "チキン",
+      "romaji": "chikin",
+      "meaning_vi": "thịt gà",
+      "chars": [
+        "チ",
+        "キ",
+        "ン"
+      ],
+      "introduces": "チ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_127",
+      "word": "ツアー",
+      "romaji": "tsuaa",
+      "meaning_vi": "chuyến du lịch (tour)",
+      "chars": [
+        "ツ",
+        "ア",
+        "ー"
+      ],
+      "introduces": "ツ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_128",
+      "word": "スーツ",
+      "romaji": "suutsu",
+      "meaning_vi": "bộ đồ vest",
+      "chars": [
+        "ス",
+        "ー",
+        "ツ"
+      ],
+      "introduces": "ツ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_129",
+      "word": "テレビ",
+      "romaji": "terebi",
+      "meaning_vi": "ti vi",
+      "chars": [
+        "テ",
+        "レ",
+        "ビ"
+      ],
+      "introduces": "テ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_130",
+      "word": "テント",
+      "romaji": "tento",
+      "meaning_vi": "cái lều",
+      "chars": [
+        "テ",
+        "ン",
+        "ト"
+      ],
+      "introduces": "テ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_131",
+      "word": "トマト",
+      "romaji": "tomato",
+      "meaning_vi": "quả cà chua",
+      "chars": [
+        "ト",
+        "マ",
+        "ト"
+      ],
+      "introduces": "ト",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_132",
+      "word": "ノート",
+      "romaji": "nooto",
+      "meaning_vi": "quyển vở",
+      "chars": [
+        "ノ",
+        "ー",
+        "ト"
+      ],
+      "introduces": "ト",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_133",
+      "word": "ナイフ",
+      "romaji": "naifu",
+      "meaning_vi": "con dao",
+      "chars": [
+        "ナ",
+        "イ",
+        "フ"
+      ],
+      "introduces": "ナ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_134",
+      "word": "バナナ",
+      "romaji": "banana",
+      "meaning_vi": "quả chuối",
+      "chars": [
+        "バ",
+        "ナ",
+        "ナ"
+      ],
+      "introduces": "ナ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_135",
+      "word": "テニス",
+      "romaji": "tenisu",
+      "meaning_vi": "môn quần vợt",
+      "chars": [
+        "テ",
+        "ニ",
+        "ス"
+      ],
+      "introduces": "ニ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_136",
+      "word": "メニュー",
+      "romaji": "menyuu",
+      "meaning_vi": "thực đơn",
+      "chars": [
+        "メ",
+        "ニ",
+        "ュ",
+        "ー"
+      ],
+      "introduces": "ニ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_137",
+      "word": "カヌー",
+      "romaji": "kanuu",
+      "meaning_vi": "thuyền ca-nô",
+      "chars": [
+        "カ",
+        "ヌ",
+        "ー"
+      ],
+      "introduces": "ヌ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_138",
+      "word": "ヌードル",
+      "romaji": "nuudoru",
+      "meaning_vi": "mì sợi (noodle)",
+      "chars": [
+        "ヌ",
+        "ー",
+        "ド",
+        "ル"
+      ],
+      "introduces": "ヌ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_139",
+      "word": "ネクタイ",
+      "romaji": "nekutai",
+      "meaning_vi": "cà vạt",
+      "chars": [
+        "ネ",
+        "ク",
+        "タ",
+        "イ"
+      ],
+      "introduces": "ネ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_140",
+      "word": "ネット",
+      "romaji": "netto",
+      "meaning_vi": "tấm lưới / mạng",
+      "chars": [
+        "ネ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ネ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_141",
+      "word": "ピアノ",
+      "romaji": "piano",
+      "meaning_vi": "đàn dương cầm",
+      "chars": [
+        "ピ",
+        "ア",
+        "ノ"
+      ],
+      "introduces": "ノ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_142",
+      "word": "ノック",
+      "romaji": "nokku",
+      "meaning_vi": "tiếng gõ cửa",
+      "chars": [
+        "ノ",
+        "ッ",
+        "ク"
+      ],
+      "introduces": "ノ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_143",
+      "word": "ハム",
+      "romaji": "hamu",
+      "meaning_vi": "thịt nguội (ham)",
+      "chars": [
+        "ハ",
+        "ム"
+      ],
+      "introduces": "ハ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_144",
+      "word": "ハンカチ",
+      "romaji": "hankachi",
+      "meaning_vi": "khăn tay",
+      "chars": [
+        "ハ",
+        "ン",
+        "カ",
+        "チ"
+      ],
+      "introduces": "ハ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_145",
+      "word": "ヒーロー",
+      "romaji": "hiiroo",
+      "meaning_vi": "anh hùng",
+      "chars": [
+        "ヒ",
+        "ー",
+        "ロ",
+        "ー"
+      ],
+      "introduces": "ヒ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_146",
+      "word": "ヒント",
+      "romaji": "hinto",
+      "meaning_vi": "gợi ý (hint)",
+      "chars": [
+        "ヒ",
+        "ン",
+        "ト"
+      ],
+      "introduces": "ヒ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_147",
+      "word": "フォーク",
+      "romaji": "fooku",
+      "meaning_vi": "cái nĩa",
+      "chars": [
+        "フ",
+        "ォ",
+        "ー",
+        "ク"
+      ],
+      "introduces": "フ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_148",
+      "word": "フルーツ",
+      "romaji": "furuutsu",
+      "meaning_vi": "trái cây",
+      "chars": [
+        "フ",
+        "ル",
+        "ー",
+        "ツ"
+      ],
+      "introduces": "フ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_149",
+      "word": "ヘルメット",
+      "romaji": "herumetto",
+      "meaning_vi": "mũ bảo hiểm",
+      "chars": [
+        "ヘ",
+        "ル",
+        "メ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ヘ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_150",
+      "word": "ヘリ",
+      "romaji": "heri",
+      "meaning_vi": "trực thăng (viết tắt)",
+      "chars": [
+        "ヘ",
+        "リ"
+      ],
+      "introduces": "ヘ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_151",
+      "word": "ホテル",
+      "romaji": "hoteru",
+      "meaning_vi": "khách sạn",
+      "chars": [
+        "ホ",
+        "テ",
+        "ル"
+      ],
+      "introduces": "ホ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_152",
+      "word": "ホース",
+      "romaji": "hoosu",
+      "meaning_vi": "vòi nước",
+      "chars": [
+        "ホ",
+        "ー",
+        "ス"
+      ],
+      "introduces": "ホ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_153",
+      "word": "マスク",
+      "romaji": "masuku",
+      "meaning_vi": "khẩu trang",
+      "chars": [
+        "マ",
+        "ス",
+        "ク"
+      ],
+      "introduces": "マ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_154",
+      "word": "マッチ",
+      "romaji": "macchi",
+      "meaning_vi": "que diêm",
+      "chars": [
+        "マ",
+        "ッ",
+        "チ"
+      ],
+      "introduces": "マ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_155",
+      "word": "ミルク",
+      "romaji": "miruku",
+      "meaning_vi": "sữa",
+      "chars": [
+        "ミ",
+        "ル",
+        "ク"
+      ],
+      "introduces": "ミ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_156",
+      "word": "ミシン",
+      "romaji": "mishin",
+      "meaning_vi": "máy khâu",
+      "chars": [
+        "ミ",
+        "シ",
+        "ン"
+      ],
+      "introduces": "ミ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_157",
+      "word": "ガム",
+      "romaji": "gamu",
+      "meaning_vi": "kẹo cao su",
+      "chars": [
+        "ガ",
+        "ム"
+      ],
+      "introduces": "ム",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_158",
+      "word": "チーム",
+      "romaji": "chiimu",
+      "meaning_vi": "đội / nhóm",
+      "chars": [
+        "チ",
+        "ー",
+        "ム"
+      ],
+      "introduces": "ム",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_159",
+      "word": "メロン",
+      "romaji": "meron",
+      "meaning_vi": "dưa lưới",
+      "chars": [
+        "メ",
+        "ロ",
+        "ン"
+      ],
+      "introduces": "メ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_160",
+      "word": "メモ",
+      "romaji": "memo",
+      "meaning_vi": "ghi chú",
+      "chars": [
+        "メ",
+        "モ"
+      ],
+      "introduces": "メ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_161",
+      "word": "モデル",
+      "romaji": "moderu",
+      "meaning_vi": "mô hình / người mẫu",
+      "chars": [
+        "モ",
+        "デ",
+        "ル"
+      ],
+      "introduces": "モ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_162",
+      "word": "モニター",
+      "romaji": "monitaa",
+      "meaning_vi": "màn hình",
+      "chars": [
+        "モ",
+        "ニ",
+        "タ",
+        "ー"
+      ],
+      "introduces": "モ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_163",
+      "word": "ヤギ",
+      "romaji": "yagi",
+      "meaning_vi": "con dê",
+      "chars": [
+        "ヤ",
+        "ギ"
+      ],
+      "introduces": "ヤ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_164",
+      "word": "ダイヤ",
+      "romaji": "daiya",
+      "meaning_vi": "kim cương",
+      "chars": [
+        "ダ",
+        "イ",
+        "ヤ"
+      ],
+      "introduces": "ヤ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_165",
+      "word": "ユニフォーム",
+      "romaji": "yunifoomu",
+      "meaning_vi": "đồng phục",
+      "chars": [
+        "ユ",
+        "ニ",
+        "フ",
+        "ォ",
+        "ー",
+        "ム"
+      ],
+      "introduces": "ユ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_166",
+      "word": "ユーモア",
+      "romaji": "yuumoa",
+      "meaning_vi": "sự hài hước",
+      "chars": [
+        "ユ",
+        "ー",
+        "モ",
+        "ア"
+      ],
+      "introduces": "ユ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_167",
+      "word": "ヨット",
+      "romaji": "yotto",
+      "meaning_vi": "thuyền buồm",
+      "chars": [
+        "ヨ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ヨ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_168",
+      "word": "クレヨン",
+      "romaji": "kureyon",
+      "meaning_vi": "bút sáp màu",
+      "chars": [
+        "ク",
+        "レ",
+        "ヨ",
+        "ン"
+      ],
+      "introduces": "ヨ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_169",
+      "word": "ラジオ",
+      "romaji": "rajio",
+      "meaning_vi": "đài radio",
+      "chars": [
+        "ラ",
+        "ジ",
+        "オ"
+      ],
+      "introduces": "ラ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_170",
+      "word": "ラーメン",
+      "romaji": "raamen",
+      "meaning_vi": "mì ramen",
+      "chars": [
+        "ラ",
+        "ー",
+        "メ",
+        "ン"
+      ],
+      "introduces": "ラ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_171",
+      "word": "リボン",
+      "romaji": "ribon",
+      "meaning_vi": "dải ruy-băng",
+      "chars": [
+        "リ",
+        "ボ",
+        "ン"
+      ],
+      "introduces": "リ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_172",
+      "word": "スリッパ",
+      "romaji": "surippa",
+      "meaning_vi": "dép đi trong nhà",
+      "chars": [
+        "ス",
+        "リ",
+        "ッ",
+        "パ"
+      ],
+      "introduces": "リ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_173",
+      "word": "ルール",
+      "romaji": "ruuru",
+      "meaning_vi": "quy tắc / luật",
+      "chars": [
+        "ル",
+        "ー",
+        "ル"
+      ],
+      "introduces": "ル",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_174",
+      "word": "ボール",
+      "romaji": "booru",
+      "meaning_vi": "quả bóng",
+      "chars": [
+        "ボ",
+        "ー",
+        "ル"
+      ],
+      "introduces": "ル",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_175",
+      "word": "レモン",
+      "romaji": "remon",
+      "meaning_vi": "quả chanh vàng",
+      "chars": [
+        "レ",
+        "モ",
+        "ン"
+      ],
+      "introduces": "レ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_176",
+      "word": "トイレ",
+      "romaji": "toire",
+      "meaning_vi": "nhà vệ sinh",
+      "chars": [
+        "ト",
+        "イ",
+        "レ"
+      ],
+      "introduces": "レ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_177",
+      "word": "ロボット",
+      "romaji": "robotto",
+      "meaning_vi": "người máy (robot)",
+      "chars": [
+        "ロ",
+        "ボ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ロ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_178",
+      "word": "キロ",
+      "romaji": "kiro",
+      "meaning_vi": "ki-lô (kg / km)",
+      "chars": [
+        "キ",
+        "ロ"
+      ],
+      "introduces": "ロ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_179",
+      "word": "ワイン",
+      "romaji": "wain",
+      "meaning_vi": "rượu vang",
+      "chars": [
+        "ワ",
+        "イ",
+        "ン"
+      ],
+      "introduces": "ワ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_180",
+      "word": "タワー",
+      "romaji": "tawaa",
+      "meaning_vi": "ngọn tháp",
+      "chars": [
+        "タ",
+        "ワ",
+        "ー"
+      ],
+      "introduces": "ワ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_181",
+      "word": "ヲタク",
+      "romaji": "wotaku",
+      "meaning_vi": "người đam mê (otaku)",
+      "chars": [
+        "ヲ",
+        "タ",
+        "ク"
+      ],
+      "introduces": "ヲ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_182",
+      "word": "ビデオヲミル",
+      "romaji": "bideo wo miru",
+      "meaning_vi": "xem video (trợ từ ヲ)",
+      "chars": [
+        "ビ",
+        "デ",
+        "オ",
+        "ヲ",
+        "ミ",
+        "ル"
+      ],
+      "introduces": "ヲ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_183",
+      "word": "パン",
+      "romaji": "pan",
+      "meaning_vi": "bánh mì",
+      "chars": [
+        "パ",
+        "ン"
+      ],
+      "introduces": "ン",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_184",
+      "word": "ライオン",
+      "romaji": "raion",
+      "meaning_vi": "sư tử",
+      "chars": [
+        "ラ",
+        "イ",
+        "オ",
+        "ン"
+      ],
+      "introduces": "ン",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_185",
+      "word": "がっこう",
+      "romaji": "gakkou",
+      "meaning_vi": "trường học",
+      "chars": [
+        "が",
+        "っ",
+        "こ",
+        "う"
+      ],
+      "introduces": "が",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_186",
+      "word": "めがね",
+      "romaji": "megane",
+      "meaning_vi": "kính mắt",
+      "chars": [
+        "め",
+        "が",
+        "ね"
+      ],
+      "introduces": "が",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_187",
+      "word": "かぎ",
+      "romaji": "kagi",
+      "meaning_vi": "chìa khoá",
+      "chars": [
+        "か",
+        "ぎ"
+      ],
+      "introduces": "ぎ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_188",
+      "word": "うさぎ",
+      "romaji": "usagi",
+      "meaning_vi": "con thỏ",
+      "chars": [
+        "う",
+        "さ",
+        "ぎ"
+      ],
+      "introduces": "ぎ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_189",
+      "word": "かぐ",
+      "romaji": "kagu",
+      "meaning_vi": "đồ nội thất",
+      "chars": [
+        "か",
+        "ぐ"
+      ],
+      "introduces": "ぐ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_190",
+      "word": "どんぐり",
+      "romaji": "donguri",
+      "meaning_vi": "quả sồi",
+      "chars": [
+        "ど",
+        "ん",
+        "ぐ",
+        "り"
+      ],
+      "introduces": "ぐ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_191",
+      "word": "ひげ",
+      "romaji": "hige",
+      "meaning_vi": "râu",
+      "chars": [
+        "ひ",
+        "げ"
+      ],
+      "introduces": "げ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_192",
+      "word": "かげ",
+      "romaji": "kage",
+      "meaning_vi": "cái bóng",
+      "chars": [
+        "か",
+        "げ"
+      ],
+      "introduces": "げ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_193",
+      "word": "りんご",
+      "romaji": "ringo",
+      "meaning_vi": "quả táo",
+      "chars": [
+        "り",
+        "ん",
+        "ご"
+      ],
+      "introduces": "ご",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_194",
+      "word": "ごはん",
+      "romaji": "gohan",
+      "meaning_vi": "cơm",
+      "chars": [
+        "ご",
+        "は",
+        "ん"
+      ],
+      "introduces": "ご",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_195",
+      "word": "ひざ",
+      "romaji": "hiza",
+      "meaning_vi": "đầu gối",
+      "chars": [
+        "ひ",
+        "ざ"
+      ],
+      "introduces": "ざ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_196",
+      "word": "ざぶとん",
+      "romaji": "zabuton",
+      "meaning_vi": "đệm ngồi",
+      "chars": [
+        "ざ",
+        "ぶ",
+        "と",
+        "ん"
+      ],
+      "introduces": "ざ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_197",
+      "word": "にじ",
+      "romaji": "niji",
+      "meaning_vi": "cầu vồng",
+      "chars": [
+        "に",
+        "じ"
+      ],
+      "introduces": "じ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_198",
+      "word": "くじら",
+      "romaji": "kujira",
+      "meaning_vi": "cá voi",
+      "chars": [
+        "く",
+        "じ",
+        "ら"
+      ],
+      "introduces": "じ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_199",
+      "word": "みず",
+      "romaji": "mizu",
+      "meaning_vi": "nước",
+      "chars": [
+        "み",
+        "ず"
+      ],
+      "introduces": "ず",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_200",
+      "word": "すずめ",
+      "romaji": "suzume",
+      "meaning_vi": "chim sẻ",
+      "chars": [
+        "す",
+        "ず",
+        "め"
+      ],
+      "introduces": "ず",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_201",
+      "word": "かぜ",
+      "romaji": "kaze",
+      "meaning_vi": "cơn gió / cảm lạnh",
+      "chars": [
+        "か",
+        "ぜ"
+      ],
+      "introduces": "ぜ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_202",
+      "word": "ぜんぶ",
+      "romaji": "zenbu",
+      "meaning_vi": "tất cả",
+      "chars": [
+        "ぜ",
+        "ん",
+        "ぶ"
+      ],
+      "introduces": "ぜ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_203",
+      "word": "ぞう",
+      "romaji": "zou",
+      "meaning_vi": "con voi",
+      "chars": [
+        "ぞ",
+        "う"
+      ],
+      "introduces": "ぞ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_204",
+      "word": "かぞく",
+      "romaji": "kazoku",
+      "meaning_vi": "gia đình",
+      "chars": [
+        "か",
+        "ぞ",
+        "く"
+      ],
+      "introduces": "ぞ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_205",
+      "word": "えだ",
+      "romaji": "eda",
+      "meaning_vi": "cành cây",
+      "chars": [
+        "え",
+        "だ"
+      ],
+      "introduces": "だ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_206",
+      "word": "なみだ",
+      "romaji": "namida",
+      "meaning_vi": "nước mắt",
+      "chars": [
+        "な",
+        "み",
+        "だ"
+      ],
+      "introduces": "だ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_207",
+      "word": "はなぢ",
+      "romaji": "hanaji",
+      "meaning_vi": "chảy máu cam",
+      "chars": [
+        "は",
+        "な",
+        "ぢ"
+      ],
+      "introduces": "ぢ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_208",
+      "word": "ちぢむ",
+      "romaji": "chijimu",
+      "meaning_vi": "co lại",
+      "chars": [
+        "ち",
+        "ぢ",
+        "む"
+      ],
+      "introduces": "ぢ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_209",
+      "word": "つづく",
+      "romaji": "tsuzuku",
+      "meaning_vi": "tiếp tục",
+      "chars": [
+        "つ",
+        "づ",
+        "く"
+      ],
+      "introduces": "づ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_210",
+      "word": "みかづき",
+      "romaji": "mikazuki",
+      "meaning_vi": "trăng lưỡi liềm",
+      "chars": [
+        "み",
+        "か",
+        "づ",
+        "き"
+      ],
+      "introduces": "づ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_211",
+      "word": "でんわ",
+      "romaji": "denwa",
+      "meaning_vi": "điện thoại",
+      "chars": [
+        "で",
+        "ん",
+        "わ"
+      ],
+      "introduces": "で",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_212",
+      "word": "うで",
+      "romaji": "ude",
+      "meaning_vi": "cánh tay",
+      "chars": [
+        "う",
+        "で"
+      ],
+      "introduces": "で",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_213",
+      "word": "まど",
+      "romaji": "mado",
+      "meaning_vi": "cửa sổ",
+      "chars": [
+        "ま",
+        "ど"
+      ],
+      "introduces": "ど",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_214",
+      "word": "ぶどう",
+      "romaji": "budou",
+      "meaning_vi": "quả nho",
+      "chars": [
+        "ぶ",
+        "ど",
+        "う"
+      ],
+      "introduces": "ど",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_215",
+      "word": "かばん",
+      "romaji": "kaban",
+      "meaning_vi": "cặp sách",
+      "chars": [
+        "か",
+        "ば",
+        "ん"
+      ],
+      "introduces": "ば",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_216",
+      "word": "つばめ",
+      "romaji": "tsubame",
+      "meaning_vi": "chim én",
+      "chars": [
+        "つ",
+        "ば",
+        "め"
+      ],
+      "introduces": "ば",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_217",
+      "word": "えび",
+      "romaji": "ebi",
+      "meaning_vi": "con tôm",
+      "chars": [
+        "え",
+        "び"
+      ],
+      "introduces": "び",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_218",
+      "word": "ゆび",
+      "romaji": "yubi",
+      "meaning_vi": "ngón tay",
+      "chars": [
+        "ゆ",
+        "び"
+      ],
+      "introduces": "び",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_219",
+      "word": "ぶた",
+      "romaji": "buta",
+      "meaning_vi": "con lợn (heo)",
+      "chars": [
+        "ぶ",
+        "た"
+      ],
+      "introduces": "ぶ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_220",
+      "word": "ぶどう",
+      "romaji": "budou",
+      "meaning_vi": "quả nho",
+      "chars": [
+        "ぶ",
+        "ど",
+        "う"
+      ],
+      "introduces": "ぶ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_221",
+      "word": "かべ",
+      "romaji": "kabe",
+      "meaning_vi": "bức tường",
+      "chars": [
+        "か",
+        "べ"
+      ],
+      "introduces": "べ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_222",
+      "word": "なべ",
+      "romaji": "nabe",
+      "meaning_vi": "cái nồi",
+      "chars": [
+        "な",
+        "べ"
+      ],
+      "introduces": "べ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_223",
+      "word": "ぼうし",
+      "romaji": "boushi",
+      "meaning_vi": "cái mũ",
+      "chars": [
+        "ぼ",
+        "う",
+        "し"
+      ],
+      "introduces": "ぼ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_224",
+      "word": "とんぼ",
+      "romaji": "tonbo",
+      "meaning_vi": "chuồn chuồn",
+      "chars": [
+        "と",
+        "ん",
+        "ぼ"
+      ],
+      "introduces": "ぼ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_225",
+      "word": "かっぱ",
+      "romaji": "kappa",
+      "meaning_vi": "áo mưa",
+      "chars": [
+        "か",
+        "っ",
+        "ぱ"
+      ],
+      "introduces": "ぱ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_226",
+      "word": "らっぱ",
+      "romaji": "rappa",
+      "meaning_vi": "cái kèn",
+      "chars": [
+        "ら",
+        "っ",
+        "ぱ"
+      ],
+      "introduces": "ぱ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_227",
+      "word": "えんぴつ",
+      "romaji": "enpitsu",
+      "meaning_vi": "bút chì",
+      "chars": [
+        "え",
+        "ん",
+        "ぴ",
+        "つ"
+      ],
+      "introduces": "ぴ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_228",
+      "word": "ぴかぴか",
+      "romaji": "pikapika",
+      "meaning_vi": "lấp lánh",
+      "chars": [
+        "ぴ",
+        "か",
+        "ぴ",
+        "か"
+      ],
+      "introduces": "ぴ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_229",
+      "word": "てんぷら",
+      "romaji": "tenpura",
+      "meaning_vi": "món tempura",
+      "chars": [
+        "て",
+        "ん",
+        "ぷ",
+        "ら"
+      ],
+      "introduces": "ぷ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_230",
+      "word": "きっぷ",
+      "romaji": "kippu",
+      "meaning_vi": "vé tàu",
+      "chars": [
+        "き",
+        "っ",
+        "ぷ"
+      ],
+      "introduces": "ぷ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_231",
+      "word": "ほっぺ",
+      "romaji": "hoppe",
+      "meaning_vi": "má (khuôn mặt)",
+      "chars": [
+        "ほ",
+        "っ",
+        "ぺ"
+      ],
+      "introduces": "ぺ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_232",
+      "word": "ぺこぺこ",
+      "romaji": "pekopeko",
+      "meaning_vi": "đói cồn cào",
+      "chars": [
+        "ぺ",
+        "こ",
+        "ぺ",
+        "こ"
+      ],
+      "introduces": "ぺ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_233",
+      "word": "しっぽ",
+      "romaji": "shippo",
+      "meaning_vi": "cái đuôi",
+      "chars": [
+        "し",
+        "っ",
+        "ぽ"
+      ],
+      "introduces": "ぽ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_234",
+      "word": "さんぽ",
+      "romaji": "sanpo",
+      "meaning_vi": "đi dạo",
+      "chars": [
+        "さ",
+        "ん",
+        "ぽ"
+      ],
+      "introduces": "ぽ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_235",
+      "word": "ガラス",
+      "romaji": "garasu",
+      "meaning_vi": "kính / thuỷ tinh",
+      "chars": [
+        "ガ",
+        "ラ",
+        "ス"
+      ],
+      "introduces": "ガ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_236",
+      "word": "ガム",
+      "romaji": "gamu",
+      "meaning_vi": "kẹo cao su",
+      "chars": [
+        "ガ",
+        "ム"
+      ],
+      "introduces": "ガ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_237",
+      "word": "ギター",
+      "romaji": "gitaa",
+      "meaning_vi": "đàn ghi-ta",
+      "chars": [
+        "ギ",
+        "タ",
+        "ー"
+      ],
+      "introduces": "ギ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_238",
+      "word": "カギ",
+      "romaji": "kagi",
+      "meaning_vi": "chìa khoá",
+      "chars": [
+        "カ",
+        "ギ"
+      ],
+      "introduces": "ギ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_239",
+      "word": "グラス",
+      "romaji": "gurasu",
+      "meaning_vi": "cốc thuỷ tinh",
+      "chars": [
+        "グ",
+        "ラ",
+        "ス"
+      ],
+      "introduces": "グ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_240",
+      "word": "グループ",
+      "romaji": "guruupu",
+      "meaning_vi": "nhóm",
+      "chars": [
+        "グ",
+        "ル",
+        "ー",
+        "プ"
+      ],
+      "introduces": "グ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_241",
+      "word": "ゲーム",
+      "romaji": "geemu",
+      "meaning_vi": "trò chơi",
+      "chars": [
+        "ゲ",
+        "ー",
+        "ム"
+      ],
+      "introduces": "ゲ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_242",
+      "word": "ゲスト",
+      "romaji": "gesuto",
+      "meaning_vi": "khách mời",
+      "chars": [
+        "ゲ",
+        "ス",
+        "ト"
+      ],
+      "introduces": "ゲ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_243",
+      "word": "ゴリラ",
+      "romaji": "gorira",
+      "meaning_vi": "khỉ đột",
+      "chars": [
+        "ゴ",
+        "リ",
+        "ラ"
+      ],
+      "introduces": "ゴ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_244",
+      "word": "イチゴ",
+      "romaji": "ichigo",
+      "meaning_vi": "dâu tây",
+      "chars": [
+        "イ",
+        "チ",
+        "ゴ"
+      ],
+      "introduces": "ゴ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_245",
+      "word": "ピザ",
+      "romaji": "piza",
+      "meaning_vi": "bánh pizza",
+      "chars": [
+        "ピ",
+        "ザ"
+      ],
+      "introduces": "ザ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_246",
+      "word": "デザート",
+      "romaji": "dezaato",
+      "meaning_vi": "món tráng miệng",
+      "chars": [
+        "デ",
+        "ザ",
+        "ー",
+        "ト"
+      ],
+      "introduces": "ザ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_247",
+      "word": "ジュース",
+      "romaji": "juusu",
+      "meaning_vi": "nước trái cây",
+      "chars": [
+        "ジ",
+        "ュ",
+        "ー",
+        "ス"
+      ],
+      "introduces": "ジ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_248",
+      "word": "ページ",
+      "romaji": "peeji",
+      "meaning_vi": "trang sách",
+      "chars": [
+        "ペ",
+        "ー",
+        "ジ"
+      ],
+      "introduces": "ジ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_249",
+      "word": "ズボン",
+      "romaji": "zubon",
+      "meaning_vi": "quần dài",
+      "chars": [
+        "ズ",
+        "ボ",
+        "ン"
+      ],
+      "introduces": "ズ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_250",
+      "word": "チーズ",
+      "romaji": "chiizu",
+      "meaning_vi": "phô mai",
+      "chars": [
+        "チ",
+        "ー",
+        "ズ"
+      ],
+      "introduces": "ズ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_251",
+      "word": "ゼリー",
+      "romaji": "zerii",
+      "meaning_vi": "thạch rau câu",
+      "chars": [
+        "ゼ",
+        "リ",
+        "ー"
+      ],
+      "introduces": "ゼ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_252",
+      "word": "ゼロ",
+      "romaji": "zero",
+      "meaning_vi": "số không (0)",
+      "chars": [
+        "ゼ",
+        "ロ"
+      ],
+      "introduces": "ゼ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_253",
+      "word": "ゾーン",
+      "romaji": "zoon",
+      "meaning_vi": "khu vực",
+      "chars": [
+        "ゾ",
+        "ー",
+        "ン"
+      ],
+      "introduces": "ゾ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_254",
+      "word": "ナゾ",
+      "romaji": "nazo",
+      "meaning_vi": "câu đố",
+      "chars": [
+        "ナ",
+        "ゾ"
+      ],
+      "introduces": "ゾ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_255",
+      "word": "ダンス",
+      "romaji": "dansu",
+      "meaning_vi": "nhảy múa",
+      "chars": [
+        "ダ",
+        "ン",
+        "ス"
+      ],
+      "introduces": "ダ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_256",
+      "word": "パンダ",
+      "romaji": "panda",
+      "meaning_vi": "gấu trúc",
+      "chars": [
+        "パ",
+        "ン",
+        "ダ"
+      ],
+      "introduces": "ダ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_257",
+      "word": "ヂーゼル",
+      "romaji": "jiizeru",
+      "meaning_vi": "động cơ diesel",
+      "chars": [
+        "ヂ",
+        "ー",
+        "ゼ",
+        "ル"
+      ],
+      "introduces": "ヂ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_258",
+      "word": "ハナヂ",
+      "romaji": "hanaji",
+      "meaning_vi": "máu cam",
+      "chars": [
+        "ハ",
+        "ナ",
+        "ヂ"
+      ],
+      "introduces": "ヂ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_259",
+      "word": "ツヅキ",
+      "romaji": "tsuzuki",
+      "meaning_vi": "phần tiếp theo",
+      "chars": [
+        "ツ",
+        "ヅ",
+        "キ"
+      ],
+      "introduces": "ヅ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_260",
+      "word": "ミカヅキ",
+      "romaji": "mikazuki",
+      "meaning_vi": "trăng lưỡi liềm",
+      "chars": [
+        "ミ",
+        "カ",
+        "ヅ",
+        "キ"
+      ],
+      "introduces": "ヅ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_261",
+      "word": "デスク",
+      "romaji": "desuku",
+      "meaning_vi": "bàn làm việc",
+      "chars": [
+        "デ",
+        "ス",
+        "ク"
+      ],
+      "introduces": "デ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_262",
+      "word": "ビデオ",
+      "romaji": "bideo",
+      "meaning_vi": "video",
+      "chars": [
+        "ビ",
+        "デ",
+        "オ"
+      ],
+      "introduces": "デ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_263",
+      "word": "ドア",
+      "romaji": "doa",
+      "meaning_vi": "cánh cửa",
+      "chars": [
+        "ド",
+        "ア"
+      ],
+      "introduces": "ド",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_264",
+      "word": "ベッド",
+      "romaji": "beddo",
+      "meaning_vi": "cái giường",
+      "chars": [
+        "ベ",
+        "ッ",
+        "ド"
+      ],
+      "introduces": "ド",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_265",
+      "word": "バス",
+      "romaji": "basu",
+      "meaning_vi": "xe buýt",
+      "chars": [
+        "バ",
+        "ス"
+      ],
+      "introduces": "バ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_266",
+      "word": "バナナ",
+      "romaji": "banana",
+      "meaning_vi": "quả chuối",
+      "chars": [
+        "バ",
+        "ナ",
+        "ナ"
+      ],
+      "introduces": "バ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_267",
+      "word": "テレビ",
+      "romaji": "terebi",
+      "meaning_vi": "ti vi",
+      "chars": [
+        "テ",
+        "レ",
+        "ビ"
+      ],
+      "introduces": "ビ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_268",
+      "word": "ビル",
+      "romaji": "biru",
+      "meaning_vi": "toà nhà",
+      "chars": [
+        "ビ",
+        "ル"
+      ],
+      "introduces": "ビ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_269",
+      "word": "ブラシ",
+      "romaji": "burashi",
+      "meaning_vi": "bàn chải",
+      "chars": [
+        "ブ",
+        "ラ",
+        "シ"
+      ],
+      "introduces": "ブ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_270",
+      "word": "テーブル",
+      "romaji": "teeburu",
+      "meaning_vi": "cái bàn",
+      "chars": [
+        "テ",
+        "ー",
+        "ブ",
+        "ル"
+      ],
+      "introduces": "ブ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_271",
+      "word": "ベッド",
+      "romaji": "beddo",
+      "meaning_vi": "cái giường",
+      "chars": [
+        "ベ",
+        "ッ",
+        "ド"
+      ],
+      "introduces": "ベ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_272",
+      "word": "ベル",
+      "romaji": "beru",
+      "meaning_vi": "cái chuông",
+      "chars": [
+        "ベ",
+        "ル"
+      ],
+      "introduces": "ベ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_273",
+      "word": "ボール",
+      "romaji": "booru",
+      "meaning_vi": "quả bóng",
+      "chars": [
+        "ボ",
+        "ー",
+        "ル"
+      ],
+      "introduces": "ボ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_274",
+      "word": "ボタン",
+      "romaji": "botan",
+      "meaning_vi": "cúc áo",
+      "chars": [
+        "ボ",
+        "タ",
+        "ン"
+      ],
+      "introduces": "ボ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_275",
+      "word": "パン",
+      "romaji": "pan",
+      "meaning_vi": "bánh mì",
+      "chars": [
+        "パ",
+        "ン"
+      ],
+      "introduces": "パ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_276",
+      "word": "パパ",
+      "romaji": "papa",
+      "meaning_vi": "bố / ba",
+      "chars": [
+        "パ",
+        "パ"
+      ],
+      "introduces": "パ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_277",
+      "word": "ピアノ",
+      "romaji": "piano",
+      "meaning_vi": "đàn dương cầm",
+      "chars": [
+        "ピ",
+        "ア",
+        "ノ"
+      ],
+      "introduces": "ピ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_278",
+      "word": "ピンク",
+      "romaji": "pinku",
+      "meaning_vi": "màu hồng",
+      "chars": [
+        "ピ",
+        "ン",
+        "ク"
+      ],
+      "introduces": "ピ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_279",
+      "word": "プール",
+      "romaji": "puuru",
+      "meaning_vi": "hồ bơi",
+      "chars": [
+        "プ",
+        "ー",
+        "ル"
+      ],
+      "introduces": "プ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_280",
+      "word": "コップ",
+      "romaji": "koppu",
+      "meaning_vi": "cái cốc",
+      "chars": [
+        "コ",
+        "ッ",
+        "プ"
+      ],
+      "introduces": "プ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_281",
+      "word": "ペン",
+      "romaji": "pen",
+      "meaning_vi": "cây bút",
+      "chars": [
+        "ペ",
+        "ン"
+      ],
+      "introduces": "ペ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_282",
+      "word": "ペット",
+      "romaji": "petto",
+      "meaning_vi": "thú cưng",
+      "chars": [
+        "ペ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ペ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_283",
+      "word": "ポスト",
+      "romaji": "posuto",
+      "meaning_vi": "hòm thư",
+      "chars": [
+        "ポ",
+        "ス",
+        "ト"
+      ],
+      "introduces": "ポ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_284",
+      "word": "ポケット",
+      "romaji": "poketto",
+      "meaning_vi": "túi áo",
+      "chars": [
+        "ポ",
+        "ケ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ポ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_285",
+      "word": "しゃしん",
+      "romaji": "shashin",
+      "meaning_vi": "bức ảnh",
+      "chars": [
+        "し",
+        "ゃ",
+        "し",
+        "ん"
+      ],
+      "introduces": "ゃ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_286",
+      "word": "おちゃ",
+      "romaji": "ocha",
+      "meaning_vi": "trà xanh",
+      "chars": [
+        "お",
+        "ち",
+        "ゃ"
+      ],
+      "introduces": "ゃ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_287",
+      "word": "きゅうり",
+      "romaji": "kyuuri",
+      "meaning_vi": "dưa chuột",
+      "chars": [
+        "き",
+        "ゅ",
+        "う",
+        "り"
+      ],
+      "introduces": "ゅ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_288",
+      "word": "しゅくだい",
+      "romaji": "shukudai",
+      "meaning_vi": "bài tập về nhà",
+      "chars": [
+        "し",
+        "ゅ",
+        "く",
+        "だ",
+        "い"
+      ],
+      "introduces": "ゅ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_289",
+      "word": "きょう",
+      "romaji": "kyou",
+      "meaning_vi": "hôm nay",
+      "chars": [
+        "き",
+        "ょ",
+        "う"
+      ],
+      "introduces": "ょ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_290",
+      "word": "としょかん",
+      "romaji": "toshokan",
+      "meaning_vi": "thư viện",
+      "chars": [
+        "と",
+        "し",
+        "ょ",
+        "か",
+        "ん"
+      ],
+      "introduces": "ょ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_291",
+      "word": "きって",
+      "romaji": "kitte",
+      "meaning_vi": "con tem",
+      "chars": [
+        "き",
+        "っ",
+        "て"
+      ],
+      "introduces": "っ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_292",
+      "word": "ねっこ",
+      "romaji": "nekko",
+      "meaning_vi": "rễ cây",
+      "chars": [
+        "ね",
+        "っ",
+        "こ"
+      ],
+      "introduces": "っ",
+      "script": "hiragana"
+    },
+    {
+      "id": "vocab_293",
+      "word": "シャツ",
+      "romaji": "shatsu",
+      "meaning_vi": "áo sơ mi",
+      "chars": [
+        "シ",
+        "ャ",
+        "ツ"
+      ],
+      "introduces": "ャ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_294",
+      "word": "キャンプ",
+      "romaji": "kyanpu",
+      "meaning_vi": "cắm trại",
+      "chars": [
+        "キ",
+        "ャ",
+        "ン",
+        "プ"
+      ],
+      "introduces": "ャ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_295",
+      "word": "ジュース",
+      "romaji": "juusu",
+      "meaning_vi": "nước ép",
+      "chars": [
+        "ジ",
+        "ュ",
+        "ー",
+        "ス"
+      ],
+      "introduces": "ュ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_296",
+      "word": "メニュー",
+      "romaji": "menyuu",
+      "meaning_vi": "thực đơn",
+      "chars": [
+        "メ",
+        "ニ",
+        "ュ",
+        "ー"
+      ],
+      "introduces": "ュ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_297",
+      "word": "チョコ",
+      "romaji": "choko",
+      "meaning_vi": "sô-cô-la",
+      "chars": [
+        "チ",
+        "ョ",
+        "コ"
+      ],
+      "introduces": "ョ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_298",
+      "word": "ショップ",
+      "romaji": "shoppu",
+      "meaning_vi": "cửa hàng",
+      "chars": [
+        "シ",
+        "ョ",
+        "ッ",
+        "プ"
+      ],
+      "introduces": "ョ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_299",
+      "word": "コップ",
+      "romaji": "koppu",
+      "meaning_vi": "cái cốc",
+      "chars": [
+        "コ",
+        "ッ",
+        "プ"
+      ],
+      "introduces": "ッ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_300",
+      "word": "ベッド",
+      "romaji": "beddo",
+      "meaning_vi": "cái giường",
+      "chars": [
+        "ベ",
+        "ッ",
+        "ド"
+      ],
+      "introduces": "ッ",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_301",
+      "word": "ケーキ",
+      "romaji": "keeki",
+      "meaning_vi": "bánh kem",
+      "chars": [
+        "ケ",
+        "ー",
+        "キ"
+      ],
+      "introduces": "ー",
+      "script": "katakana"
+    },
+    {
+      "id": "vocab_302",
+      "word": "コーヒー",
+      "romaji": "koohii",
+      "meaning_vi": "cà phê",
+      "chars": [
+        "コ",
+        "ー",
+        "ヒ",
+        "ー"
+      ],
+      "introduces": "ー",
+      "script": "katakana"
+    }
+  ]
+}
