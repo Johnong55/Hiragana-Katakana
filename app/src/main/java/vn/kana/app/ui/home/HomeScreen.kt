@@ -90,10 +90,17 @@ fun HomeScreen(
     var replayTrigger by remember { mutableIntStateOf(0) }
 
     val selectedTemplate = selectedChar?.let { byChar[it] }
-    val selectedStrokes = remember(selectedTemplate?.char) {
-        selectedTemplate?.toTypedStrokes().orEmpty()
+    var lastActiveTemplate by remember { mutableStateOf<KanaStrokeTemplate?>(null) }
+    LaunchedEffect(selectedTemplate) {
+        if (selectedTemplate != null) {
+            lastActiveTemplate = selectedTemplate
+        }
     }
-    val selectedWords = uiState.wordsByChar[selectedTemplate?.char.orEmpty()].orEmpty()
+    val displayTemplate = selectedTemplate ?: lastActiveTemplate
+    val selectedStrokes = remember(displayTemplate?.char) {
+        displayTemplate?.toTypedStrokes().orEmpty()
+    }
+    val selectedWords = uiState.wordsByChar[displayTemplate?.char.orEmpty()].orEmpty()
 
     var animStrokeIdx by remember { mutableIntStateOf(0) }
     var animStrokeProgress by remember { mutableFloatStateOf(0f) }
@@ -173,13 +180,14 @@ fun HomeScreen(
             }
         }
 
-        // 2. Khung Upper Animated ngay trên cùng khi bấm vào 1 chữ (không cần chuyển màn hình)
+        // 2. Khung Upper Animated ngay trên cùng khi bấm vào 1 chữ (thu/mở mượt, không khựng khi đóng)
         AnimatedVisibility(
-            visible = selectedTemplate != null,
+            visible = selectedTemplate != null && displayTemplate != null,
             enter = expandVertically(animationSpec = tween(240)) + fadeIn(animationSpec = tween(220)),
-            exit = shrinkVertically(animationSpec = tween(200)) + fadeOut(animationSpec = tween(180))
+            exit = shrinkVertically(animationSpec = tween(240)) + fadeOut(animationSpec = tween(200))
         ) {
-            if (selectedTemplate != null) {
+            val activeTmpl = displayTemplate
+            if (activeTmpl != null) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -211,14 +219,14 @@ fun HomeScreen(
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = "${selectedTemplate.char} (${selectedTemplate.romaji})",
+                                    text = "${activeTmpl.char} (${activeTmpl.romaji})",
                                     style = MaterialTheme.typography.titleLarge,
                                     color = MaterialTheme.colorScheme.onBackground,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
                                 )
                                 Text(
-                                    text = "${selectedTemplate.row} • ${selectedTemplate.strokeCount} nét",
+                                    text = "${activeTmpl.row} • ${activeTmpl.strokeCount} nét",
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -233,7 +241,7 @@ fun HomeScreen(
                                         .background(MaterialTheme.colorScheme.primary)
                                         .clickable {
                                             replayTrigger++
-                                            viewModel.speak(selectedTemplate.char, selectedTemplate.romaji)
+                                            viewModel.speak(activeTmpl.char, activeTmpl.romaji)
                                         }
                                         .padding(horizontal = 8.dp, vertical = 5.dp)
                                 )
@@ -283,15 +291,15 @@ fun HomeScreen(
                                 .background(MaterialTheme.colorScheme.primary)
                                 .clickable {
                                     onPracticeCharacter(
-                                        selectedTemplate.row,
-                                        selectedTemplate.script,
-                                        selectedTemplate.char
+                                        activeTmpl.row,
+                                        activeTmpl.script,
+                                        activeTmpl.char
                                     )
                                 }
                                 .padding(vertical = 6.dp)
                         ) {
                             Text(
-                                text = "✎ Luyện viết chữ '${selectedTemplate.char}' →",
+                                text = "✎ Luyện viết chữ '${activeTmpl.char}' →",
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 maxLines = 1

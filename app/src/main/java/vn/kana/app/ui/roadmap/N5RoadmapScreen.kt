@@ -593,20 +593,20 @@ private fun SCurveInfographicRoadMap(
     val centerLineColor = MaterialTheme.colorScheme.background
     val flagRedColor = MaterialTheme.colorScheme.error
 
-    val totalHeightDp = 940.dp
+    val totalHeightDp = 1180.dp
     val density = LocalDensity.current
 
-    // Toạ độ chuẩn hoá (xRatio, yRatio) cho 8 trạm uốn lượn chữ S giống hệt hình mẫu
+    // Toạ độ chuẩn hoá (xRatio, yRatio) cho 8 trạm uốn lượn chữ S với khoảng cách dọc đều đặn ~145dp giữa các box
     val stationPositions = remember {
         listOf(
-            0.22f to 0.07f, // 01: Trái trên (Bắt đầu)
-            0.78f to 0.16f, // 02: Phải trên
-            0.20f to 0.30f, // 03: Uốn sang trái
-            0.48f to 0.41f, // 04: Giữa
-            0.80f to 0.51f, // 05: Uốn sang phải
-            0.52f to 0.65f, // 06: Giữa phải
-            0.22f to 0.78f, // 07: Uốn sang trái dưới
-            0.74f to 0.91f  // 08: Phải dưới (Đích N5 🚩)
+            0.20f to 0.055f, // 01: Trái trên
+            0.80f to 0.175f, // 02: Phải trên
+            0.20f to 0.300f, // 03: Uốn sang trái
+            0.50f to 0.425f, // 04: Giữa
+            0.80f to 0.550f, // 05: Uốn sang phải
+            0.50f to 0.675f, // 06: Giữa phải
+            0.20f to 0.800f, // 07: Uốn sang trái dưới
+            0.78f to 0.920f  // 08: Phải dưới (Đích N5 🚩)
         )
     }
 
