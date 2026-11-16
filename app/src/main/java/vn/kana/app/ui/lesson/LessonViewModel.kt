@@ -627,7 +627,7 @@ class LessonViewModel(
                     showingCorrectionAnimation = true,
                     correctionTemplate = target,
                     mustRewriteAfterError = requireRewrite,
-                    feedbackMessage = "Chưa chính xác ($errReason). Xem lại nét đúng rồi thử lại nhé!",
+                    feedbackMessage = "ối zồi ôi làm được không đấy ($errReason). Xem lại nét đúng rồi thử lại nhé!",
                     isFeedbackError = true,
                     shakeTrigger = it.shakeTrigger + 1
                 )
@@ -725,7 +725,7 @@ class LessonViewModel(
                     showingCorrectionAnimation = true,
                     correctionTemplate = failedTemplate,
                     mustRewriteAfterError = true,
-                    feedbackMessage = "Ô số ${firstFailedSlot.index + 1} ('${firstFailedSlot.targetChar}'): $errReason.",
+                    feedbackMessage = "ối zồi ôi làm được không đấy — Ô số ${firstFailedSlot.index + 1} ('${firstFailedSlot.targetChar}'): $errReason.",
                     isFeedbackError = true,
                     shakeTrigger = it.shakeTrigger + 1
                 )
@@ -898,7 +898,7 @@ class LessonViewModel(
                     showingCorrectionAnimation = true,
                     correctionTemplate = target,
                     mustRewriteAfterError = true,
-                    feedbackMessage = "Chưa đúng ($errReason). Đáp án là '${target.char}'. Xem lại nét rồi viết lại 1 lần!",
+                    feedbackMessage = "ối zồi ôi làm được không đấy ($errReason). Đáp án là '${target.char}'. Xem lại nét rồi viết lại 1 lần!",
                     isFeedbackError = true,
                     shakeTrigger = it.shakeTrigger + 1
                 )
@@ -943,7 +943,7 @@ class LessonViewModel(
                     showingCorrectionAnimation = true,
                     correctionTemplate = failedTemplate,
                     mustRewriteAfterError = true,
-                    feedbackMessage = "Chưa chính xác ở chữ '${firstFailedSlot.targetChar}' (từ đúng: $wordText).",
+                    feedbackMessage = "ối zồi ôi làm được không đấy — Sai ở chữ '${firstFailedSlot.targetChar}' (từ đúng: $wordText).",
                     isFeedbackError = true,
                     shakeTrigger = it.shakeTrigger + 1
                 )

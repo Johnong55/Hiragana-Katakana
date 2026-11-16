@@ -342,7 +342,7 @@ fun KanaDrawingCanvas(
                         .padding(horizontal = 28.dp, vertical = 18.dp)
                 ) {
                     Text(
-                        text = "✓ CHÍNH XÁC!",
+                        text = "✓ HAY BẠN!",
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )

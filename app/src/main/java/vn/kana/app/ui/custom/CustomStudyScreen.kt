@@ -802,7 +802,7 @@ private fun CustomWordWritingPracticeView(
                     val failed = evaluated.firstOrNull { it.evaluation?.passed != true }
                     if (failed == null) {
                         isFeedbackError = false
-                        feedbackText = "✓ Chính xác! Bạn đã viết đúng từ '${word.word}' (${word.meaningVi})."
+                        feedbackText = "✓ Hay bạn! Bạn đã viết đúng từ '${word.word}' (${word.meaningVi})."
                         localView.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                         onSpeakWord()
                         scope.launch {
@@ -818,7 +818,7 @@ private fun CustomWordWritingPracticeView(
                         val reason = failed.evaluation?.errors?.joinToString(", ") { it.messageVi }
                             .orEmpty()
                             .ifEmpty { "Chưa đúng nét" }
-                        feedbackText = "Ô số ${failed.index + 1} ('${failed.targetChar}'): $reason."
+                        feedbackText = "ối zồi ôi làm được không đấy — Ô số ${failed.index + 1} ('${failed.targetChar}'): $reason."
                     }
                 },
                 modifier = Modifier.weight(1.2f)

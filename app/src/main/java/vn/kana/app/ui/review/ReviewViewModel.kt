@@ -473,7 +473,7 @@ class ReviewViewModel(
                     showingCorrectionAnimation = true,
                     correctionTemplate = target,
                     mustRewriteAfterError = true,
-                    feedbackMessage = "Chưa đạt ($errReason). Đáp án: '${target.char}'. Xem lại nét đúng rồi viết lại 1 lần!",
+                    feedbackMessage = "ối zồi ôi làm được không đấy ($errReason). Đáp án: '${target.char}'. Xem lại nét đúng rồi viết lại 1 lần!",
                     isFeedbackError = true,
                     shakeTrigger = it.shakeTrigger + 1
                 )
@@ -552,7 +552,7 @@ class ReviewViewModel(
                     showingCorrectionAnimation = true,
                     correctionTemplate = failedTmpl,
                     mustRewriteAfterError = true,
-                    feedbackMessage = "Ô số ${firstFailed.index + 1} ('${firstFailed.targetChar}'): $errReason. Đáp án từ: ${word.word}. Hãy xem nét mẫu rồi viết lại 1 lần!",
+                    feedbackMessage = "ối zồi ôi làm được không đấy — Ô số ${firstFailed.index + 1} ('${firstFailed.targetChar}'): $errReason. Đáp án từ: ${word.word}.",
                     isFeedbackError = true,
                     shakeTrigger = it.shakeTrigger + 1
                 )
