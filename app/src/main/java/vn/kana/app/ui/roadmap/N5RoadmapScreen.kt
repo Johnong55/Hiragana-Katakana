@@ -462,38 +462,30 @@ fun N5RoadmapScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(horizontal = 16.dp, vertical = 6.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        // 1. Header Lộ trình N5
+        // 1. Header Lộ trình N5 gọn gàng (sát trên/dưới)
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column {
-                Text(
-                    text = "LỘ TRÌNH CHINH PHỤC JLPT N5",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Text(
-                    text = "Hoàn thành từng chặng • Kiểm tra kiến thức để mở khoá chặng mới",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            Text(
+                text = "LỘ TRÌNH JLPT N5",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1
+            )
             Text(
                 text = "$completedStagesCount/8 Chặng",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.primary)
-                    .padding(horizontal = 10.dp, vertical = 6.dp)
+                    .padding(horizontal = 10.dp, vertical = 4.dp)
             )
         }
-
-        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
 
         // 2. Bản đồ Con đường Uốn lượn Chữ S (S-Curve Winding Road Map 01 -> 08)
         Box(
@@ -516,12 +508,21 @@ fun N5RoadmapScreen(
             stage = cur,
             onEnterStageStudy = {
                 when (cur.type) {
-                    RoadmapStageType.HIRAGANA_BASIC,
+                    RoadmapStageType.HIRAGANA_BASIC -> {
+                        // Bấm Step 1 -> đi thẳng vào học và kiểm tra Hiragana (chữ tiếp theo chưa thuộc)
+                        val nextRow = uiState.allLessons.firstOrNull {
+                            it.script == "hiragana" && !it.isCompleted && it.characters.firstOrNull()?.category == "basic"
+                        } ?: uiState.allLessons.firstOrNull { it.script == "hiragana" }
+                        if (nextRow != null) {
+                            onStartRowLesson(nextRow.rowName, nextRow.script)
+                        }
+                    }
+
                     RoadmapStageType.KATAKANA_BASIC,
                     RoadmapStageType.DAKUTEN_AND_YOON,
                     RoadmapStageType.N5_KANJI_1,
                     RoadmapStageType.N5_KANJI_2_FINAL -> {
-                        // Lộ trình -> Bảng chữ cái của Chặng -> Chọn chữ / Học tiếp -> Tập viết
+                        // Các chặng tiếp theo mở Bảng chữ cái của Chặng đó
                         overlayMode = RoadmapOverlayMode.StageAlphabetBoard(cur)
                     }
 

@@ -47,8 +47,8 @@ import vn.kana.app.ui.settings.SettingsScreen
 import vn.kana.app.ui.theme.KanaTheme
 
 private enum class AppDestination(val isMainTab: Boolean, val tabLabelVi: String = "") {
-    HOME(isMainTab = true, tabLabelVi = "Trang chủ"),
-    ROADMAP_N5(isMainTab = true, tabLabelVi = "Lộ trình N5"),
+    ROADMAP_N5(isMainTab = true, tabLabelVi = "Trang chủ"),
+    HOME(isMainTab = true, tabLabelVi = "Bảng chữ"),
     CUSTOM_STUDY(isMainTab = true, tabLabelVi = "Chọn hàng"),
     REVIEW(isMainTab = true, tabLabelVi = "Ôn tập"),
     SETTINGS(isMainTab = true, tabLabelVi = "Cài đặt"),
@@ -82,7 +82,8 @@ class MainActivity : ComponentActivity() {
             }
 
             KanaTheme(darkTheme = useDarkTheme) {
-                var destination by rememberSaveable { mutableStateOf(AppDestination.HOME) }
+                // Đặt Lộ trình N5 làm Trang chủ mặc định khi mở app
+                var destination by rememberSaveable { mutableStateOf(AppDestination.ROADMAP_N5) }
                 var selectedRowName by rememberSaveable { mutableStateOf("あ行") }
                 var selectedScript by rememberSaveable { mutableStateOf("hiragana") }
                 var startLessonInTestOutMode by rememberSaveable { mutableStateOf(false) }
@@ -90,11 +91,11 @@ class MainActivity : ComponentActivity() {
                 var referenceInitialChar by rememberSaveable { mutableStateOf<String?>(null) }
                 var sessionCounter by rememberSaveable { mutableIntStateOf(0) }
 
-                BackHandler(enabled = destination != AppDestination.HOME) {
+                BackHandler(enabled = destination != AppDestination.ROADMAP_N5) {
                     destination = when (destination) {
                         AppDestination.DEBUG_RECOGNIZER,
                         AppDestination.LICENSES -> AppDestination.SETTINGS
-                        else -> AppDestination.HOME
+                        else -> AppDestination.ROADMAP_N5
                     }
                 }
 
@@ -202,7 +203,7 @@ class MainActivity : ComponentActivity() {
                                     LessonScreen(
                                         viewModel = lessonViewModel,
                                         onExitLesson = {
-                                            destination = AppDestination.HOME
+                                            destination = AppDestination.ROADMAP_N5
                                         },
                                         onContinueNextRow = {
                                             // Tìm hàng tiếp theo ngay sau hàng vừa hoàn thành để học tiếp không bị lặp lại
@@ -339,8 +340,8 @@ private fun MainBottomNavigationBar(
     onSelectTab: (AppDestination) -> Unit
 ) {
     val mainTabs = listOf(
-        AppDestination.HOME,
         AppDestination.ROADMAP_N5,
+        AppDestination.HOME,
         AppDestination.CUSTOM_STUDY,
         AppDestination.REVIEW,
         AppDestination.SETTINGS

@@ -72,7 +72,7 @@ fun HomeScreen(
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        // 1. Header tối giản: Tên app + Tiến độ bên trái, nút Sáng/Tối bên phải
+        // 1. Header tối giản cho Tab Bảng chữ cái: Tiến độ + Nút Sáng/Tối
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -80,8 +80,8 @@ fun HomeScreen(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "KANA",
-                    style = MaterialTheme.typography.headlineMedium,
+                    text = "BẢNG CHỮ CÁI",
+                    style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1
                 )
@@ -99,10 +99,10 @@ fun HomeScreen(
                 modifier = Modifier
                     .border(1.dp, MaterialTheme.colorScheme.onBackground)
                     .clickable { viewModel.toggleLightDarkQuick(isDark) }
-                    .padding(horizontal = 14.dp, vertical = 8.dp)
+                    .padding(horizontal = 12.dp, vertical = 7.dp)
             ) {
                 Text(
-                    text = if (isDark) "☀ Chế độ Sáng" else "☾ Chế độ Tối",
+                    text = if (isDark) "☀ Sáng" else "☾ Tối",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1,
@@ -111,91 +111,13 @@ fun HomeScreen(
             }
         }
 
-        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            // 2. Hai thẻ hành động chính: "HỌC TIẾP" (rõ chữ tiếp theo) & "ÔN HÔM NAY"
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                // Thẻ "HỌC TIẾP"
-                Column(
-                    modifier = Modifier
-                        .weight(1.15f)
-                        .background(MaterialTheme.colorScheme.primary)
-                        .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                        .clickable {
-                            if (nextRowLesson != null) {
-                                onStartRowLesson(nextRowLesson.rowName, nextRowLesson.script)
-                            } else {
-                                onOpenCustomStudy()
-                            }
-                        }
-                        .padding(14.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(
-                        text = "HỌC TIẾP NGAY",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        maxLines = 1
-                    )
-                    val mainLabel = if (nextRowLesson != null && nextUnlearnedChar != null) {
-                        "${nextRowLesson.rowName} • Chữ ${nextUnlearnedChar.char} (${nextUnlearnedChar.romaji})"
-                    } else {
-                        nextRowLesson?.rowName ?: "Hoàn tất"
-                    }
-                    Text(
-                        text = mainLabel,
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        maxLines = 1
-                    )
-                    Text(
-                        text = "Bấm để học tiếp →",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        maxLines = 1
-                    )
-                }
-
-                // Thẻ "LỘ TRÌNH N5" (Bản đồ con đường 01 -> 08)
-                Column(
-                    modifier = Modifier
-                        .weight(0.95f)
-                        .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                        .clickable(onClick = onOpenLessonMap)
-                        .padding(14.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(
-                        text = "LỘ TRÌNH JLPT N5 🚩",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        maxLines = 1
-                    )
-                    Text(
-                        text = "01 → 08 Chặng",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        maxLines = 1
-                    )
-                    Text(
-                        text = "Kana • Ngữ pháp • Kanji →",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1
-                    )
-                }
-            }
-
-            // 3. Thanh chuyển hệ chữ: Hiragana (46) | Katakana (46) | Dakuten • 拗音
+            // 2. Thanh chuyển hệ chữ: Hiragana | Katakana | Âm đục/ghép | Kanji N5
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
