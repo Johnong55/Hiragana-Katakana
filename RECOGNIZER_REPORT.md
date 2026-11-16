@@ -11,7 +11,7 @@
 | **Negative - Thiếu / thừa nét (`WRONG_STROKE_COUNT`)** | **100.00% bị loại** | ≥ 95.00% | ĐẠT |
 | **Negative - Đảo hướng nét (`WRONG_DIRECTION`)** | **100.00% bị loại** | ≥ 95.00% | ĐẠT |
 | **Negative - Đảo thứ tự nét (`WRONG_ORDER`)** | **100.00% bị loại** | ≥ 95.00% | ĐẠT |
-| **Thời gian chấm trung bình 1 chữ (so với 46 chữ cùng bộ)** | **2.589 ms** | < 50.000 ms | ĐẠT |
+| **Thời gian chấm trung bình 1 chữ (so với 46 chữ cùng bộ)** | **0.945 ms** | < 50.000 ms | ĐẠT |
 
 ## 2. Kết quả Kiểm thử Riêng 10 Cặp/Nhóm Chữ Dễ Nhầm
 

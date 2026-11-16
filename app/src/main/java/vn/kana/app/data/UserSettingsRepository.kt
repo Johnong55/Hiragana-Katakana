@@ -27,7 +27,7 @@ enum class ThemeMode(val displayNameVi: String) {
 }
 
 data class UserSettings(
-    val strictnessLevel: StrictnessLevel = StrictnessLevel.STANDARD,
+    val strictnessLevel: StrictnessLevel = StrictnessLevel.EASY,
     val animationSpeed: Float = 1.0f,
     val autoAdvanceDelayMs: Long = 700L,
     val soundEnabled: Boolean = true,
@@ -55,9 +55,9 @@ class UserSettingsRepository(
     }
 
     val settingsFlow: Flow<UserSettings> = appContext.dataStore.data.map { prefs ->
-        val strictnessStr = prefs[Keys.STRICTNESS] ?: StrictnessLevel.STANDARD.name
+        val strictnessStr = prefs[Keys.STRICTNESS] ?: StrictnessLevel.EASY.name
         val strictness = StrictnessLevel.entries.firstOrNull { it.name == strictnessStr }
-            ?: StrictnessLevel.STANDARD
+            ?: StrictnessLevel.EASY
 
         val themeStr = prefs[Keys.THEME_MODE] ?: ThemeMode.SYSTEM.name
         val themeMode = ThemeMode.entries.firstOrNull { it.name == themeStr }

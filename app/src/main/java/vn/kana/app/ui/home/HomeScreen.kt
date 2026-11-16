@@ -54,18 +54,25 @@ fun HomeScreen(
         ThemeMode.SYSTEM -> systemDark
     }
 
-    val nextRowLesson = uiState.filteredLessons.firstOrNull { it.isUnlocked && !it.isCompleted }
-        ?: uiState.allLessons.firstOrNull { it.isUnlocked && !it.isCompleted }
+    // Tìm bài học đầu tiên chưa hoàn thành và chữ cái đầu tiên chưa học trong bài đó
+    val nextRowLesson = uiState.filteredLessons.firstOrNull { !it.isCompleted }
+        ?: uiState.allLessons.firstOrNull { !it.isCompleted }
         ?: uiState.filteredLessons.firstOrNull()
+
+    val nextUnlearnedChar = remember(nextRowLesson, uiState.characterProgressByChar) {
+        nextRowLesson?.characters?.firstOrNull { ch ->
+            uiState.characterProgressByChar[ch.char]?.learned != true
+        } ?: nextRowLesson?.characters?.firstOrNull()
+    }
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        // 1. Header gọn gàng: Tên app + Streak bên trái, nút Cài đặt rộng rãi 1 dòng bên phải
+        // 1. Header tối giản: Tên app + Tiến độ bên trái, nút Sáng/Tối bên phải
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -79,7 +86,7 @@ fun HomeScreen(
                     maxLines = 1
                 )
                 Text(
-                    text = "Streak: ${uiState.settings.streakDays} ngày • Đã thuộc: ${uiState.totalLearnedCount}/${uiState.allCurriculumCharacters.size} chữ",
+                    text = "Đã thuộc: ${uiState.totalLearnedCount}/${uiState.allCurriculumCharacters.size} chữ • Streak: ${uiState.settings.streakDays} ngày",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
@@ -87,66 +94,15 @@ fun HomeScreen(
                 )
             }
 
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                TopNavButton(
-                    label = if (isDark) "☀ Sáng" else "☾ Tối",
-                    onClick = { viewModel.toggleLightDarkQuick(isDark) }
-                )
-                TopNavButton(
-                    label = "Cài đặt",
-                    onClick = onOpenSettings
-                )
-            }
-        }
-
-        // Thanh điều hướng: Bản đồ bài học • Chọn hàng (Checkbox) • Bảng tra cứu
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .weight(1f)
                     .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                    .clickable(onClick = onOpenLessonMap)
-                    .padding(vertical = 8.dp, horizontal = 6.dp)
+                    .clickable { viewModel.toggleLightDarkQuick(isDark) }
+                    .padding(horizontal = 14.dp, vertical = 8.dp)
             ) {
                 Text(
-                    text = "Bản đồ bài học",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    maxLines = 1,
-                    softWrap = false
-                )
-            }
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .weight(1.15f)
-                    .background(MaterialTheme.colorScheme.primary)
-                    .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                    .clickable(onClick = onOpenCustomStudy)
-                    .padding(vertical = 8.dp, horizontal = 6.dp)
-            ) {
-                Text(
-                    text = "☑ Chọn hàng & Câu",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    maxLines = 1,
-                    softWrap = false
-                )
-            }
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .weight(0.95f)
-                    .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                    .clickable { onOpenReference(null) }
-                    .padding(vertical = 8.dp, horizontal = 6.dp)
-            ) {
-                Text(
-                    text = "Tra cứu Kana",
+                    text = if (isDark) "☀ Chế độ Sáng" else "☾ Chế độ Tối",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1,
@@ -163,17 +119,59 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            // 2. Hai thẻ hành động chính: "Ôn hôm nay" & "Học tiếp"
+            // 2. Hai thẻ hành động chính: "HỌC TIẾP" (rõ chữ tiếp theo) & "ÔN HÔM NAY"
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                // Thẻ "HỌC TIẾP"
                 Column(
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(1.15f)
+                        .background(MaterialTheme.colorScheme.primary)
+                        .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                        .clickable {
+                            if (nextRowLesson != null) {
+                                onStartRowLesson(nextRowLesson.rowName, nextRowLesson.script)
+                            } else {
+                                onOpenCustomStudy()
+                            }
+                        }
+                        .padding(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = "HỌC TIẾP NGAY",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        maxLines = 1
+                    )
+                    val mainLabel = if (nextRowLesson != null && nextUnlearnedChar != null) {
+                        "${nextRowLesson.rowName} • Chữ ${nextUnlearnedChar.char} (${nextUnlearnedChar.romaji})"
+                    } else {
+                        nextRowLesson?.rowName ?: "Hoàn tất"
+                    }
+                    Text(
+                        text = mainLabel,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        maxLines = 1
+                    )
+                    Text(
+                        text = "Bấm để học tiếp →",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        maxLines = 1
+                    )
+                }
+
+                // Thẻ "ÔN HÔM NAY"
+                Column(
+                    modifier = Modifier
+                        .weight(0.85f)
                         .border(1.dp, MaterialTheme.colorScheme.onBackground)
                         .clickable(onClick = onStartReview)
-                        .padding(12.dp),
+                        .padding(14.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
@@ -183,54 +181,15 @@ fun HomeScreen(
                         maxLines = 1
                     )
                     Text(
-                        text = "${uiState.dueSrsCardsCount} thẻ đến hạn",
+                        text = "${uiState.dueSrsCardsCount} thẻ",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground,
                         maxLines = 1
                     )
                     Text(
-                        text = if (uiState.dueSrsCardsCount > 0) {
-                            "Ôn chữ & từ vựng →"
-                        } else {
-                            "Luyện tập thêm →"
-                        },
+                        text = "Bấm để ôn tập →",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1
-                    )
-                }
-
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .background(MaterialTheme.colorScheme.primary)
-                        .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                        .clickable {
-                            if (nextRowLesson != null) {
-                                onStartRowLesson(nextRowLesson.rowName, nextRowLesson.script)
-                            } else {
-                                onOpenLessonMap()
-                            }
-                        }
-                        .padding(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(
-                        text = "HỌC TIẾP",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        maxLines = 1
-                    )
-                    Text(
-                        text = nextRowLesson?.rowName ?: "Hoàn tất",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        maxLines = 1
-                    )
-                    Text(
-                        text = "Bắt đầu học ngay →",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
                         maxLines = 1
                     )
                 }
@@ -268,7 +227,7 @@ fun HomeScreen(
                 }
             }
 
-            // 4. Bảng Kana thể hiện độ thuộc bằng 4 độ đậm nhạt của xám (không gradient)
+            // 4. Bảng Kana thể hiện độ thuộc bằng 4 độ đậm nhạt của xám (chạm vào chữ bất kỳ để xem nét & tập viết)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -282,18 +241,12 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "BẢNG KANA • ${uiState.selectedTab.titleVi.uppercase()}",
-                        style = MaterialTheme.typography.titleMedium,
+                        text = "BẢNG CHỮ CÁI (CHẠM ĐỂ XEM NÉT / HỌC)",
+                        style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Text(
-                        text = "Chạm chữ để xem nét",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
-                // Chú thích 4 mức độ xám
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -396,28 +349,6 @@ internal val EXTENDED_KANA_LAYOUT = listOf(
     "拗・促" to listOf("ゃ", "ゅ", "ょ", "っ", null),
     "拗・長" to listOf("ャ", "ュ", "ョ", "ッ", "ー")
 )
-
-@Composable
-private fun TopNavButton(
-    label: String,
-    onClick: () -> Unit
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .border(1.dp, MaterialTheme.colorScheme.onBackground)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 14.dp, vertical = 8.dp)
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-            maxLines = 1,
-            softWrap = false
-        )
-    }
-}
 
 internal fun masteryColors(level: MasteryLevel, isDark: Boolean): Pair<Color, Color> {
     return if (!isDark) {

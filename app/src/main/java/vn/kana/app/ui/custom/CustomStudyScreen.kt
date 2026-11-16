@@ -8,19 +8,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -52,19 +49,24 @@ import vn.kana.app.ui.map.CurriculumTab
 import vn.kana.app.ui.map.LessonMapViewModel
 import vn.kana.recognizer.KanaRecognizer
 import vn.kana.recognizer.RecognizerConfig
-import vn.kana.recognizer.Stroke
+
+private enum class CustomStudyStage {
+    SELECT_ROWS,
+    VOCAB_AND_PRONUNCIATION,
+    WRITING_PRACTICE
+}
 
 /**
- * Màn hình Tự chọn hàng/chữ bằng Checkbox [☑]:
- * - Cho phép người dùng tick chọn bất kỳ hàng Gojūon hoặc từng chữ cái cụ thể muốn học.
- * - Hiển thị toàn bộ Từ vựng liên quan + Câu mẫu tiếng Nhật chứa từ đó.
- * - Luyện phát âm (Nghe mẫu từ, Nghe mẫu câu) + Ghi âm giọng đọc của người dùng để tự nghe lại / so sánh.
- * - Chuyển sang Luyện viết trên Canvas 1:1 + dãy ô vuông 原稿用紙 cho các từ thuộc hàng đã tick.
+ * Tab "Chọn hàng":
+ * Bước 1: Danh sách dọc các hàng có Checkbox [☑] rõ ràng, dễ bấm.
+ * Bước 2: Sau khi tick các hàng muốn học -> bấm 1 nút dưới cùng để mở Từ vựng + Câu mẫu + Ghi âm phát âm.
+ * Bước 3: Bấm "✎ Tập viết" nếu muốn viết từ vựng đó trên Canvas.
  */
 @Composable
 fun CustomStudyScreen(
     viewModel: LessonMapViewModel,
-    onBack: () -> Unit,
+    onStartRowLesson: (rowName: String, script: String) -> Unit = { _, _ -> },
+    onBack: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -74,9 +76,7 @@ fun CustomStudyScreen(
 
     val voiceRecorder = remember { VoiceRecorderHelper(context.applicationContext) }
     DisposableEffect(Unit) {
-        onDispose {
-            voiceRecorder.release()
-        }
+        onDispose { voiceRecorder.release() }
     }
 
     val isRecording by voiceRecorder.isRecording.collectAsState()
@@ -91,16 +91,16 @@ fun CustomStudyScreen(
     ) { granted ->
         if (granted && activeRecTargetKey != null) {
             val ok = voiceRecorder.startRecording(activeRecTargetKey!!)
-            micStatusMessage = if (ok) "Đang ghi âm... Hãy đọc to từ/câu rồi bấm Dừng." else "Không thể mở micro trên thiết bị này."
+            micStatusMessage = if (ok) "Đang ghi âm... Hãy đọc to rồi bấm Dừng." else "Thiết bị không hỗ trợ micro."
         } else if (!granted) {
-            micStatusMessage = "Bạn chưa cấp quyền Micro. Bạn vẫn nghe phát âm mẫu và luyện viết bình thường."
+            micStatusMessage = "Chưa cấp quyền Micro. Bạn vẫn nghe mẫu và tập viết bình thường."
         }
     }
 
     fun toggleRecordForKey(key: String) {
         if (isRecording && activeRecTargetKey == key) {
             voiceRecorder.stopRecording()
-            micStatusMessage = "Đã lưu bản ghi âm. Bấm '▶ Giọng bạn' để nghe lại!"
+            micStatusMessage = "Đã lưu thu âm! Bấm '▶ Giọng bạn' để nghe lại."
             return
         }
         val hasPerm = ContextCompat.checkSelfPermission(
@@ -110,34 +110,32 @@ fun CustomStudyScreen(
         activeRecTargetKey = key
         if (hasPerm) {
             val ok = voiceRecorder.startRecording(key)
-            micStatusMessage = if (ok) "Đang ghi âm... Hãy đọc to từ/câu rồi bấm Dừng." else "Thiết bị không hỗ trợ ghi âm."
+            micStatusMessage = if (ok) "Đang ghi âm... Hãy đọc to rồi bấm Dừng." else "Không mở được micro."
         } else {
             permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
         }
     }
 
-    // Tập hợp các chữ Kana được tick chọn (mặc định tick sẵn hàng あ行)
-    var selectedChars by remember(uiState.basicHiragana) {
-        val defaultChars = uiState.basicHiragana
-            .filter { it.row == "あ行" }
-            .map { it.char }
+    // Tập hợp các rowId được tick chọn (mặc định tick sẵn "hiragana_あ行")
+    var checkedRowIds by remember {
+        mutableStateOf(setOf("hiragana_あ行"))
+    }
+    var stage by remember { mutableStateOf(CustomStudyStage.SELECT_ROWS) }
+    var writingWordIndex by remember { mutableIntStateOf(0) }
+
+    val selectedChars = remember(checkedRowIds, uiState.allLessons) {
+        uiState.allLessons
+            .filter { it.rowId in checkedRowIds }
+            .flatMap { lesson -> lesson.characters.map { it.char } }
             .toSet()
-        mutableStateOf(defaultChars)
     }
 
-    // Danh sách từ vựng liên quan tới các chữ đã tick
     val allWords = remember(uiState.wordsByChar) {
         uiState.wordsByChar.values.flatten().distinctBy { it.id.ifBlank { it.word } }
     }
     val matchingWords = remember(selectedChars, allWords) {
-        allWords.filter { w ->
-            w.introduces in selectedChars || w.chars.any { c -> c in selectedChars }
-        }
+        allWords.filter { w -> w.introduces in selectedChars }
     }
-
-    // Chế độ luyện viết các từ đã chọn
-    var isWritingPracticeMode by remember { mutableStateOf(false) }
-    var writingWordIndex by remember { mutableIntStateOf(0) }
 
     val recognizer = remember(uiState.allCurriculumCharacters) {
         if (uiState.allCurriculumCharacters.isNotEmpty()) {
@@ -150,345 +148,316 @@ fun CustomStudyScreen(
         uiState.allCurriculumCharacters.associateBy { it.char }
     }
 
-    if (isWritingPracticeMode && matchingWords.isNotEmpty()) {
-        val safeIdx = writingWordIndex.coerceIn(0, matchingWords.lastIndex)
-        val currentWord = matchingWords[safeIdx]
-        CustomWordWritingPracticeView(
-            word = currentWord,
-            wordPositionLabel = "${safeIdx + 1}/${matchingWords.size}",
-            templatesByChar = templatesByChar,
-            recognizer = recognizer,
-            strictnessLevel = uiState.settings.strictnessLevel,
-            autoAdvanceDelayMs = uiState.settings.autoAdvanceDelayMs,
-            isRecording = isRecording && activeRecTargetKey == currentWord.word,
-            hasRecording = recordedKeys.contains(currentWord.word),
-            isPlayingRecording = isPlayingRec,
-            micStatusMessage = micStatusMessage,
-            onSpeakWord = { viewModel.speak(currentWord.word, currentWord.romaji) },
-            onSpeakSentence = {
-                if (currentWord.exampleSentence.isNotBlank()) {
-                    viewModel.speak(currentWord.exampleSentence, null)
-                }
-            },
-            onToggleRecord = { toggleRecordForKey(currentWord.word) },
-            onPlayUserRecording = { voiceRecorder.playRecording(currentWord.word) },
-            onCompareAudio = {
-                viewModel.speak(
-                    if (currentWord.exampleSentence.isNotBlank()) currentWord.exampleSentence else currentWord.word,
-                    null
-                )
-                scope.launch {
-                    delay(1600L)
-                    voiceRecorder.playRecording(currentWord.word)
-                }
-            },
-            onPrevWord = {
-                if (safeIdx > 0) writingWordIndex = safeIdx - 1
-            },
-            onNextWord = {
-                if (safeIdx < matchingWords.lastIndex) {
-                    writingWordIndex = safeIdx + 1
-                } else {
-                    isWritingPracticeMode = false
-                }
-            },
-            onExitWriting = { isWritingPracticeMode = false },
-            localView = localView,
-            modifier = modifier
-        )
-        return
-    }
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        // 1. Header
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                    .clickable(onClick = onBack)
-                    .padding(horizontal = 12.dp, vertical = 8.dp)
+    when (stage) {
+        CustomStudyStage.SELECT_ROWS -> {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(
-                    text = "← Quay lại",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    maxLines = 1,
-                    softWrap = false
-                )
-            }
-
-            Text(
-                text = "CHỌN HÀNG • TỪ VỰNG & PHÁT ÂM",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-
-        // 2. Thanh chọn hệ chữ: Hiragana | Katakana | Dakuten • 拗音
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            for (tab in CurriculumTab.entries) {
-                val selected = uiState.selectedTab == tab
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .weight(1f)
-                        .background(
-                            if (selected) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.surface
-                        )
-                        .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                        .clickable { viewModel.selectTab(tab) }
-                        .padding(vertical = 7.dp, horizontal = 4.dp)
+                // Tiêu đề + Chọn nhanh
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = tab.titleVi,
-                        style = MaterialTheme.typography.labelLarge,
-                        color = if (selected) MaterialTheme.colorScheme.onPrimary
-                        else MaterialTheme.colorScheme.onBackground,
-                        maxLines = 1,
-                        softWrap = false
+                        text = "CHỌN HÀNG MUỐN HỌC",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
-                }
-            }
-        }
-
-        // 3. Khung Checkbox chọn Hàng (và từng chữ cái trong hàng)
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(1.dp, MaterialTheme.colorScheme.outline)
-                .padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Tick [☑] hàng hoặc chữ muốn học (${selectedChars.size} chữ → ${matchingWords.size} từ):",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(
-                        text = "Chọn hết",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier
-                            .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                            .clickable {
-                                val tabChars = uiState.filteredLessons
-                                    .flatMap { it.characters.map { c -> c.char } }
-                                selectedChars = selectedChars + tabChars
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        SmallBtn(
+                            label = "Chọn hết",
+                            filled = false,
+                            onClick = {
+                                checkedRowIds = checkedRowIds + uiState.filteredLessons.map { it.rowId }
                             }
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                    Text(
-                        text = "Bỏ chọn",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier
-                            .border(1.dp, MaterialTheme.colorScheme.outline)
-                            .clickable { selectedChars = emptySet() }
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                }
-            }
-
-            // Thanh cuộn ngang các Checkbox Hàng
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                for (lesson in uiState.filteredLessons) {
-                    val rowCharSet = lesson.characters.map { it.char }.toSet()
-                    val isRowChecked = rowCharSet.isNotEmpty() && selectedChars.containsAll(rowCharSet)
-                    val isPartial = !isRowChecked && rowCharSet.any { it in selectedChars }
-
-                    val checkSymbol = when {
-                        isRowChecked -> "☑"
-                        isPartial -> "▣"
-                        else -> "☐"
+                        )
+                        SmallBtn(
+                            label = "Bỏ chọn",
+                            filled = false,
+                            onClick = { checkedRowIds = emptySet() }
+                        )
                     }
+                }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .background(
-                                if (isRowChecked) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.surface
+                // 3 tab hệ chữ
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    for (tab in CurriculumTab.entries) {
+                        val selected = uiState.selectedTab == tab
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .weight(1f)
+                                .background(
+                                    if (selected) MaterialTheme.colorScheme.primary
+                                    else MaterialTheme.colorScheme.surface
+                                )
+                                .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                                .clickable { viewModel.selectTab(tab) }
+                                .padding(vertical = 8.dp, horizontal = 4.dp)
+                        ) {
+                            Text(
+                                text = tab.titleVi,
+                                style = MaterialTheme.typography.labelLarge,
+                                color = if (selected) MaterialTheme.colorScheme.onPrimary
+                                else MaterialTheme.colorScheme.onBackground,
+                                maxLines = 1,
+                                softWrap = false
                             )
-                            .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                            .clickable {
-                                selectedChars = if (isRowChecked) {
-                                    selectedChars - rowCharSet
-                                } else {
-                                    selectedChars + rowCharSet
+                        }
+                    }
+                }
+
+                // Danh sách dọc các hàng có Checkbox [☑] to rõ
+                LazyColumn(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(uiState.filteredLessons, key = { it.rowId }) { lesson ->
+                        val isChecked = lesson.rowId in checkedRowIds
+                        val charsPreview = lesson.characters.joinToString("  ") { it.char }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .border(
+                                    if (isChecked) 2.dp else 1.dp,
+                                    if (isChecked) MaterialTheme.colorScheme.onBackground
+                                    else MaterialTheme.colorScheme.outline
+                                )
+                                .clickable {
+                                    checkedRowIds = if (isChecked) {
+                                        checkedRowIds - lesson.rowId
+                                    } else {
+                                        checkedRowIds + lesson.rowId
+                                    }
+                                }
+                                .padding(horizontal = 12.dp, vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Row(
+                                modifier = Modifier.weight(1f),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                // Ô Checkbox to rõ
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                        .background(
+                                            if (isChecked) MaterialTheme.colorScheme.primary
+                                            else MaterialTheme.colorScheme.surface
+                                        )
+                                        .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                                ) {
+                                    Text(
+                                        text = if (isChecked) "✓" else " ",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = if (isChecked) MaterialTheme.colorScheme.onPrimary
+                                        else MaterialTheme.colorScheme.onBackground
+                                    )
+                                }
+
+                                Column {
+                                    Text(
+                                        text = "${lesson.rowName}  •  $charsPreview",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                        maxLines = 1
+                                    )
+                                    Text(
+                                        text = if (lesson.isCompleted) "Đã thuộc hàng này" else lesson.titleVi,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
                                 }
                             }
-                            .padding(horizontal = 10.dp, vertical = 6.dp)
+
+                            SmallBtn(
+                                label = "Học chữ →",
+                                filled = false,
+                                onClick = { onStartRowLesson(lesson.rowName, lesson.script) }
+                            )
+                        }
+                    }
+                }
+
+                // Thanh hành động dưới cùng khi đã tick >= 1 hàng
+                if (matchingWords.isNotEmpty()) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.primary)
+                            .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                            .clickable {
+                                stage = CustomStudyStage.VOCAB_AND_PRONUNCIATION
+                            }
+                            .padding(vertical = 13.dp, horizontal = 12.dp)
                     ) {
                         Text(
-                            text = "$checkSymbol ${lesson.rowName} (${lesson.characters.joinToString("") { it.char }})",
+                            text = "Xem ${matchingWords.size} Từ vựng & Câu mẫu (Luyện phát âm) →",
                             style = MaterialTheme.typography.labelLarge,
-                            color = if (isRowChecked) MaterialTheme.colorScheme.onPrimary
-                            else MaterialTheme.colorScheme.onBackground,
-                            maxLines = 1,
-                            softWrap = false
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            maxLines = 1
                         )
                     }
                 }
             }
-
-            // Thanh cuộn ngang tick lẻ từng chữ trong tab hiện tại
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                val charsInTab = uiState.filteredLessons.flatMap { it.characters }
-                for (tmpl in charsInTab) {
-                    val checked = tmpl.char in selectedChars
-                    Text(
-                        text = "${if (checked) "☑" else "☐"}${tmpl.char}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = if (checked) MaterialTheme.colorScheme.onPrimary
-                        else MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier
-                            .background(
-                                if (checked) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.surface
-                            )
-                            .border(1.dp, MaterialTheme.colorScheme.outline)
-                            .clickable {
-                                selectedChars = if (checked) {
-                                    selectedChars - tmpl.char
-                                } else {
-                                    selectedChars + tmpl.char
-                                }
-                            }
-                            .padding(horizontal = 7.dp, vertical = 4.dp)
-                    )
-                }
-            }
         }
 
-        micStatusMessage?.let { msg ->
-            Text(
-                text = msg,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(1.dp, MaterialTheme.colorScheme.outline)
-                    .padding(horizontal = 10.dp, vertical = 6.dp)
-            )
-        }
-
-        // Nút chuyển sang Luyện viết toàn bộ các từ đã tick
-        if (matchingWords.isNotEmpty()) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primary)
-                    .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                    .clickable {
-                        writingWordIndex = 0
-                        isWritingPracticeMode = true
-                    }
-                    .padding(vertical = 10.dp, horizontal = 12.dp)
-            ) {
-                Text(
-                    text = "✎ Luyện viết & phát âm chuỗi ${matchingWords.size} từ đã chọn →",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    maxLines = 1
-                )
-            }
-        }
-
-        // 4. Danh sách Từ vựng + Câu mẫu + Nút Phát âm & Ghi âm
-        if (matchingWords.isEmpty()) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
+        CustomStudyStage.VOCAB_AND_PRONUNCIATION -> {
+            Column(
+                modifier = modifier
                     .fillMaxSize()
-                    .border(1.dp, MaterialTheme.colorScheme.outline)
-                    .padding(24.dp)
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(
-                    text = "Hãy tick [☑] ít nhất 1 hàng hoặc 1 chữ cái ở trên để xem từ vựng, câu mẫu và luyện phát âm.",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                itemsIndexed(matchingWords, key = { _, w -> w.id.ifBlank { w.word } }) { idx, word ->
-                    val recKey = word.word
-                    val isThisRecording = isRecording && activeRecTargetKey == recKey
-                    val hasRec = recordedKeys.contains(recKey)
-
-                    VocabSentencePronunciationCard(
-                        word = word,
-                        isRecording = isThisRecording,
-                        hasRecording = hasRec,
-                        isPlayingRecording = isPlayingRec,
-                        onSpeakWord = { viewModel.speak(word.word, word.romaji) },
-                        onSpeakSentence = {
-                            if (word.exampleSentence.isNotBlank()) {
-                                viewModel.speak(word.exampleSentence, null)
-                            }
-                        },
-                        onToggleRecord = { toggleRecordForKey(recKey) },
-                        onPlayUserRecording = { voiceRecorder.playRecording(recKey) },
-                        onCompareAudio = {
-                            viewModel.speak(
-                                if (word.exampleSentence.isNotBlank()) word.exampleSentence else word.word,
-                                null
-                            )
-                            scope.launch {
-                                delay(1600L)
-                                voiceRecorder.playRecording(recKey)
-                            }
-                        },
-                        onPracticeWriteThisWord = {
-                            writingWordIndex = idx
-                            isWritingPracticeMode = true
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SmallBtn(
+                        label = "← Chọn lại hàng",
+                        filled = false,
+                        onClick = { stage = CustomStudyStage.SELECT_ROWS }
+                    )
+                    Text(
+                        text = "${matchingWords.size} TỪ VỰNG & CÂU MẪU",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    SmallBtn(
+                        label = "✎ Tập viết tất cả",
+                        filled = true,
+                        onClick = {
+                            writingWordIndex = 0
+                            stage = CustomStudyStage.WRITING_PRACTICE
                         }
                     )
                 }
+
+                micStatusMessage?.let { msg ->
+                    Text(
+                        text = msg,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, MaterialTheme.colorScheme.outline)
+                            .padding(horizontal = 10.dp, vertical = 6.dp)
+                    )
+                }
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    itemsIndexed(matchingWords, key = { _, w -> w.id.ifBlank { w.word } }) { idx, word ->
+                        val recKey = word.word
+                        val isThisRecording = isRecording && activeRecTargetKey == recKey
+                        val hasRec = recordedKeys.contains(recKey)
+
+                        VocabSentenceCard(
+                            word = word,
+                            isRecording = isThisRecording,
+                            hasRecording = hasRec,
+                            isPlayingRecording = isPlayingRec,
+                            onSpeakWord = { viewModel.speak(word.word, word.romaji) },
+                            onSpeakSentence = {
+                                if (word.exampleSentence.isNotBlank()) {
+                                    viewModel.speak(word.exampleSentence, null)
+                                }
+                            },
+                            onToggleRecord = { toggleRecordForKey(recKey) },
+                            onPlayUserRecording = { voiceRecorder.playRecording(recKey) },
+                            onCompareAudio = {
+                                viewModel.speak(
+                                    if (word.exampleSentence.isNotBlank()) word.exampleSentence else word.word,
+                                    null
+                                )
+                                scope.launch {
+                                    delay(1600L)
+                                    voiceRecorder.playRecording(recKey)
+                                }
+                            },
+                            onPracticeWriteThisWord = {
+                                writingWordIndex = idx
+                                stage = CustomStudyStage.WRITING_PRACTICE
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        CustomStudyStage.WRITING_PRACTICE -> {
+            val safeIdx = writingWordIndex.coerceIn(0, (matchingWords.size - 1).coerceAtLeast(0))
+            val currentWord = matchingWords.getOrNull(safeIdx)
+            if (currentWord == null) {
+                stage = CustomStudyStage.SELECT_ROWS
+            } else {
+                CustomWordWritingPracticeView(
+                    word = currentWord,
+                    wordPositionLabel = "${safeIdx + 1}/${matchingWords.size}",
+                    templatesByChar = templatesByChar,
+                    recognizer = recognizer,
+                    strictnessLevel = uiState.settings.strictnessLevel,
+                    autoAdvanceDelayMs = uiState.settings.autoAdvanceDelayMs,
+                    isRecording = isRecording && activeRecTargetKey == currentWord.word,
+                    hasRecording = recordedKeys.contains(currentWord.word),
+                    isPlayingRecording = isPlayingRec,
+                    micStatusMessage = micStatusMessage,
+                    onSpeakWord = { viewModel.speak(currentWord.word, currentWord.romaji) },
+                    onSpeakSentence = {
+                        if (currentWord.exampleSentence.isNotBlank()) {
+                            viewModel.speak(currentWord.exampleSentence, null)
+                        }
+                    },
+                    onToggleRecord = { toggleRecordForKey(currentWord.word) },
+                    onPlayUserRecording = { voiceRecorder.playRecording(currentWord.word) },
+                    onCompareAudio = {
+                        viewModel.speak(
+                            if (currentWord.exampleSentence.isNotBlank()) currentWord.exampleSentence else currentWord.word,
+                            null
+                        )
+                        scope.launch {
+                            delay(1600L)
+                            voiceRecorder.playRecording(currentWord.word)
+                        }
+                    },
+                    onPrevWord = { if (safeIdx > 0) writingWordIndex = safeIdx - 1 },
+                    onNextWord = {
+                        if (safeIdx < matchingWords.lastIndex) {
+                            writingWordIndex = safeIdx + 1
+                        } else {
+                            stage = CustomStudyStage.VOCAB_AND_PRONUNCIATION
+                        }
+                    },
+                    onExitWriting = { stage = CustomStudyStage.VOCAB_AND_PRONUNCIATION },
+                    localView = localView,
+                    modifier = modifier
+                )
             }
         }
     }
 }
 
 @Composable
-private fun VocabSentencePronunciationCard(
+private fun VocabSentenceCard(
     word: KanaVocabWord,
     isRecording: Boolean,
     hasRecording: Boolean,
@@ -507,7 +476,6 @@ private fun VocabSentencePronunciationCard(
             .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        // Dòng 1: Từ vựng + Romaji + Nghĩa tiếng Việt + Nghe từ
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -520,27 +488,18 @@ private fun VocabSentencePronunciationCard(
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = "Nghĩa: ${word.meaningVi} • Chữ trọng tâm: ${word.introduces}",
+                    text = "Nghĩa: ${word.meaningVi}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                SmallBorderButton(
-                    label = "🔊 Nghe từ",
-                    filled = true,
-                    onClick = onSpeakWord
-                )
-                SmallBorderButton(
-                    label = "✎ Viết",
-                    filled = false,
-                    onClick = onPracticeWriteThisWord
-                )
+                SmallBtn(label = "🔊 Nghe từ", filled = true, onClick = onSpeakWord)
+                SmallBtn(label = "✎ Tập viết", filled = false, onClick = onPracticeWriteThisWord)
             }
         }
 
-        // Dòng 2: Câu mẫu chứa từ vựng đó
         if (word.exampleSentence.isNotBlank()) {
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
             Row(
@@ -556,50 +515,40 @@ private fun VocabSentencePronunciationCard(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
-                        text = "Câu mẫu: ${word.exampleSentence}",
+                        text = word.exampleSentence,
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Text(
-                        text = word.exampleRomaji,
+                        text = "${word.exampleRomaji} — ${word.exampleVi}",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Text(
-                        text = word.exampleVi,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
                 }
 
-                SmallBorderButton(
-                    label = "🔊 Nghe câu",
-                    filled = false,
-                    onClick = onSpeakSentence
-                )
+                SmallBtn(label = "🔊 Nghe câu", filled = false, onClick = onSpeakSentence)
             }
         }
 
-        // Dòng 3: Cụm nút Luyện phát âm & Ghi âm đối chiếu
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            SmallBorderButton(
-                label = if (isRecording) "⏹ Dừng ghi" else "🎙 Ghi âm thử",
+            SmallBtn(
+                label = if (isRecording) "⏹ Dừng ghi" else "🎙 Ghi âm phát âm",
                 filled = isRecording,
                 isAlert = isRecording,
                 onClick = onToggleRecord,
                 modifier = Modifier.weight(1f)
             )
             if (hasRecording) {
-                SmallBorderButton(
+                SmallBtn(
                     label = if (isPlayingRecording) "Đang phát..." else "▶ Giọng bạn",
                     filled = false,
                     onClick = onPlayUserRecording,
                     modifier = Modifier.weight(1f)
                 )
-                SmallBorderButton(
+                SmallBtn(
                     label = "⇄ Mẫu + Bạn",
                     filled = false,
                     onClick = onCompareAudio,
@@ -664,25 +613,23 @@ private fun CustomWordWritingPracticeView(
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        // Header
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            SmallBorderButton(label = "← Danh sách từ", filled = false, onClick = onExitWriting)
+            SmallBtn(label = "← Danh sách từ", filled = false, onClick = onExitWriting)
             Text(
-                text = "LUYỆN TỪ & CÂU ($wordPositionLabel)",
+                text = "TẬP VIẾT ($wordPositionLabel)",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                SmallBorderButton(label = "‹ Trước", filled = false, onClick = onPrevWord)
-                SmallBorderButton(label = "Sau ›", filled = false, onClick = onNextWord)
+                SmallBtn(label = "‹ Trước", filled = false, onClick = onPrevWord)
+                SmallBtn(label = "Sau ›", filled = false, onClick = onNextWord)
             }
         }
 
-        // Khung Từ vựng + Câu mẫu + Phát âm / Ghi âm
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -705,24 +652,24 @@ private fun CustomWordWritingPracticeView(
                         Text(
                             text = "Câu: ${word.exampleSentence} (${word.exampleVi})",
                             style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.clickable(onClick = onSpeakSentence)
                         )
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    SmallBorderButton(label = "🔊 Từ", filled = true, onClick = onSpeakWord)
+                    SmallBtn(label = "🔊 Từ", filled = true, onClick = onSpeakWord)
                     if (word.exampleSentence.isNotBlank()) {
-                        SmallBorderButton(label = "🔊 Câu", filled = false, onClick = onSpeakSentence)
+                        SmallBtn(label = "🔊 Câu", filled = false, onClick = onSpeakSentence)
                     }
                 }
             }
 
-            // Hàng nút Ghi âm phát âm ngay trong lúc luyện viết
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                SmallBorderButton(
+                SmallBtn(
                     label = if (isRecording) "⏹ Dừng ghi" else "🎙 Ghi âm phát âm",
                     filled = isRecording,
                     isAlert = isRecording,
@@ -730,13 +677,13 @@ private fun CustomWordWritingPracticeView(
                     modifier = Modifier.weight(1f)
                 )
                 if (hasRecording) {
-                    SmallBorderButton(
+                    SmallBtn(
                         label = if (isPlayingRecording) "Đang phát..." else "▶ Giọng bạn",
                         filled = false,
                         onClick = onPlayUserRecording,
                         modifier = Modifier.weight(1f)
                     )
-                    SmallBorderButton(
+                    SmallBtn(
                         label = "⇄ Mẫu + Bạn",
                         filled = false,
                         onClick = onCompareAudio,
@@ -769,7 +716,6 @@ private fun CustomWordWritingPracticeView(
             )
         }
 
-        // Ô vuông Canvas 1:1 cố định (không cuộn dọc)
         val activeSlot = slots.getOrNull(activeSlotIndex)
         Box(
             contentAlignment = Alignment.Center,
@@ -808,17 +754,16 @@ private fun CustomWordWritingPracticeView(
             )
         }
 
-        // 3 nút điều khiển Canvas
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            SmallBorderButton(
-                label = "Hoàn tác nét",
+            SmallBtn(
+                label = "Hoàn tác",
                 filled = false,
                 onClick = {
                     autoAdvanceJob?.cancel()
-                    val cur = slots.getOrNull(activeSlotIndex) ?: return@SmallBorderButton
+                    val cur = slots.getOrNull(activeSlotIndex) ?: return@SmallBtn
                     if (cur.userStrokes.isNotEmpty()) {
                         slots = slots.mapIndexed { idx, s ->
                             if (idx == activeSlotIndex) s.copy(userStrokes = s.userStrokes.dropLast(1), evaluation = null)
@@ -828,10 +773,10 @@ private fun CustomWordWritingPracticeView(
                         activeSlotIndex -= 1
                     }
                 },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(0.85f)
             )
-            SmallBorderButton(
-                label = "Xoá hết",
+            SmallBtn(
+                label = "Xoá",
                 filled = false,
                 onClick = {
                     autoAdvanceJob?.cancel()
@@ -839,14 +784,14 @@ private fun CustomWordWritingPracticeView(
                     activeSlotIndex = 0
                     feedbackText = null
                 },
-                modifier = Modifier.weight(0.75f)
+                modifier = Modifier.weight(0.65f)
             )
-            SmallBorderButton(
-                label = "Kiểm tra",
+            SmallBtn(
+                label = "Kiểm tra →",
                 filled = true,
                 onClick = {
                     autoAdvanceJob?.cancel()
-                    val engine = recognizer ?: return@SmallBorderButton
+                    val engine = recognizer ?: return@SmallBtn
                     val cfg = RecognizerConfig.forLevel(strictnessLevel)
                     val evaluated = slots.map { s ->
                         s.copy(evaluation = engine.recognize(s.userStrokes, s.targetChar, cfg))
@@ -855,7 +800,7 @@ private fun CustomWordWritingPracticeView(
                     val failed = evaluated.firstOrNull { it.evaluation?.passed != true }
                     if (failed == null) {
                         isFeedbackError = false
-                        feedbackText = "Chính xác! Bạn đã viết đúng từ '${word.word}' (${word.meaningVi})."
+                        feedbackText = "Chính xác! Từ '${word.word}' (${word.meaningVi}) đã viết đúng."
                         onSpeakWord()
                     } else {
                         isFeedbackError = true
@@ -868,14 +813,14 @@ private fun CustomWordWritingPracticeView(
                         feedbackText = "Ô số ${failed.index + 1} ('${failed.targetChar}'): $reason."
                     }
                 },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1.2f)
             )
         }
     }
 }
 
 @Composable
-private fun SmallBorderButton(
+private fun SmallBtn(
     label: String,
     filled: Boolean,
     isAlert: Boolean = false,

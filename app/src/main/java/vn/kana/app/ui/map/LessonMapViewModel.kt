@@ -171,11 +171,21 @@ class LessonMapViewModel(
                 val lessons = orderedKeys.mapIndexed { index, (script, rowName) ->
                     val rowId = "${script}_$rowName"
                     val progress = lessonMap[rowId]
+                    val rowChars = groupedByScriptAndRow[script to rowName].orEmpty()
+                    val allCharsInRowLearned = rowChars.isNotEmpty() && rowChars.all { c ->
+                        charMap[c.char]?.learned == true
+                    }
+                    val isRowDone = (progress?.completed == true) || allCharsInRowLearned
+
                     val prevCompleted = if (index == 0) {
                         true
                     } else {
                         val (prevScript, prevRow) = orderedKeys[index - 1]
-                        lessonMap["${prevScript}_$prevRow"]?.completed == true
+                        val prevChars = groupedByScriptAndRow[prevScript to prevRow].orEmpty()
+                        val prevAllLearned = prevChars.isNotEmpty() && prevChars.all { c ->
+                            charMap[c.char]?.learned == true
+                        }
+                        lessonMap["${prevScript}_$prevRow"]?.completed == true || prevAllLearned
                     }
                     // Mở sẵn bài đầu tiên của mỗi nhóm chính (あ行, ア行, が行, 拗音) hoặc theo tiến trình
                     val isStageStarter = (script == "hiragana" && rowName == "あ行") ||
@@ -184,7 +194,7 @@ class LessonMapViewModel(
                         (script == "hiragana" && rowName == "拗音")
                     val isUnlocked = isStageStarter ||
                         prevCompleted ||
-                        progress?.completed == true ||
+                        isRowDone ||
                         settings.unlockAllRows
 
                     val (titleVi, subVi) = rowMeta[script to rowName] ?: (rowName to "")
@@ -194,10 +204,10 @@ class LessonMapViewModel(
                         rowName = rowName,
                         titleVi = titleVi,
                         subtitleVi = subVi,
-                        characters = groupedByScriptAndRow[script to rowName].orEmpty(),
+                        characters = rowChars,
                         isUnlocked = isUnlocked,
-                        isCompleted = progress?.completed == true,
-                        bestQuizScore = progress?.bestQuizScore ?: 0
+                        isCompleted = isRowDone,
+                        bestQuizScore = progress?.bestQuizScore ?: if (allCharsInRowLearned) 100 else 0
                     )
                 }
 

@@ -18,7 +18,6 @@ import vn.kana.app.data.VocabAssetRepository
 import vn.kana.app.data.local.CharacterProgressEntity
 import vn.kana.app.data.local.KanaDao
 import vn.kana.app.data.local.LessonProgressEntity
-import vn.kana.app.data.local.SrsCardEntity
 import vn.kana.app.domain.AudioProvider
 import vn.kana.app.domain.KanaVocabWord
 import vn.kana.app.domain.LessonStepType
@@ -40,13 +39,11 @@ data class LessonUiState(
     val currentCharIndex: Int = 0,
     val stepType: LessonStepType = LessonStepType.STEP_1_OBSERVE,
 
-    // Cài đặt
     val settings: UserSettings = UserSettings(),
 
     // Bước 1: Xem nét
     val isAnimationPlaying: Boolean = true,
     val isAnimationLooping: Boolean = true,
-    val showStrokeNumbersInObserve: Boolean = true,
     val animationRestartTrigger: Int = 0,
 
     // Bước 2, 3, 4 & Quiz chữ đơn
@@ -59,7 +56,7 @@ data class LessonUiState(
     val wordSlots: List<WordCharSlot> = emptyList(),
     val activeSlotIndex: Int = 0,
 
-    // Trạng thái sửa lỗi bắt buộc (Bước 4, 5 & Kiểm tra cuối bài)
+    // Trạng thái sửa lỗi bắt buộc
     val showingCorrectionAnimation: Boolean = false,
     val correctionTemplate: KanaStrokeTemplate? = null,
     val mustRewriteAfterError: Boolean = false,
@@ -67,9 +64,10 @@ data class LessonUiState(
     val isFeedbackError: Boolean = false,
     val shakeTrigger: Int = 0,
 
-    // Kiểm tra tổng hợp cuối bài / Kiểm tra vượt cấp (Test-out)
+    // Kiểm tra nhanh 1 chữ đã biết (viết đúng 1 lần là pass chữ đó và qua chữ mới ngay!)
+    val isCharQuickCheckMode: Boolean = false,
+    // Kiểm tra vượt bài (cả hàng)
     val isRowTestOutMode: Boolean = false,
-    val isCharFastTrackMode: Boolean = false,
     val quizQuestions: List<QuizQuestion> = emptyList(),
     val currentQuizIndex: Int = 0,
     val quizFirstAttemptPassedCount: Int = 0,
@@ -139,8 +137,7 @@ class LessonViewModel(
 
             val currentSettings = settingsRepository.settingsFlow.first()
 
-            // Lấy danh sách chữ đã học từ DB + các hàng trước hàng hiện tại
-            val dbLearned = kanaDao.getLearnedCharacters().map { it.char }
+            val dbLearned = kanaDao.getLearnedCharacters().map { it.char }.toSet()
             learnedCharsSet.addAll(dbLearned)
 
             val rowChars = allChars.filter { it.script == script && it.row == rowName }
@@ -157,18 +154,24 @@ class LessonViewModel(
                     }
                 }
             } else {
-                // Khi đã học sang phần Dakuten/Handakuten hoặc Yōon/っ/ー, coi 46 chữ cơ bản của hệ chữ đó đã được học
                 basicInScript.forEach { learnedCharsSet.add(it.char) }
                 if (currentCategory == "small") {
                     allChars.filter { it.script == script && it.category == "dakuten" }
                         .forEach { learnedCharsSet.add(it.char) }
                 }
             }
-            val startIdx = if (!initialFocusChar.isNullOrBlank()) {
-                rowChars.indexOfFirst { it.char == initialFocusChar }.coerceAtLeast(0)
-            } else {
-                0
+
+            // QUAN TRỌNG: Tìm chữ đầu tiên CHƯA HỌC trong hàng này để người dùng không bao giờ bị học lại chữ あ!
+            val startIdx = when {
+                !initialFocusChar.isNullOrBlank() -> {
+                    rowChars.indexOfFirst { it.char == initialFocusChar }.coerceAtLeast(0)
+                }
+                else -> {
+                    val firstUnlearned = rowChars.indexOfFirst { it.char !in dbLearned }
+                    if (firstUnlearned != -1) firstUnlearned else 0
+                }
             }
+
             for (i in 0 until startIdx) {
                 learnedCharsSet.add(rowChars[i].char)
             }
@@ -197,79 +200,6 @@ class LessonViewModel(
             } else {
                 startChar?.let { speakIfEnabled(it.char, it.romaji) }
             }
-        }
-    }
-
-    /**
-     * Bỏ qua các bước hướng dẫn (1, 2, 3) của chữ hiện tại để kiểm tra viết từ trí nhớ (Bước 4) + từ vựng (Bước 5) luôn.
-     * Nếu viết đúng hết sẽ pass chữ hiện tại và mở khoá ngay chữ cái tiếp theo.
-     */
-    fun jumpToCharacterFastTest() {
-        autoAdvanceJob?.cancel()
-        val currentChar = _uiState.value.currentCharacter ?: return
-        _uiState.update {
-            it.copy(
-                stepType = LessonStepType.STEP_4_RECALL,
-                isCharFastTrackMode = true,
-                singleCharStrokes = emptyList(),
-                lastSingleEvaluation = null,
-                showingCorrectionAnimation = false,
-                correctionTemplate = null,
-                mustRewriteAfterError = false,
-                feedbackMessage = "Kiểm tra nhanh chữ '${currentChar.romaji}': Viết đúng chữ và từ vựng để qua luôn chữ mới!",
-                isFeedbackError = false
-            )
-        }
-        speakIfEnabled(currentChar.char, currentChar.romaji)
-    }
-
-    /**
-     * Kiểm tra vượt bài (Test-out cả hàng):
-     * Mở toàn bộ các chữ trong hàng này để kiểm tra viết chữ + viết từ vựng.
-     * Nếu đúng hết 100% ngay lần đầu thì được Pass cả bài và mở khoá hàng chữ cái mới.
-     */
-    fun jumpToRowTestOut() {
-        autoAdvanceJob?.cancel()
-        // Trong chế độ kiểm tra vượt cấp của hàng, coi toàn bộ các chữ trong hàng này đều phải tự viết
-        _uiState.value.rowCharacters.forEach { learnedCharsSet.add(it.char) }
-        _uiState.update {
-            it.copy(
-                isRowTestOutMode = true,
-                isTestOutFailed = false
-            )
-        }
-        startEndOfRowQuiz(isTestOut = true)
-    }
-
-    /**
-     * Chuyển từ màn hình báo chưa đạt kiểm tra vượt cấp về học tuần tự từng chữ từ Bước 1.
-     */
-    fun switchFromTestOutToNormalLesson() {
-        autoAdvanceJob?.cancel()
-        val firstChar = _uiState.value.rowCharacters.firstOrNull() ?: return
-        viewModelScope.launch {
-            val words = vocabRepository.getWordsForCharacter(firstChar.char)
-            _uiState.update {
-                it.copy(
-                    currentCharIndex = 0,
-                    stepType = LessonStepType.STEP_1_OBSERVE,
-                    isRowTestOutMode = false,
-                    isCharFastTrackMode = false,
-                    isTestOutFailed = false,
-                    isLessonCompleted = false,
-                    currentCharWords = words,
-                    currentWordIndex = 0,
-                    singleCharStrokes = emptyList(),
-                    lastSingleEvaluation = null,
-                    showingCorrectionAnimation = false,
-                    mustRewriteAfterError = false,
-                    feedbackMessage = null,
-                    isFeedbackError = false,
-                    isAnimationPlaying = true,
-                    animationRestartTrigger = it.animationRestartTrigger + 1
-                )
-            }
-            speakIfEnabled(firstChar.char, firstChar.romaji)
         }
     }
 
@@ -313,35 +243,11 @@ class LessonViewModel(
         }
     }
 
-    // --- Điều khiển Bước 1: XEM ---
-    fun toggleObservePlayPause() {
-        _uiState.update { it.copy(isAnimationPlaying = !it.isAnimationPlaying) }
-    }
-
-    fun replayObserveAnimation() {
-        _uiState.update {
-            it.copy(
-                isAnimationPlaying = true,
-                animationRestartTrigger = it.animationRestartTrigger + 1
-            )
-        }
-        speakCurrentPrompt()
-    }
-
-    fun toggleObserveLoop() {
-        _uiState.update { it.copy(isAnimationLooping = !it.isAnimationLooping) }
-    }
-
-    fun setObserveSpeed(speed: Float) {
-        viewModelScope.launch {
-            settingsRepository.setAnimationSpeed(speed)
-        }
-    }
-
     fun advanceFromObserveToTrace() {
         _uiState.update {
             it.copy(
                 stepType = LessonStepType.STEP_2_TRACE,
+                isCharQuickCheckMode = false,
                 singleCharStrokes = emptyList(),
                 lastSingleEvaluation = null,
                 showingCorrectionAnimation = false,
@@ -352,7 +258,74 @@ class LessonViewModel(
         }
     }
 
-    // --- Thao tác vẽ trên Canvas ---
+    /**
+     * Khi người dùng bấm "Đã biết chữ này • Kiểm tra luôn":
+     * Chuyển thẳng sang viết chữ đó 1 lần từ trí nhớ.
+     * Nếu viết ĐÚNG -> Lưu chữ đó ĐÃ THUỘC vào DB ngay lập tức và nhảy sang chữ cái mới tiếp theo!
+     */
+    fun jumpToCharacterFastTest() {
+        autoAdvanceJob?.cancel()
+        val currentChar = _uiState.value.currentCharacter ?: return
+        _uiState.update {
+            it.copy(
+                stepType = LessonStepType.STEP_4_RECALL,
+                isCharQuickCheckMode = true,
+                singleCharStrokes = emptyList(),
+                lastSingleEvaluation = null,
+                showingCorrectionAnimation = false,
+                correctionTemplate = null,
+                mustRewriteAfterError = false,
+                feedbackMessage = "Viết đúng chữ '${currentChar.romaji}' 1 lần để qua ngay chữ tiếp theo!",
+                isFeedbackError = false
+            )
+        }
+        speakIfEnabled(currentChar.char, currentChar.romaji)
+    }
+
+    /**
+     * Kiểm tra vượt bài (Test-out cả hàng).
+     */
+    fun jumpToRowTestOut() {
+        autoAdvanceJob?.cancel()
+        _uiState.value.rowCharacters.forEach { learnedCharsSet.add(it.char) }
+        _uiState.update {
+            it.copy(
+                isRowTestOutMode = true,
+                isTestOutFailed = false
+            )
+        }
+        startEndOfRowQuiz(isTestOut = true)
+    }
+
+    fun switchFromTestOutToNormalLesson() {
+        autoAdvanceJob?.cancel()
+        val firstChar = _uiState.value.rowCharacters.firstOrNull() ?: return
+        viewModelScope.launch {
+            val words = vocabRepository.getWordsForCharacter(firstChar.char)
+            _uiState.update {
+                it.copy(
+                    currentCharIndex = 0,
+                    stepType = LessonStepType.STEP_1_OBSERVE,
+                    isRowTestOutMode = false,
+                    isCharQuickCheckMode = false,
+                    isTestOutFailed = false,
+                    isLessonCompleted = false,
+                    currentCharWords = words,
+                    currentWordIndex = 0,
+                    singleCharStrokes = emptyList(),
+                    lastSingleEvaluation = null,
+                    showingCorrectionAnimation = false,
+                    mustRewriteAfterError = false,
+                    feedbackMessage = null,
+                    isFeedbackError = false,
+                    isAnimationPlaying = true,
+                    animationRestartTrigger = it.animationRestartTrigger + 1
+                )
+            }
+            speakIfEnabled(firstChar.char, firstChar.romaji)
+        }
+    }
+
     fun onUserCanvasActivity() {
         autoAdvanceJob?.cancel()
     }
@@ -389,7 +362,6 @@ class LessonViewModel(
                 )
             }
 
-            // Tự chuyển sang ô cần viết kế tiếp sau khoảng dừng (mặc định 700ms) nếu đã vẽ đủ số nét của ô hiện tại
             if (updatedStrokes.size >= slot.expectedStrokeCount) {
                 val nextWritableIdx = updatedSlots.indexOfFirst {
                     it.index > activeIdx && !it.isPreFilledUnlearned && it.userStrokes.isEmpty()
@@ -453,7 +425,6 @@ class LessonViewModel(
                     )
                 }
             } else {
-                // Nếu ô hiện tại đang trống, lùi về ô cần viết liền trước đó
                 val prevWritable = state.wordSlots
                     .lastOrNull { it.index < activeIdx && !it.isPreFilledUnlearned }
                 if (prevWritable != null) {
@@ -503,7 +474,7 @@ class LessonViewModel(
                     singleCharStrokes = emptyList(),
                     lastSingleEvaluation = null,
                     feedbackMessage = if (it.mustRewriteAfterError) {
-                        "Hãy tự viết lại đúng 1 lần trước khi đi tiếp."
+                        "Hãy viết lại 1 lần để đi tiếp."
                     } else {
                         null
                     },
@@ -522,7 +493,7 @@ class LessonViewModel(
                     correctionTemplate = null,
                     wordSlots = resetSlots,
                     activeSlotIndex = firstWritable,
-                    feedbackMessage = "Hãy tự viết lại từ này đúng 1 lần trước khi đi tiếp.",
+                    feedbackMessage = "Hãy viết lại từ này 1 lần để đi tiếp.",
                     isFeedbackError = false
                 )
             }
@@ -533,10 +504,6 @@ class LessonViewModel(
         _uiState.update { it.copy(showFallbackRomajiInListenMode = true) }
     }
 
-    /**
-     * Bấm nút "Kiểm tra": chấm điểm toàn bộ chữ hoặc toàn bộ từ trên dãy ô vuông.
-     * @return true nếu bài làm ĐẠT, false nếu SAI (để UI kích hoạt rung Haptic).
-     */
     fun checkCurrentSubmission(): Boolean {
         autoAdvanceJob?.cancel()
         val state = _uiState.value
@@ -579,7 +546,6 @@ class LessonViewModel(
     ): Boolean {
         val state = _uiState.value
         if (result.passed) {
-            recordCharacterPracticeInDb(target, result.score, passed = true)
             when (state.stepType) {
                 LessonStepType.STEP_2_TRACE -> {
                     _uiState.update {
@@ -589,7 +555,7 @@ class LessonViewModel(
                             lastSingleEvaluation = null,
                             showingCorrectionAnimation = false,
                             mustRewriteAfterError = false,
-                            feedbackMessage = "Đồ nét chính xác (${result.score}đ)! Sang Bước 3: Viết có gợi ý.",
+                            feedbackMessage = "Đồ nét tốt (${result.score}đ)! Sang Bước 3: Viết có gợi ý.",
                             isFeedbackError = false
                         )
                     }
@@ -611,16 +577,22 @@ class LessonViewModel(
                 }
 
                 LessonStepType.STEP_4_RECALL -> {
-                    // Đánh dấu chữ này đã học xong để Bước 5 mở khoá ô viết của chữ này trong từ vựng
+                    // Đánh dấu chữ này ĐÃ HỌC XONG và lưu ngay vào DB!
                     learnedCharsSet.add(target.char)
-                    startStep5VocabForCurrentCharacter(wordIdx = 0)
+                    markCharacterLearnedInDb(target, result.score)
+
+                    if (state.isCharQuickCheckMode) {
+                        // Trong chế độ Kiểm tra nhanh chữ đã biết: viết đúng 1 lần là QUA NGAY chữ mới tiếp theo!
+                        advanceToNextCharacterOrQuiz()
+                    } else {
+                        startStep5VocabForCurrentCharacter(wordIdx = 0)
+                    }
                 }
 
                 else -> {}
             }
             return true
         } else {
-            recordCharacterPracticeInDb(target, result.score, passed = false)
             val errReason = result.errors.joinToString(", ") { it.messageVi }
                 .ifEmpty { "Chưa khớp nét chuẩn" }
             val requireRewrite = (state.stepType == LessonStepType.STEP_4_RECALL)
@@ -630,7 +602,7 @@ class LessonViewModel(
                     showingCorrectionAnimation = true,
                     correctionTemplate = target,
                     mustRewriteAfterError = requireRewrite,
-                    feedbackMessage = "Chưa chính xác ($errReason). Hãy quan sát lại thứ tự nét đúng rồi viết lại!",
+                    feedbackMessage = "Chưa chính xác ($errReason). Xem lại nét đúng rồi thử lại nhé!",
                     isFeedbackError = true,
                     shakeTrigger = it.shakeTrigger + 1
                 )
@@ -702,7 +674,6 @@ class LessonViewModel(
         }
 
         if (firstFailedSlot == null) {
-            // Cả từ đều ĐẠT!
             val nextWordIdx = state.currentWordIndex + 1
             if (nextWordIdx < state.currentCharWords.size) {
                 startStep5VocabForCurrentCharacter(nextWordIdx)
@@ -711,7 +682,6 @@ class LessonViewModel(
             }
             return true
         } else {
-            // Có ít nhất 1 ô viết sai -> hiện đáp án + animate nét chữ sai, bắt viết lại 1 lần
             val failedTemplate = allTemplatesByChar[firstFailedSlot.targetChar]
             val errReason = firstFailedSlot.evaluation?.errors
                 ?.joinToString(", ") { it.messageVi }
@@ -725,7 +695,7 @@ class LessonViewModel(
                     showingCorrectionAnimation = true,
                     correctionTemplate = failedTemplate,
                     mustRewriteAfterError = true,
-                    feedbackMessage = "Ô số ${firstFailedSlot.index + 1} ('${firstFailedSlot.targetChar}'): $errReason. Hãy xem lại nét chuẩn rồi viết lại cả từ 1 lần!",
+                    feedbackMessage = "Ô số ${firstFailedSlot.index + 1} ('${firstFailedSlot.targetChar}'): $errReason.",
                     isFeedbackError = true,
                     shakeTrigger = it.shakeTrigger + 1
                 )
@@ -746,7 +716,7 @@ class LessonViewModel(
                     it.copy(
                         currentCharIndex = nextCharIdx,
                         stepType = LessonStepType.STEP_1_OBSERVE,
-                        isCharFastTrackMode = false,
+                        isCharQuickCheckMode = false,
                         currentCharWords = words,
                         currentWordIndex = 0,
                         singleCharStrokes = emptyList(),
@@ -762,7 +732,16 @@ class LessonViewModel(
                 speakIfEnabled(nextChar.char, nextChar.romaji)
             }
         } else {
-            startEndOfRowQuiz(isTestOut = false)
+            // Đã học xong toàn bộ các chữ trong hàng!
+            // Nếu tất cả các chữ trong hàng đều được vượt nhanh (Quick Check), hoàn tất luôn hàng này và mở khoá hàng tiếp theo!
+            if (state.isCharQuickCheckMode) {
+                completeLessonInDb(
+                    firstAttemptCorrect = state.rowCharacters.size,
+                    totalQuestions = state.rowCharacters.size
+                )
+            } else {
+                startEndOfRowQuiz(isTestOut = false)
+            }
         }
     }
 
@@ -770,17 +749,16 @@ class LessonViewModel(
         viewModelScope.launch {
             val state = _uiState.value
             val currentRowChars = state.rowCharacters
-            // Lấy thêm chữ đã học ở các hàng trước để trộn
             val previousLearnedTemplates = learnedCharsSet
                 .mapNotNull { allTemplatesByChar[it] }
                 .filter { it.script == script && it.row != rowName }
 
-            val poolChars = (currentRowChars + previousLearnedTemplates.take(5)).distinctBy { it.char }
+            val poolChars = (currentRowChars + previousLearnedTemplates.take(3)).distinctBy { it.char }
             val poolWords = vocabRepository.getWordsForCharacters(poolChars.map { it.char })
 
             val questions = ArrayList<QuizQuestion>()
             if (isTestOut) {
-                // Chế độ Kiểm tra vượt cấp (Đã biết): Kiểm tra toàn bộ chữ cái và từ vựng của hàng này
+                // Kiểm tra vượt bài gọn: kiểm tra các chữ trong hàng này
                 for (ch in currentRowChars) {
                     questions.add(
                         QuizQuestion(
@@ -788,18 +766,8 @@ class LessonViewModel(
                             targetTemplate = ch
                         )
                     )
-                    val wordForChar = poolWords.firstOrNull { it.introduces == ch.char }
-                    if (wordForChar != null) {
-                        questions.add(
-                            QuizQuestion(
-                                type = QuizQuestionType.MEANING_ROMAJI_TO_WORD,
-                                targetWord = wordForChar
-                            )
-                        )
-                    }
                 }
             } else {
-                // 1. Dạng (a) Romaji -> Viết Kana cho các chữ trong hàng hiện tại
                 for (ch in currentRowChars) {
                     questions.add(
                         QuizQuestion(
@@ -808,34 +776,21 @@ class LessonViewModel(
                         )
                     )
                 }
-                // 2. Dạng (b) Nghe -> Viết Kana (trộn chữ hàng này và hàng trước)
-                val listenChars = (currentRowChars.take(2) + previousLearnedTemplates.take(2))
-                    .ifEmpty { currentRowChars.take(2) }
-                for (ch in listenChars) {
+                val listenChar = currentRowChars.firstOrNull()
+                if (listenChar != null) {
                     questions.add(
                         QuizQuestion(
                             type = QuizQuestionType.LISTEN_TO_KANA,
-                            targetTemplate = ch
+                            targetTemplate = listenChar
                         )
                     )
                 }
-                // 3. Dạng (c) Nghĩa tiếng Việt + Romaji -> Viết cả từ
-                val meaningWords = poolWords.filter { w -> w.introduces in currentRowChars.map { it.char } }.take(2)
-                for (w in meaningWords) {
+                val meaningWord = poolWords.firstOrNull { w -> w.introduces in currentRowChars.map { it.char } }
+                if (meaningWord != null) {
                     questions.add(
                         QuizQuestion(
                             type = QuizQuestionType.MEANING_ROMAJI_TO_WORD,
-                            targetWord = w
-                        )
-                    )
-                }
-                // 4. Dạng (d) Nghe -> Viết cả từ
-                val listenWords = poolWords.reversed().take(2)
-                for (w in listenWords) {
-                    questions.add(
-                        QuizQuestion(
-                            type = QuizQuestionType.LISTEN_TO_WORD,
-                            targetWord = w
+                            targetWord = meaningWord
                         )
                     )
                 }
@@ -863,7 +818,7 @@ class LessonViewModel(
                     mustRewriteAfterError = false,
                     showFallbackRomajiInListenMode = false,
                     feedbackMessage = if (isTestOut) {
-                        "Chế độ Kiểm tra vượt bài: Viết đúng hết (${questions.size} câu) để pass và mở khoá bài mới!"
+                        "Kiểm tra vượt bài: Viết đúng ${questions.size} chữ trong hàng để mở khoá bài tiếp theo!"
                     } else {
                         null
                     },
@@ -888,10 +843,7 @@ class LessonViewModel(
                 audioProvider.speak(w.word, w.romaji)
             }
 
-            QuizQuestionType.ROMAJI_TO_KANA,
-            QuizQuestionType.MEANING_ROMAJI_TO_WORD -> {
-                // Không bắt buộc tự phát âm ở dạng nhìn đề chữ, người dùng có thể bấm nút Nghe nếu muốn
-            }
+            else -> {}
         }
     }
 
@@ -900,12 +852,11 @@ class LessonViewModel(
         result: RecognitionResult
     ): Boolean {
         if (result.passed) {
-            recordCharacterPracticeInDb(target, result.score, passed = !hadErrorOnCurrentQuizItem)
+            markCharacterLearnedInDb(target, result.score)
             advanceToNextQuizQuestion()
             return true
         } else {
             hadErrorOnCurrentQuizItem = true
-            recordCharacterPracticeInDb(target, result.score, passed = false)
             val errReason = result.errors.joinToString(", ") { it.messageVi }
                 .ifEmpty { "Chưa đúng nét" }
             _uiState.update {
@@ -914,7 +865,7 @@ class LessonViewModel(
                     showingCorrectionAnimation = true,
                     correctionTemplate = target,
                     mustRewriteAfterError = true,
-                    feedbackMessage = "Sai đáp án ($errReason). Đáp án đúng là '${target.char}'. Hãy xem lại nét và viết lại 1 lần!",
+                    feedbackMessage = "Chưa đúng ($errReason). Đáp án là '${target.char}'. Xem lại nét rồi viết lại 1 lần!",
                     isFeedbackError = true,
                     shakeTrigger = it.shakeTrigger + 1
                 )
@@ -955,7 +906,7 @@ class LessonViewModel(
                     showingCorrectionAnimation = true,
                     correctionTemplate = failedTemplate,
                     mustRewriteAfterError = true,
-                    feedbackMessage = "Chưa chính xác ở chữ '${firstFailedSlot.targetChar}' (từ đúng: $wordText). Hãy xem lại nét mẫu rồi viết lại 1 lần!",
+                    feedbackMessage = "Chưa chính xác ở chữ '${firstFailedSlot.targetChar}' (từ đúng: $wordText).",
                     isFeedbackError = true,
                     shakeTrigger = it.shakeTrigger + 1
                 )
@@ -998,7 +949,6 @@ class LessonViewModel(
             }
             triggerAudioForQuizQuestion(nextQ)
         } else {
-            // Nếu đang ở chế độ Kiểm tra vượt cấp (isRowTestOutMode): bắt buộc đúng hết 100% mới được Pass và mở khoá
             if (state.isRowTestOutMode && updatedPassCount < state.quizQuestions.size) {
                 _uiState.update {
                     it.copy(
@@ -1012,10 +962,9 @@ class LessonViewModel(
         }
     }
 
-    private fun recordCharacterPracticeInDb(
+    private fun markCharacterLearnedInDb(
         template: KanaStrokeTemplate,
-        score: Int,
-        passed: Boolean
+        score: Int
     ) {
         viewModelScope.launch {
             val now = System.currentTimeMillis()
@@ -1024,13 +973,27 @@ class LessonViewModel(
                 char = template.char,
                 script = template.script,
                 rowName = template.row,
-                learned = existing?.learned == true || passed,
+                learned = true,
                 lastScore = score,
                 practiceCount = (existing?.practiceCount ?: 0) + 1,
-                errorCount = (existing?.errorCount ?: 0) + if (passed) 0 else 1,
+                errorCount = existing?.errorCount ?: 0,
                 updatedAtEpochMs = now
             )
             kanaDao.upsertCharacterProgress(updated)
+
+            val charCardId = "CHAR_${template.char}"
+            val existingCard = kanaDao.getSrsCard(charCardId)
+            val nextCard = SrsScheduler.computeNextCardState(
+                existing = existingCard,
+                cardId = charCardId,
+                cardType = "CHAR",
+                targetKey = template.char,
+                script = template.script,
+                score = score,
+                passedFirstAttempt = true,
+                nowEpochMs = now
+            )
+            kanaDao.upsertSrsCard(nextCard)
         }
     }
 
@@ -1055,7 +1018,6 @@ class LessonViewModel(
                 )
             )
 
-            // Khởi tạo / cập nhật thẻ SRS cho toàn bộ chữ và từ vựng trong hàng vừa học
             val rowCharsList = _uiState.value.rowCharacters
             for (ch in rowCharsList) {
                 val existingProg = kanaDao.getCharacterProgress(ch.char)

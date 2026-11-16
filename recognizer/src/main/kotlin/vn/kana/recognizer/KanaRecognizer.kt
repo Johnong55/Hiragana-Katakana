@@ -303,8 +303,8 @@ class KanaRecognizer(
                 // Kiểm tra hình dáng nét (WRONG_SHAPE)
                 val isShapeBad = avgDist > config.maxPointToPointDistance ||
                     frechetDist > config.maxFrechetDistance ||
-                    centeredAvgDist > config.maxPointToPointDistance * 0.85f ||
-                    (n >= 2 && lengthFractionDiff > 0.24f)
+                    centeredAvgDist > config.maxPointToPointDistance * 0.90f ||
+                    (n >= 2 && lengthFractionDiff > 0.42f)
 
                 if (isShapeBad && !strokeErrors.contains(RecognitionError.WRONG_DIRECTION)) {
                     strokeErrors.add(RecognitionError.WRONG_SHAPE)
