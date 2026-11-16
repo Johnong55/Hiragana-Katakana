@@ -51,6 +51,7 @@ class MainActivity : ComponentActivity() {
                 var selectedRowName by rememberSaveable { mutableStateOf("あ行") }
                 var selectedScript by rememberSaveable { mutableStateOf("hiragana") }
                 var startLessonInTestOutMode by rememberSaveable { mutableStateOf(false) }
+                var lessonInitialFocusChar by rememberSaveable { mutableStateOf<String?>(null) }
                 var referenceInitialChar by rememberSaveable { mutableStateOf<String?>(null) }
                 var sessionCounter by rememberSaveable { mutableIntStateOf(0) }
 
@@ -90,6 +91,7 @@ class MainActivity : ComponentActivity() {
                                     selectedRowName = rowName
                                     selectedScript = script
                                     startLessonInTestOutMode = false
+                                    lessonInitialFocusChar = null
                                     sessionCounter++
                                     destination = AppDestination.ACTIVE_LESSON
                                 },
@@ -113,6 +115,7 @@ class MainActivity : ComponentActivity() {
                                     selectedRowName = rowName
                                     selectedScript = script
                                     startLessonInTestOutMode = false
+                                    lessonInitialFocusChar = null
                                     sessionCounter++
                                     destination = AppDestination.ACTIVE_LESSON
                                 },
@@ -120,6 +123,7 @@ class MainActivity : ComponentActivity() {
                                     selectedRowName = rowName
                                     selectedScript = script
                                     startLessonInTestOutMode = true
+                                    lessonInitialFocusChar = null
                                     sessionCounter++
                                     destination = AppDestination.ACTIVE_LESSON
                                 },
@@ -137,11 +141,12 @@ class MainActivity : ComponentActivity() {
 
                         AppDestination.ACTIVE_LESSON -> {
                             val lessonViewModel: LessonViewModel = viewModel(
-                                key = "lesson_${selectedScript}_${selectedRowName}_${startLessonInTestOutMode}_$sessionCounter",
+                                key = "lesson_${selectedScript}_${selectedRowName}_${startLessonInTestOutMode}_${lessonInitialFocusChar}_$sessionCounter",
                                 factory = LessonViewModel.provideFactory(
                                     rowName = selectedRowName,
                                     script = selectedScript,
                                     startInTestOutMode = startLessonInTestOutMode,
+                                    initialFocusChar = lessonInitialFocusChar,
                                     strokeRepository = app.strokeRepository,
                                     vocabRepository = app.vocabRepository,
                                     settingsRepository = app.settingsRepository,
@@ -180,6 +185,14 @@ class MainActivity : ComponentActivity() {
                             KanaReferenceScreen(
                                 viewModel = mapViewModel,
                                 initialChar = referenceInitialChar,
+                                onPracticeCharacter = { rowName, script, targetChar ->
+                                    selectedRowName = rowName
+                                    selectedScript = script
+                                    startLessonInTestOutMode = false
+                                    lessonInitialFocusChar = targetChar
+                                    sessionCounter++
+                                    destination = AppDestination.ACTIVE_LESSON
+                                },
                                 onBack = {
                                     destination = AppDestination.HOME
                                 }

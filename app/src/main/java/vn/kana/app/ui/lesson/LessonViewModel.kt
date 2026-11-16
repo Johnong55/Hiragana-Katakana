@@ -101,6 +101,7 @@ class LessonViewModel(
     private val rowName: String,
     private val script: String,
     private val startInTestOutMode: Boolean = false,
+    private val initialFocusChar: String? = null,
     private val strokeRepository: StrokeAssetRepository,
     private val vocabRepository: VocabAssetRepository,
     private val settingsRepository: UserSettingsRepository,
@@ -163,9 +164,18 @@ class LessonViewModel(
                         .forEach { learnedCharsSet.add(it.char) }
                 }
             }
-            val firstChar = rowChars.firstOrNull()
-            val firstCharWords = if (firstChar != null) {
-                vocabRepository.getWordsForCharacter(firstChar.char)
+            val startIdx = if (!initialFocusChar.isNullOrBlank()) {
+                rowChars.indexOfFirst { it.char == initialFocusChar }.coerceAtLeast(0)
+            } else {
+                0
+            }
+            for (i in 0 until startIdx) {
+                learnedCharsSet.add(rowChars[i].char)
+            }
+
+            val startChar = rowChars.getOrNull(startIdx)
+            val startCharWords = if (startChar != null) {
+                vocabRepository.getWordsForCharacter(startChar.char)
             } else {
                 emptyList()
             }
@@ -175,9 +185,9 @@ class LessonViewModel(
                     isLoading = false,
                     settings = currentSettings,
                     rowCharacters = rowChars,
-                    currentCharIndex = 0,
+                    currentCharIndex = startIdx,
                     stepType = LessonStepType.STEP_1_OBSERVE,
-                    currentCharWords = firstCharWords,
+                    currentCharWords = startCharWords,
                     isAnimationPlaying = true
                 )
             }
@@ -185,7 +195,7 @@ class LessonViewModel(
             if (startInTestOutMode) {
                 jumpToRowTestOut()
             } else {
-                firstChar?.let { speakIfEnabled(it.char, it.romaji) }
+                startChar?.let { speakIfEnabled(it.char, it.romaji) }
             }
         }
     }
@@ -1106,6 +1116,7 @@ class LessonViewModel(
             rowName: String,
             script: String,
             startInTestOutMode: Boolean = false,
+            initialFocusChar: String? = null,
             strokeRepository: StrokeAssetRepository,
             vocabRepository: VocabAssetRepository,
             settingsRepository: UserSettingsRepository,
@@ -1118,6 +1129,7 @@ class LessonViewModel(
                     rowName = rowName,
                     script = script,
                     startInTestOutMode = startInTestOutMode,
+                    initialFocusChar = initialFocusChar,
                     strokeRepository = strokeRepository,
                     vocabRepository = vocabRepository,
                     settingsRepository = settingsRepository,

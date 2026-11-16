@@ -215,7 +215,8 @@ fun LessonScreen(
             uiState = uiState,
             onSpeak = viewModel::speakCurrentPrompt,
             onSelectWordSlot = viewModel::selectWordSlot,
-            onRevealRomajiFallback = viewModel::revealListenRomajiFallback
+            onRevealRomajiFallback = viewModel::revealListenRomajiFallback,
+            onFastTrackCharacter = viewModel::jumpToCharacterFastTest
         )
 
         // 4. Thông báo phản hồi / lỗi (nếu có)
@@ -456,7 +457,8 @@ private fun PromptHeaderSection(
     uiState: LessonUiState,
     onSpeak: () -> Unit,
     onSelectWordSlot: (Int) -> Unit,
-    onRevealRomajiFallback: () -> Unit
+    onRevealRomajiFallback: () -> Unit,
+    onFastTrackCharacter: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -476,6 +478,7 @@ private fun PromptHeaderSection(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Row(
+                        modifier = Modifier.weight(1f),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
@@ -485,8 +488,13 @@ private fun PromptHeaderSection(
                             color = MaterialTheme.colorScheme.onBackground
                         )
                         Column {
+                            val strokeProgressLabel = if (uiState.stepType == LessonStepType.STEP_1_OBSERVE) {
+                                "${ch.strokeCount} nét"
+                            } else {
+                                "Đã vẽ: ${uiState.singleCharStrokes.size}/${ch.strokeCount} nét"
+                            }
                             Text(
-                                text = "${uiState.stepType.titleVi} • Romaji: ${ch.romaji} (${ch.strokeCount} nét)",
+                                text = "${uiState.stepType.titleVi} • ${ch.romaji} ($strokeProgressLabel)",
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
@@ -495,6 +503,16 @@ private fun PromptHeaderSection(
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
+                            if (uiState.stepType != LessonStepType.STEP_1_OBSERVE) {
+                                Text(
+                                    text = "Đã thuộc chữ '${ch.char}'? Bấm để kiểm tra luôn →",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    modifier = Modifier
+                                        .padding(top = 2.dp)
+                                        .clickable(onClick = onFastTrackCharacter)
+                                )
+                            }
                         }
                     }
                     SpeakButton(onClick = onSpeak)
@@ -522,7 +540,7 @@ private fun PromptHeaderSection(
                             color = MaterialTheme.colorScheme.onBackground
                         )
                         Text(
-                            text = "Không có gợi ý nét. Hãy tự nhớ và viết đủ ${ch.strokeCount} nét.",
+                            text = "Không có gợi ý nét • Đã vẽ: ${uiState.singleCharStrokes.size}/${ch.strokeCount} nét",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

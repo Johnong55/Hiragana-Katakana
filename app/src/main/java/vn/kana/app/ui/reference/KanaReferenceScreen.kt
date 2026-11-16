@@ -53,6 +53,7 @@ import vn.kana.app.ui.map.LessonMapViewModel
 fun KanaReferenceScreen(
     viewModel: LessonMapViewModel,
     initialChar: String? = null,
+    onPracticeCharacter: (rowName: String, script: String, targetChar: String) -> Unit = { _, _, _ -> },
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -207,6 +208,27 @@ fun KanaReferenceScreen(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
+                    }
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                            .clickable {
+                                onPracticeCharacter(
+                                    selectedTemplate.row,
+                                    selectedTemplate.script,
+                                    selectedTemplate.char
+                                )
+                            }
+                            .padding(vertical = 6.dp)
+                    ) {
+                        Text(
+                            text = "Luyện viết chữ '${selectedTemplate.char}' →",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                     }
                 }
             }
