@@ -1,5 +1,13 @@
 package vn.kana.app.ui.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,16 +28,23 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import vn.kana.app.data.ThemeMode
 import vn.kana.app.domain.MasteryLevel
+import vn.kana.app.ui.components.KanaStrokeAnimatorCanvas
 import vn.kana.app.ui.components.drawSmoothStrokePath
 import vn.kana.app.ui.map.CurriculumTab
 import vn.kana.app.ui.map.LessonMapViewModel
@@ -43,6 +58,9 @@ fun HomeScreen(
     onOpenLessonMap: () -> Unit,
     onOpenCustomStudy: () -> Unit = {},
     onOpenReference: (initialChar: String?) -> Unit,
+    onPracticeCharacter: (rowName: String, script: String, targetChar: String) -> Unit = { r, s, _ ->
+        onStartRowLesson(r, s)
+    },
     onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -65,12 +83,56 @@ fun HomeScreen(
         } ?: nextRowLesson?.characters?.firstOrNull()
     }
 
+    val byChar = remember(uiState.allCurriculumCharacters) {
+        uiState.allCurriculumCharacters.associateBy { it.char }
+    }
+    var selectedChar by remember { mutableStateOf<String?>(null) }
+    var replayTrigger by remember { mutableIntStateOf(0) }
+
+    val selectedTemplate = selectedChar?.let { byChar[it] }
+    val selectedStrokes = remember(selectedTemplate?.char) {
+        selectedTemplate?.toTypedStrokes().orEmpty()
+    }
+    val selectedWords = uiState.wordsByChar[selectedTemplate?.char.orEmpty()].orEmpty()
+
+    var animStrokeIdx by remember { mutableIntStateOf(0) }
+    var animStrokeProgress by remember { mutableFloatStateOf(0f) }
+
+    LaunchedEffect(selectedTemplate?.char, replayTrigger, uiState.settings.animationSpeed) {
+        if (selectedTemplate == null || selectedStrokes.isEmpty()) return@LaunchedEffect
+        val speed = uiState.settings.animationSpeed.coerceIn(0.5f, 2.0f)
+        while (true) {
+            for (sIdx in selectedStrokes.indices) {
+                animStrokeIdx = sIdx
+                animStrokeProgress = 0f
+                val dur = (660f / speed).toInt().coerceAtLeast(130)
+                animate(0f, 1f, animationSpec = tween(dur, easing = LinearEasing)) { v, _ ->
+                    animStrokeProgress = v
+                }
+                delay((180f / speed).toLong().coerceAtLeast(60L))
+            }
+            animStrokeIdx = selectedStrokes.size
+            animStrokeProgress = 1f
+            delay((850f / speed).toLong().coerceAtLeast(250L))
+        }
+    }
+
+    fun onTapGridChar(ch: String) {
+        if (selectedChar == ch) {
+            selectedChar = null
+        } else {
+            selectedChar = ch
+            replayTrigger++
+            byChar[ch]?.let { viewModel.speak(it.char, it.romaji) }
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         // 1. Header tối giản cho Tab Bảng chữ cái: Tiến độ + Nút Sáng/Tối
         Row(
@@ -111,130 +173,252 @@ fun HomeScreen(
             }
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+        // 2. Khung Upper Animated ngay trên cùng khi bấm vào 1 chữ (không cần chuyển màn hình)
+        AnimatedVisibility(
+            visible = selectedTemplate != null,
+            enter = expandVertically(animationSpec = tween(240)) + fadeIn(animationSpec = tween(220)),
+            exit = shrinkVertically(animationSpec = tween(200)) + fadeOut(animationSpec = tween(180))
         ) {
-            // 2. Thanh chuyển hệ chữ: Hiragana | Katakana | Âm đục/ghép | Kanji N5
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                for (tab in CurriculumTab.entries) {
-                    val selected = uiState.selectedTab == tab
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .weight(1f)
-                            .background(
-                                if (selected) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.surface
-                            )
-                            .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                            .clickable { viewModel.selectTab(tab) }
-                            .padding(vertical = 8.dp, horizontal = 4.dp)
-                    ) {
-                        Text(
-                            text = tab.titleVi,
-                            style = MaterialTheme.typography.labelLarge,
-                            color = if (selected) MaterialTheme.colorScheme.onPrimary
-                            else MaterialTheme.colorScheme.onBackground,
-                            maxLines = 1,
-                            softWrap = false,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                }
-            }
-
-            // 4. Bảng Kana thể hiện độ thuộc bằng 4 độ đậm nhạt của xám (chạm vào chữ bất kỳ để xem nét & tập viết)
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(1.dp, MaterialTheme.colorScheme.outline)
-                    .padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+            if (selectedTemplate != null) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "BẢNG CHỮ CÁI (CHẠM ĐỂ XEM NÉT / HỌC)",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
+                    Box(modifier = Modifier.size(124.dp)) {
+                        KanaStrokeAnimatorCanvas(
+                            strokes = selectedStrokes,
+                            activeStrokeIndex = animStrokeIdx,
+                            activeStrokeProgress = animStrokeProgress,
+                            showGhostStrokes = true,
+                            showStrokeNumbers = true,
+                            showDirectionArrows = true,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    for (level in MasteryLevel.entries) {
-                        val (bg, _) = masteryColors(level, isDark)
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Box(
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "${selectedTemplate.char} (${selectedTemplate.romaji})",
+                                    style = MaterialTheme.typography.titleLarge,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Text(
+                                    text = "${selectedTemplate.row} • ${selectedTemplate.strokeCount} nét",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+
+                            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text(
+                                    text = "🔊",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.onPrimary,
+                                    modifier = Modifier
+                                        .background(MaterialTheme.colorScheme.primary)
+                                        .clickable {
+                                            replayTrigger++
+                                            viewModel.speak(selectedTemplate.char, selectedTemplate.romaji)
+                                        }
+                                        .padding(horizontal = 8.dp, vertical = 5.dp)
+                                )
+                                Text(
+                                    text = "✕",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    modifier = Modifier
+                                        .border(1.dp, MaterialTheme.colorScheme.outline)
+                                        .clickable { selectedChar = null }
+                                        .padding(horizontal = 8.dp, vertical = 5.dp)
+                                )
+                            }
+                        }
+
+                        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
+
+                        for (w in selectedWords.take(2)) {
+                            Row(
                                 modifier = Modifier
-                                    .size(12.dp)
-                                    .background(bg)
-                                    .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                            )
+                                    .fillMaxWidth()
+                                    .clickable { viewModel.speak(w.word, w.romaji) }
+                                    .padding(vertical = 1.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "${w.word} (${w.romaji})",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    maxLines = 1
+                                )
+                                Text(
+                                    text = w.meaningVi,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        }
+
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.primary)
+                                .clickable {
+                                    onPracticeCharacter(
+                                        selectedTemplate.row,
+                                        selectedTemplate.script,
+                                        selectedTemplate.char
+                                    )
+                                }
+                                .padding(vertical = 6.dp)
+                        ) {
                             Text(
-                                text = level.labelVi,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onBackground,
+                                text = "✎ Luyện viết chữ '${selectedTemplate.char}' →",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 maxLines = 1
                             )
                         }
                     }
                 }
+            }
+        }
 
-                when (uiState.selectedTab) {
-                    CurriculumTab.HIRAGANA_BASIC -> {
-                        GojuonMasteryGrid(
-                            templates = uiState.basicHiragana,
-                            rowsLayout = HIRAGANA_GOJUON_LAYOUT,
-                            masteryByChar = uiState.masteryByChar,
-                            isDark = isDark,
-                            onClickCharacter = { ch -> onOpenReference(ch) }
+        // 3. Thanh chuyển hệ chữ: Hiragana | Katakana | Âm đục/ghép | Kanji N5
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            for (tab in CurriculumTab.entries) {
+                val selected = uiState.selectedTab == tab
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(
+                            if (selected) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.surface
+                        )
+                        .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                        .clickable { viewModel.selectTab(tab) }
+                        .padding(vertical = 8.dp, horizontal = 4.dp)
+                ) {
+                    Text(
+                        text = tab.titleVi,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = if (selected) MaterialTheme.colorScheme.onPrimary
+                        else MaterialTheme.colorScheme.onBackground,
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+        }
+
+        // 4. Bảng Kana cuộn bên dưới (giữ nguyên screen khi xem animation phía trên)
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .border(1.dp, MaterialTheme.colorScheme.outline)
+                .verticalScroll(rememberScrollState())
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "BẢNG CHỮ CÁI (CHẠM CHỮ ĐỂ XEM NÉT & NGHE)",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                for (level in MasteryLevel.entries) {
+                    val (bg, _) = masteryColors(level, isDark)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(12.dp)
+                                .background(bg)
+                                .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                        )
+                        Text(
+                            text = level.labelVi,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            maxLines = 1
                         )
                     }
+                }
+            }
 
-                    CurriculumTab.KATAKANA_BASIC -> {
-                        GojuonMasteryGrid(
-                            templates = uiState.basicKatakana,
-                            rowsLayout = KATAKANA_GOJUON_LAYOUT,
-                            masteryByChar = uiState.masteryByChar,
-                            isDark = isDark,
-                            onClickCharacter = { ch -> onOpenReference(ch) }
-                        )
-                    }
+            when (uiState.selectedTab) {
+                CurriculumTab.HIRAGANA_BASIC -> {
+                    GojuonMasteryGrid(
+                        templates = uiState.basicHiragana,
+                        rowsLayout = HIRAGANA_GOJUON_LAYOUT,
+                        masteryByChar = uiState.masteryByChar,
+                        selectedChar = selectedChar,
+                        isDark = isDark,
+                        onClickCharacter = ::onTapGridChar
+                    )
+                }
 
-                    CurriculumTab.EXTENDED -> {
-                        GojuonMasteryGrid(
-                            templates = uiState.extendedCharacters,
-                            rowsLayout = EXTENDED_KANA_LAYOUT,
-                            masteryByChar = uiState.masteryByChar,
-                            isDark = isDark,
-                            onClickCharacter = { ch -> onOpenReference(ch) }
-                        )
-                    }
+                CurriculumTab.KATAKANA_BASIC -> {
+                    GojuonMasteryGrid(
+                        templates = uiState.basicKatakana,
+                        rowsLayout = KATAKANA_GOJUON_LAYOUT,
+                        masteryByChar = uiState.masteryByChar,
+                        selectedChar = selectedChar,
+                        isDark = isDark,
+                        onClickCharacter = ::onTapGridChar
+                    )
+                }
 
-                    CurriculumTab.KANJI_N5 -> {
-                        GojuonMasteryGrid(
-                            templates = uiState.n5KanjiCharacters,
-                            rowsLayout = KANJI_N5_LAYOUT,
-                            masteryByChar = uiState.masteryByChar,
-                            isDark = isDark,
-                            onClickCharacter = { ch -> onOpenReference(ch) }
-                        )
-                    }
+                CurriculumTab.EXTENDED -> {
+                    GojuonMasteryGrid(
+                        templates = uiState.extendedCharacters,
+                        rowsLayout = EXTENDED_KANA_LAYOUT,
+                        masteryByChar = uiState.masteryByChar,
+                        selectedChar = selectedChar,
+                        isDark = isDark,
+                        onClickCharacter = ::onTapGridChar
+                    )
+                }
+
+                CurriculumTab.KANJI_N5 -> {
+                    GojuonMasteryGrid(
+                        templates = uiState.n5KanjiCharacters,
+                        rowsLayout = KANJI_N5_LAYOUT,
+                        masteryByChar = uiState.masteryByChar,
+                        selectedChar = selectedChar,
+                        isDark = isDark,
+                        onClickCharacter = ::onTapGridChar
+                    )
                 }
             }
         }
@@ -324,6 +508,7 @@ private fun GojuonMasteryGrid(
     templates: List<KanaStrokeTemplate>,
     rowsLayout: List<Pair<String, List<String?>>>,
     masteryByChar: Map<String, MasteryLevel>,
+    selectedChar: String? = null,
     isDark: Boolean,
     onClickCharacter: (String) -> Unit
 ) {
@@ -353,6 +538,7 @@ private fun GojuonMasteryGrid(
                         val tmpl = byChar[ch]
                         val mastery = masteryByChar[ch] ?: MasteryLevel.UNLEARNED
                         val (bgColor, fgColor) = masteryColors(mastery, isDark)
+                        val isCharSelected = ch == selectedChar
                         val typedStrokes = remember(tmpl?.char) { tmpl?.toTypedStrokes().orEmpty() }
 
                         Box(
@@ -361,7 +547,11 @@ private fun GojuonMasteryGrid(
                                 .weight(1f)
                                 .aspectRatio(1f)
                                 .background(bgColor)
-                                .border(1.dp, MaterialTheme.colorScheme.outline)
+                                .border(
+                                    width = if (isCharSelected) 2.dp else 1.dp,
+                                    color = if (isCharSelected) MaterialTheme.colorScheme.onBackground
+                                    else MaterialTheme.colorScheme.outline
+                                )
                                 .clickable { onClickCharacter(ch) }
                                 .padding(4.dp)
                         ) {

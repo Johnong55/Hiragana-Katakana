@@ -136,6 +136,14 @@ class MainActivity : ComponentActivity() {
                                             referenceInitialChar = char
                                             destination = AppDestination.REFERENCE_TABLE
                                         },
+                                        onPracticeCharacter = { rowName, script, targetChar ->
+                                            selectedRowName = rowName
+                                            selectedScript = script
+                                            startLessonInTestOutMode = false
+                                            lessonInitialFocusChar = targetChar
+                                            sessionCounter++
+                                            destination = AppDestination.ACTIVE_LESSON
+                                        },
                                         onOpenSettings = {
                                             destination = AppDestination.SETTINGS
                                         }
