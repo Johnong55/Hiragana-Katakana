@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import vn.kana.app.data.ThemeMode
 import vn.kana.app.data.UserSettings
 import vn.kana.recognizer.StrictnessLevel
 
@@ -48,6 +49,7 @@ fun SettingsScreen(
     onChangeAutoAdvanceDelay: (Long) -> Unit,
     onChangeSoundEnabled: (Boolean) -> Unit,
     onChangeUnlockAllRows: (Boolean) -> Unit = {},
+    onChangeThemeMode: (ThemeMode) -> Unit = {},
     onClearProgress: () -> Unit,
     onOpenDebugScreen: () -> Unit,
     onOpenLicenses: () -> Unit,
@@ -97,6 +99,23 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // 0. Chế độ giao diện Sáng / Tối
+            SettingCard(title = "Giao diện Sáng / Tối") {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    for (mode in ThemeMode.entries) {
+                        SelectableChip(
+                            label = mode.displayNameVi,
+                            selected = settings.themeMode == mode,
+                            onClick = { onChangeThemeMode(mode) },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+            }
+
             // 1. Độ nghiêm khi chấm nét
             SettingCard(title = "1. Độ nghiêm khi chấm chữ viết") {
                 Row(

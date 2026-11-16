@@ -17,18 +17,28 @@ import java.time.LocalDate
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "kana_settings")
 
+/**
+ * Chế độ giao diện Sáng / Tối / Theo hệ thống.
+ */
+enum class ThemeMode(val displayNameVi: String) {
+    SYSTEM("Theo máy"),
+    LIGHT("Sáng"),
+    DARK("Tối")
+}
+
 data class UserSettings(
     val strictnessLevel: StrictnessLevel = StrictnessLevel.STANDARD,
     val animationSpeed: Float = 1.0f,
     val autoAdvanceDelayMs: Long = 700L,
     val soundEnabled: Boolean = true,
     val unlockAllRows: Boolean = false,
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val streakDays: Int = 0,
     val lastStudyEpochDay: Long = -1L
 )
 
 /**
- * Lưu trữ cài đặt người dùng và chuỗi ngày học (Streak đơn giản) bằng Jetpack DataStore Preferences.
+ * Lưu trữ cài đặt người dùng, chế độ Sáng/Tối và chuỗi ngày học (Streak đơn giản) bằng Jetpack DataStore Preferences.
  */
 class UserSettingsRepository(
     private val appContext: Context
@@ -39,6 +49,7 @@ class UserSettingsRepository(
         val AUTO_ADVANCE_DELAY_MS = longPreferencesKey("auto_advance_delay_ms")
         val SOUND_ENABLED = booleanPreferencesKey("sound_enabled")
         val UNLOCK_ALL_ROWS = booleanPreferencesKey("unlock_all_rows")
+        val THEME_MODE = stringPreferencesKey("theme_mode")
         val STREAK_DAYS = intPreferencesKey("streak_days")
         val LAST_STUDY_EPOCH_DAY = longPreferencesKey("last_study_epoch_day")
     }
@@ -47,6 +58,10 @@ class UserSettingsRepository(
         val strictnessStr = prefs[Keys.STRICTNESS] ?: StrictnessLevel.STANDARD.name
         val strictness = StrictnessLevel.entries.firstOrNull { it.name == strictnessStr }
             ?: StrictnessLevel.STANDARD
+
+        val themeStr = prefs[Keys.THEME_MODE] ?: ThemeMode.SYSTEM.name
+        val themeMode = ThemeMode.entries.firstOrNull { it.name == themeStr }
+            ?: ThemeMode.SYSTEM
 
         val savedStreak = prefs[Keys.STREAK_DAYS] ?: 0
         val lastEpochDay = prefs[Keys.LAST_STUDY_EPOCH_DAY] ?: -1L
@@ -63,6 +78,7 @@ class UserSettingsRepository(
             autoAdvanceDelayMs = prefs[Keys.AUTO_ADVANCE_DELAY_MS] ?: 700L,
             soundEnabled = prefs[Keys.SOUND_ENABLED] ?: true,
             unlockAllRows = prefs[Keys.UNLOCK_ALL_ROWS] ?: false,
+            themeMode = themeMode,
             streakDays = effectiveStreak,
             lastStudyEpochDay = lastEpochDay
         )
@@ -95,6 +111,12 @@ class UserSettingsRepository(
     suspend fun setUnlockAllRows(unlockAll: Boolean) {
         appContext.dataStore.edit { prefs ->
             prefs[Keys.UNLOCK_ALL_ROWS] = unlockAll
+        }
+    }
+
+    suspend fun setThemeMode(mode: ThemeMode) {
+        appContext.dataStore.edit { prefs ->
+            prefs[Keys.THEME_MODE] = mode.name
         }
     }
 

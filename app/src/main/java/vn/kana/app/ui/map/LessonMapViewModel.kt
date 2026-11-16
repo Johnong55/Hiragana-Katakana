@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import vn.kana.app.data.StrokeAssetRepository
+import vn.kana.app.data.ThemeMode
 import vn.kana.app.data.UserSettings
 import vn.kana.app.data.UserSettingsRepository
 import vn.kana.app.data.VocabAssetRepository
@@ -252,6 +253,19 @@ class LessonMapViewModel(
     fun updateUnlockAllRows(unlockAll: Boolean) {
         viewModelScope.launch {
             settingsRepository.setUnlockAllRows(unlockAll)
+        }
+    }
+
+    fun updateThemeMode(mode: ThemeMode) {
+        viewModelScope.launch {
+            settingsRepository.setThemeMode(mode)
+        }
+    }
+
+    fun toggleLightDarkQuick(currentlyDark: Boolean) {
+        viewModelScope.launch {
+            val nextMode = if (currentlyDark) ThemeMode.LIGHT else ThemeMode.DARK
+            settingsRepository.setThemeMode(nextMode)
         }
     }
 

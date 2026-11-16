@@ -320,6 +320,93 @@ SMALL_AND_CHOON_SPECS[1] = ("ゅ", "hiragana", [("きゅうり", "kyuuri", "dưa
 SMALL_AND_CHOON_SPECS[6] = ("ョ", "katakana", [("チョコ", "choko", "sô-cô-la"), ("ショップ", "shoppu", "cửa hàng")])
 
 
+def build_example_sentence(word: str, romaji: str, meaning_vi: str, script: str) -> Dict[str, str]:
+    custom = {
+        "あめ": ("あめ が ふる。", "ame ga furu.", "Trời mưa."),
+        "あり": ("ちいさい あり が あるく。", "chiisai ari ga aruku.", "Con kiến nhỏ đang đi bộ."),
+        "いぬ": ("かわいい いぬ が はしる。", "kawaii inu ga hashiru.", "Chú chó dễ thương đang chạy."),
+        "いす": ("いす に すわる。", "isu ni suwaru.", "Ngồi lên chiếc ghế."),
+        "うみ": ("あおい うみ へ いく。", "aoi umi e iku.", "Đi ra biển xanh."),
+        "うし": ("うし が くさ を たべる。", "ushi ga kusa wo taberu.", "Con bò ăn cỏ."),
+        "うえ": ("つくえ の うえ に ある。", "tsukue no ue ni aru.", "Ở phía trên cái bàn."),
+        "えび": ("おいしい えび を たべる。", "oishii ebi wo taberu.", "Ăn món tôm ngon."),
+        "あおい": ("そら が あおい です。", "sora ga aoi desu.", "Bầu trời màu xanh dương."),
+        "おに": ("あかい おに が くる。", "akai oni ga kuru.", "Con quỷ đỏ đang đến."),
+        "かさ": ("あかい かさ を さす。", "akai kasa wo sasu.", "Che chiếc ô màu đỏ."),
+        "かお": ("あさ かお を あらう。", "asa kao wo arau.", "Buổi sáng rửa mặt."),
+        "えき": ("でんしゃ で えき へ いく。", "densha de eki e iku.", "Đi tàu điện đến nhà ga."),
+        "きつね": ("やま に きつね が いる。", "yama ni kitsune ga iru.", "Trên núi có con cáo."),
+        "くつ": ("あたらしい くつ を はく。", "atarashii kutsu wo haku.", "Đi đôi giày mới."),
+        "きく": ("きいろい きく が さく。", "kiiroi kiku ga saku.", "Hoa cúc vàng nở."),
+        "いけ": ("いけ に こい が およぐ。", "ike ni koi ga oyogu.", "Cá chép bơi trong ao."),
+        "けむし": ("はっぱ に けむし が いる。", "happa ni kemushi ga iru.", "Trên lá có con sâu róm."),
+        "こい": ("おおきい こい を みる。", "ookii koi wo miru.", "Ngắm con cá chép lớn."),
+        "こま": ("こま を まわして あそぶ。", "koma wo mawashite asobu.", "Quay con vụ để chơi."),
+        "さかな": ("かわ で さかな を つる。", "kawa de sakana wo tsuru.", "Câu cá ở trên sông."),
+        "さる": ("さる が き に のぼる。", "saru ga ki ni noboru.", "Con khỉ trèo lên cây."),
+        "しか": ("こうえん に しか が いる。", "kouen ni shika ga iru.", "Trong công viên có con hươu."),
+        "あし": ("あし が はやい です。", "ashi ga hayai desu.", "Đôi chân chạy rất nhanh."),
+        "すいか": ("なつ に すいか を たべる。", "natsu ni suika wo taberu.", "Mùa hè ăn dưa hấu."),
+        "すし": ("わたし は すし が すき です。", "watashi wa sushi ga suki desu.", "Tôi thích món sushi."),
+        "せみ": ("き で せみ が なく。", "ki de semi ga naku.", "Ve sầu kêu trên cây."),
+        "あせ": ("あつい ので あせ が でる。", "atsui node ase ga deru.", "Trời nóng nên đổ mồ hôi."),
+        "そら": ("ひろい そら を みあげる。", "hiroi sora wo miageru.", "Ngước nhìn bầu trời rộng lớn."),
+        "うそ": ("うそ を ついて は いけない。", "uso wo tsuite wa ikenai.", "Không được nói dối."),
+        "たこ": ("うみ に たこ が いる。", "umi ni tako ga iru.", "Dưới biển có con bạch tuộc."),
+        "うた": ("たのしい うた を うたう。", "tanoshii uta wo utau.", "Hát bài ca vui vẻ."),
+        "くち": ("おおきく くち を あける。", "ookiku kuchi wo akeru.", "Há miệng thật to."),
+        "いち": ("いち から かぞえる。", "ichi kara kazoeru.", "Đếm từ số một."),
+        "つき": ("よる に まるい つき が でる。", "yoru ni marui tsuki ga deru.", "Đêm xuống mặt trăng tròn hiện lên."),
+        "つくえ": ("つくえ で べんきょう する。", "tsukue de benkyou suru.", "Học bài trên bàn học."),
+        "て": ("きれい に て を あらう。", "kirei ni te wo arau.", "Rửa tay thật sạch."),
+        "てがみ": ("ともだち に てがみ を かく。", "tomodachi ni tegami wo kaku.", "Viết thư cho bạn bè."),
+        "とけい": ("とけい の はり を みる。", "tokei no hari wo miru.", "Nhìn kim đồng hồ."),
+        "とり": ("とり が そら を とぶ。", "tori ga sora wo tobu.", "Con chim bay trên bầu trời."),
+        "なつ": ("あつい なつ が きた。", "atsui natsu ga kita.", "Mùa hè nóng bức đã đến."),
+        "なし": ("あまい なし を たべる。", "amai nashi wo taberu.", "Ăn quả lê ngọt."),
+        "にく": ("おいしい にく を やく。", "oishii niku wo yaku.", "Nướng miếng thịt ngon."),
+        "かに": ("すなはま に かに が いる。", "sunahama ni kani ga iru.", "Trên bãi cát có con cua."),
+        "ぬの": ("しろい ぬの で ふく を ぬう。", "shiroi nuno de fuku wo nuu.", "May áo bằng tấm vải trắng."),
+        "ねこ": ("ねこ が ひるね を する。", "neko ga hirune wo suru.", "Con mèo đang ngủ trưa."),
+        "ふね": ("ふね に のって わたる。", "fune ni notte wataru.", "Đi thuyền qua sông."),
+        "はな": ("にわ に きれい な はな が さく。", "niwa ni kirei na hana ga saku.", "Hoa đẹp nở trong vườn."),
+        "はこ": ("はこ の なか を あける。", "hako no naka wo akeru.", "Mở bên trong chiếc hộp ra."),
+        "ひと": ("やさしい ひと に あう。", "yasashii hito ni au.", "Gặp người tốt bụng."),
+        "ひこうき": ("ひこうき が たかく とぶ。", "hikouki ga takaku tobu.", "Máy bay bay thật cao."),
+        "ふく": ("あたたかい ふく を きる。", "atatakai fuku wo kiru.", "Mặc quần áo ấm."),
+        "ほし": ("よぞら に ほし が ひかる。", "yozora ni hoshi ga hikaru.", "Ngôi sao lấp lánh trên bầu trời đêm."),
+        "みみ": ("うさぎ は みみ が ながい。", "usagi wa mimi ga nagai.", "Con thỏ có đôi tai dài."),
+        "みかん": ("ふゆ に みかん を たべる。", "fuyu ni mikan wo taberu.", "Mùa đông ăn quả quýt."),
+        "め": ("め を とじて やすむ。", "me wo tojite yasumu.", "Nhắm mắt lại và nghỉ ngơi."),
+        "めがね": ("あたらしい めがね を かける。", "atarashii megane wo kakeru.", "Đeo cặp kính mắt mới."),
+        "もも": ("あまい もも を たべる。", "amai momo wo taberu.", "Ăn quả đào ngọt."),
+        "やま": ("たかい やま に のぼる。", "takai yama ni noboru.", "Leo lên ngọn núi cao."),
+        "ゆき": ("しろい ゆき が ふる。", "shiroi yuki ga furu.", "Tuyết trắng rơi."),
+        "よる": ("しずか な よる に ねむる。", "shizuka na yoru ni nemuru.", "Ngủ trong đêm yên tĩnh."),
+        "さくら": ("はる に さくら が さく。", "haru ni sakura ga saku.", "Mùa xuân hoa anh đào nở."),
+        "くるま": ("くるま に のって でかける。", "kuruma ni notte dekakeru.", "Lên xe ô tô đi dạo."),
+        "ほん": ("まいにち ほん を よむ。", "mainichi hon wo yomu.", "Mỗi ngày đều đọc sách."),
+        "アイス": ("つめたい アイス を たべる。", "tsumetai aisu wo taberu.", "Ăn cây kem mát lạnh."),
+        "テレビ": ("かぞく と テレビ を みる。", "kazoku to terebi wo miru.", "Xem ti vi cùng gia đình."),
+        "コーヒー": ("あたたかい コーヒー を のむ。", "atatakai koohii wo nomu.", "Uống tách cà phê ấm."),
+        "カメラ": ("カメラ で しゃしん を とる。", "kamera de shashin wo toru.", "Chụp ảnh bằng máy ảnh."),
+        "ケーキ": ("たんじょうび に ケーキ を たべる。", "tanjoubi ni keeki wo taberu.", "Ăn bánh kem vào ngày sinh nhật."),
+        "パン": ("あさごはん に パン を たべる。", "asagohan ni pan wo taberu.", "Ăn bánh mì vào bữa sáng."),
+    }
+    if word in custom:
+        jp, ro, vi = custom[word]
+        return {
+            "example_sentence": jp,
+            "example_romaji": ro,
+            "example_vi": vi,
+        }
+    return {
+        "example_sentence": f"これ は {word} です。",
+        "example_romaji": f"kore wa {romaji} desu.",
+        "example_vi": f"Đây là {meaning_vi}.",
+    }
+
+
 def main() -> None:
     repo_root = Path(__file__).resolve().parent.parent
     out_json = repo_root / "app" / "src" / "main" / "assets" / "vocab" / "kana_vocab.json"
@@ -329,6 +416,7 @@ def main() -> None:
     counter = 1
 
     for entry in HIRAGANA_BASIC_VOCAB:
+        ex = build_example_sentence(entry["word"], entry["romaji"], entry["meaning_vi"], "hiragana")
         all_words.append({
             "id": f"vocab_{counter:03d}",
             "word": entry["word"],
@@ -337,10 +425,12 @@ def main() -> None:
             "chars": list(entry["word"]),
             "introduces": entry["introduces"],
             "script": "hiragana",
+            **ex,
         })
         counter += 1
 
     for entry in KATAKANA_BASIC_VOCAB:
+        ex = build_example_sentence(entry["word"], entry["romaji"], entry["meaning_vi"], "katakana")
         all_words.append({
             "id": f"vocab_{counter:03d}",
             "word": entry["word"],
@@ -349,11 +439,13 @@ def main() -> None:
             "chars": list(entry["word"]),
             "introduces": entry["introduces"],
             "script": "katakana",
+            **ex,
         })
         counter += 1
 
     for ch, pairs in HIRAGANA_DAKUTEN_SPECS:
         for w, romaji, vi in pairs:
+            ex = build_example_sentence(w, romaji, vi, "hiragana")
             all_words.append({
                 "id": f"vocab_{counter:03d}",
                 "word": w,
@@ -362,11 +454,13 @@ def main() -> None:
                 "chars": list(w),
                 "introduces": ch,
                 "script": "hiragana",
+                **ex,
             })
             counter += 1
 
     for ch, pairs in KATAKANA_DAKUTEN_SPECS:
         for w, romaji, vi in pairs:
+            ex = build_example_sentence(w, romaji, vi, "katakana")
             all_words.append({
                 "id": f"vocab_{counter:03d}",
                 "word": w,
@@ -375,11 +469,13 @@ def main() -> None:
                 "chars": list(w),
                 "introduces": ch,
                 "script": "katakana",
+                **ex,
             })
             counter += 1
 
     for ch, script_type, pairs in SMALL_AND_CHOON_SPECS:
         for w, romaji, vi in pairs:
+            ex = build_example_sentence(w, romaji, vi, script_type)
             all_words.append({
                 "id": f"vocab_{counter:03d}",
                 "word": w,
@@ -388,6 +484,7 @@ def main() -> None:
                 "chars": list(w),
                 "introduces": ch,
                 "script": script_type,
+                **ex,
             })
             counter += 1
 

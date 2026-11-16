@@ -29,6 +29,7 @@ fun LessonMapScreen(
     viewModel: LessonMapViewModel,
     onStartRowLesson: (rowName: String, script: String) -> Unit,
     onTestOutRowLesson: (rowName: String, script: String) -> Unit = { _, _ -> },
+    onOpenCustomStudy: () -> Unit = {},
     onBackHome: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenLicenses: () -> Unit,
@@ -120,6 +121,25 @@ fun LessonMapScreen(
                     )
                 }
             }
+        }
+
+        // Nút mở nhanh chế độ Checkbox chọn nhiều hàng -> Từ vựng, Câu mẫu & Ghi âm phát âm
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                .clickable(onClick = onOpenCustomStudy)
+                .padding(vertical = 9.dp, horizontal = 12.dp)
+        ) {
+            Text(
+                text = "☑ Tick chọn nhiều hàng • Học từ vựng, câu mẫu & ghi âm phát âm →",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1,
+                softWrap = false,
+                overflow = TextOverflow.Ellipsis
+            )
         }
 
         // 3. Danh sách bài học

@@ -12,7 +12,13 @@ data class KanaVocabWord(
     val meaningVi: String,
     val chars: List<String>,
     val introduces: String,
-    val script: String = "hiragana"
+    val script: String = "hiragana",
+    @SerialName("example_sentence")
+    val exampleSentence: String = "",
+    @SerialName("example_romaji")
+    val exampleRomaji: String = "",
+    @SerialName("example_vi")
+    val exampleVi: String = ""
 )
 
 @Serializable

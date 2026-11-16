@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Surface
@@ -15,6 +16,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import vn.kana.app.data.ThemeMode
+import vn.kana.app.ui.custom.CustomStudyScreen
 import vn.kana.app.ui.debug.RecognizerDebugScreen
 import vn.kana.app.ui.debug.RecognizerDebugViewModel
 import vn.kana.app.ui.home.HomeScreen
@@ -32,6 +35,7 @@ import vn.kana.app.ui.theme.KanaTheme
 private enum class AppDestination {
     HOME,
     LESSON_MAP,
+    CUSTOM_STUDY,
     ACTIVE_LESSON,
     REVIEW,
     REFERENCE_TABLE,
@@ -46,7 +50,24 @@ class MainActivity : ComponentActivity() {
         val app = application as KanaApplication
 
         setContent {
-            KanaTheme {
+            val mapViewModel: LessonMapViewModel = viewModel(
+                factory = LessonMapViewModel.provideFactory(
+                    strokeRepository = app.strokeRepository,
+                    vocabRepository = app.vocabRepository,
+                    settingsRepository = app.settingsRepository,
+                    kanaDao = app.database.kanaDao(),
+                    audioProvider = app.audioProvider
+                )
+            )
+            val mapState by mapViewModel.uiState.collectAsState()
+            val systemDark = isSystemInDarkTheme()
+            val useDarkTheme = when (mapState.settings.themeMode) {
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+                ThemeMode.SYSTEM -> systemDark
+            }
+
+            KanaTheme(darkTheme = useDarkTheme) {
                 var destination by rememberSaveable { mutableStateOf(AppDestination.HOME) }
                 var selectedRowName by rememberSaveable { mutableStateOf("あ行") }
                 var selectedScript by rememberSaveable { mutableStateOf("hiragana") }
@@ -54,17 +75,6 @@ class MainActivity : ComponentActivity() {
                 var lessonInitialFocusChar by rememberSaveable { mutableStateOf<String?>(null) }
                 var referenceInitialChar by rememberSaveable { mutableStateOf<String?>(null) }
                 var sessionCounter by rememberSaveable { mutableIntStateOf(0) }
-
-                val mapViewModel: LessonMapViewModel = viewModel(
-                    factory = LessonMapViewModel.provideFactory(
-                        strokeRepository = app.strokeRepository,
-                        vocabRepository = app.vocabRepository,
-                        settingsRepository = app.settingsRepository,
-                        kanaDao = app.database.kanaDao(),
-                        audioProvider = app.audioProvider
-                    )
-                )
-                val mapState by mapViewModel.uiState.collectAsState()
 
                 BackHandler(enabled = destination != AppDestination.HOME) {
                     destination = when (destination) {
@@ -98,6 +108,9 @@ class MainActivity : ComponentActivity() {
                                 onOpenLessonMap = {
                                     destination = AppDestination.LESSON_MAP
                                 },
+                                onOpenCustomStudy = {
+                                    destination = AppDestination.CUSTOM_STUDY
+                                },
                                 onOpenReference = { char ->
                                     referenceInitialChar = char
                                     destination = AppDestination.REFERENCE_TABLE
@@ -127,6 +140,9 @@ class MainActivity : ComponentActivity() {
                                     sessionCounter++
                                     destination = AppDestination.ACTIVE_LESSON
                                 },
+                                onOpenCustomStudy = {
+                                    destination = AppDestination.CUSTOM_STUDY
+                                },
                                 onBackHome = {
                                     destination = AppDestination.HOME
                                 },
@@ -135,6 +151,15 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onOpenLicenses = {
                                     destination = AppDestination.LICENSES
+                                }
+                            )
+                        }
+
+                        AppDestination.CUSTOM_STUDY -> {
+                            CustomStudyScreen(
+                                viewModel = mapViewModel,
+                                onBack = {
+                                    destination = AppDestination.HOME
                                 }
                             )
                         }
@@ -207,6 +232,7 @@ class MainActivity : ComponentActivity() {
                                 onChangeAutoAdvanceDelay = mapViewModel::updateAutoAdvanceDelay,
                                 onChangeSoundEnabled = mapViewModel::updateSoundEnabled,
                                 onChangeUnlockAllRows = mapViewModel::updateUnlockAllRows,
+                                onChangeThemeMode = mapViewModel::updateThemeMode,
                                 onClearProgress = mapViewModel::clearAllProgress,
                                 onOpenDebugScreen = {
                                     destination = AppDestination.DEBUG_RECOGNIZER

@@ -6,6 +6,9 @@
     <!-- Phản hồi rung nhẹ khi viết sai nét -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!-- Ghi âm giọng đọc cục bộ để người học tự nghe lại khi luyện phát âm (tuỳ chọn, 100% offline) -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />

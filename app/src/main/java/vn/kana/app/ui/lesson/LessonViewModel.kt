@@ -306,6 +306,13 @@ class LessonViewModel(
         }
     }
 
+    fun speakCurrentExampleSentence() {
+        val w = _uiState.value.currentVocabWord ?: return
+        if (w.exampleSentence.isNotBlank()) {
+            audioProvider.speak(w.exampleSentence, null)
+        }
+    }
+
     // --- Điều khiển Bước 1: XEM ---
     fun toggleObservePlayPause() {
         _uiState.update { it.copy(isAnimationPlaying = !it.isAnimationPlaying) }

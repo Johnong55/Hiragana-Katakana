@@ -214,6 +214,7 @@ fun LessonScreen(
         PromptHeaderSection(
             uiState = uiState,
             onSpeak = viewModel::speakCurrentPrompt,
+            onSpeakSentence = viewModel::speakCurrentExampleSentence,
             onSelectWordSlot = viewModel::selectWordSlot,
             onRevealRomajiFallback = viewModel::revealListenRomajiFallback,
             onFastTrackCharacter = viewModel::jumpToCharacterFastTest
@@ -456,6 +457,7 @@ private fun StepIndicatorStrip(currentStep: LessonStepType) {
 private fun PromptHeaderSection(
     uiState: LessonUiState,
     onSpeak: () -> Unit,
+    onSpeakSentence: () -> Unit = {},
     onSelectWordSlot: (Int) -> Unit,
     onRevealRomajiFallback: () -> Unit,
     onFastTrackCharacter: () -> Unit = {}
@@ -572,8 +574,32 @@ private fun PromptHeaderSection(
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                        if (word.exampleSentence.isNotBlank()) {
+                            Text(
+                                text = "Câu mẫu: ${word.exampleSentence} (${word.exampleVi})",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.clickable(onClick = onSpeakSentence)
+                            )
+                        }
                     }
-                    SpeakButton(onClick = onSpeak)
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        SpeakButton(onClick = onSpeak)
+                        if (word.exampleSentence.isNotBlank()) {
+                            Text(
+                                text = "Nghe câu",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier
+                                    .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                                    .clickable(onClick = onSpeakSentence)
+                                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                            )
+                        }
+                    }
                 }
 
                 GenkoYoshiWordBar(

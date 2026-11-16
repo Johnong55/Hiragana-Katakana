@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import vn.kana.app.data.ThemeMode
 import vn.kana.app.domain.MasteryLevel
 import vn.kana.app.ui.components.drawSmoothStrokePath
 import vn.kana.app.ui.map.CurriculumTab
@@ -40,12 +41,18 @@ fun HomeScreen(
     onStartReview: () -> Unit,
     onStartRowLesson: (rowName: String, script: String) -> Unit,
     onOpenLessonMap: () -> Unit,
+    onOpenCustomStudy: () -> Unit = {},
     onOpenReference: (initialChar: String?) -> Unit,
     onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val isDark = isSystemInDarkTheme()
+    val systemDark = isSystemInDarkTheme()
+    val isDark = when (uiState.settings.themeMode) {
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+        ThemeMode.SYSTEM -> systemDark
+    }
 
     val nextRowLesson = uiState.filteredLessons.firstOrNull { it.isUnlocked && !it.isCompleted }
         ?: uiState.allLessons.firstOrNull { it.isUnlocked && !it.isCompleted }
@@ -80,16 +87,22 @@ fun HomeScreen(
                 )
             }
 
-            TopNavButton(
-                label = "Cài đặt",
-                onClick = onOpenSettings
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                TopNavButton(
+                    label = if (isDark) "☀ Sáng" else "☾ Tối",
+                    onClick = { viewModel.toggleLightDarkQuick(isDark) }
+                )
+                TopNavButton(
+                    label = "Cài đặt",
+                    onClick = onOpenSettings
+                )
+            }
         }
 
-        // Thanh điều hướng 2 nút cân đối: Bản đồ bài học & Bảng tra cứu Kana
+        // Thanh điều hướng: Bản đồ bài học • Chọn hàng (Checkbox) • Bảng tra cứu
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Box(
                 contentAlignment = Alignment.Center,
@@ -97,28 +110,47 @@ fun HomeScreen(
                     .weight(1f)
                     .border(1.dp, MaterialTheme.colorScheme.onBackground)
                     .clickable(onClick = onOpenLessonMap)
-                    .padding(vertical = 9.dp, horizontal = 8.dp)
+                    .padding(vertical = 8.dp, horizontal = 6.dp)
             ) {
                 Text(
                     text = "Bản đồ bài học",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onBackground,
-                    maxLines = 1
+                    maxLines = 1,
+                    softWrap = false
                 )
             }
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1.15f)
+                    .background(MaterialTheme.colorScheme.primary)
                     .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                    .clickable { onOpenReference(null) }
-                    .padding(vertical = 9.dp, horizontal = 8.dp)
+                    .clickable(onClick = onOpenCustomStudy)
+                    .padding(vertical = 8.dp, horizontal = 6.dp)
             ) {
                 Text(
-                    text = "Bảng tra cứu Kana",
+                    text = "☑ Chọn hàng & Câu",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    maxLines = 1,
+                    softWrap = false
+                )
+            }
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .weight(0.95f)
+                    .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                    .clickable { onOpenReference(null) }
+                    .padding(vertical = 8.dp, horizontal = 6.dp)
+            ) {
+                Text(
+                    text = "Tra cứu Kana",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onBackground,
-                    maxLines = 1
+                    maxLines = 1,
+                    softWrap = false
                 )
             }
         }
