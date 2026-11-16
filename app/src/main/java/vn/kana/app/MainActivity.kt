@@ -152,6 +152,14 @@ class MainActivity : ComponentActivity() {
                                             sessionCounter++
                                             destination = AppDestination.ACTIVE_LESSON
                                         },
+                                        onPracticeCharacter = { rowName, script, targetChar ->
+                                            selectedRowName = rowName
+                                            selectedScript = script
+                                            startLessonInTestOutMode = false
+                                            lessonInitialFocusChar = targetChar
+                                            sessionCounter++
+                                            destination = AppDestination.ACTIVE_LESSON
+                                        },
                                         onOpenTabWithFilter = { tab ->
                                             mapViewModel.selectTab(tab)
                                             destination = AppDestination.CUSTOM_STUDY

@@ -12,12 +12,14 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -60,11 +62,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import vn.kana.app.data.ThemeMode
+import vn.kana.app.domain.MasteryLevel
 import vn.kana.app.domain.N5GrammarCatalog
 import vn.kana.app.domain.N5GrammarPoint
 import vn.kana.app.domain.RoadmapStageNode
 import vn.kana.app.domain.RoadmapStageType
 import vn.kana.app.ui.components.KanaDrawingCanvas
+import vn.kana.app.ui.components.drawSmoothStrokePath
+import vn.kana.app.ui.home.EXTENDED_KANA_LAYOUT
+import vn.kana.app.ui.home.HIRAGANA_GOJUON_LAYOUT
+import vn.kana.app.ui.home.KANJI_N5_LAYOUT
+import vn.kana.app.ui.home.KATAKANA_GOJUON_LAYOUT
+import vn.kana.app.ui.home.masteryColors
 import vn.kana.app.ui.map.CurriculumTab
 import vn.kana.app.ui.map.LessonMapViewModel
 import vn.kana.recognizer.KanaRecognizer
@@ -75,6 +85,7 @@ import kotlin.math.roundToInt
 
 private sealed interface RoadmapOverlayMode {
     data object None : RoadmapOverlayMode
+    data class StageAlphabetBoard(val stage: RoadmapStageNode) : RoadmapOverlayMode
     data class GrammarLesson(val stageNumber: Int, val points: List<N5GrammarPoint>) : RoadmapOverlayMode
     data class StageCheckpointTest(
         val stage: RoadmapStageNode,
@@ -100,6 +111,9 @@ private data class CheckpointQuestion(
 fun N5RoadmapScreen(
     viewModel: LessonMapViewModel,
     onStartRowLesson: (rowName: String, script: String) -> Unit,
+    onPracticeCharacter: (rowName: String, script: String, targetChar: String) -> Unit = { r, s, _ ->
+        onStartRowLesson(r, s)
+    },
     onOpenTabWithFilter: (CurriculumTab) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -318,8 +332,52 @@ fun N5RoadmapScreen(
         }
     }
 
-    // Xử lý khi mở các chế độ toàn màn hình (Học ngữ pháp / Kiểm tra Mở khoá / Pháo hoa Mở khoá)
+    // Xử lý khi mở các chế độ toàn màn hình (Bảng chữ cái chặng / Ngữ pháp / Kiểm tra Mở khoá / Pháo hoa Mở khoá)
     when (val mode = overlayMode) {
+        is RoadmapOverlayMode.StageAlphabetBoard -> {
+            val systemDark = isSystemInDarkTheme()
+            val isDark = when (uiState.settings.themeMode) {
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+                ThemeMode.SYSTEM -> systemDark
+            }
+            StageAlphabetBoardView(
+                stage = mode.stage,
+                allTemplatesByChar = byChar,
+                masteryByChar = uiState.masteryByChar,
+                characterProgressByChar = uiState.characterProgressByChar,
+                isDark = isDark,
+                onClickCharacter = { tmpl ->
+                    onPracticeCharacter(tmpl.row, tmpl.script, tmpl.char)
+                },
+                onContinueNextUnlearned = { firstUnlearned ->
+                    if (firstUnlearned != null) {
+                        onPracticeCharacter(firstUnlearned.row, firstUnlearned.script, firstUnlearned.char)
+                    } else {
+                        val qs = buildCheckpointQuestions(mode.stage)
+                        if (qs.isNotEmpty()) {
+                            overlayMode = RoadmapOverlayMode.StageCheckpointTest(
+                                stage = mode.stage,
+                                questions = qs
+                            )
+                        }
+                    }
+                },
+                onStartCheckpointTest = {
+                    val qs = buildCheckpointQuestions(mode.stage)
+                    if (qs.isNotEmpty()) {
+                        overlayMode = RoadmapOverlayMode.StageCheckpointTest(
+                            stage = mode.stage,
+                            questions = qs
+                        )
+                    }
+                },
+                onBack = { overlayMode = RoadmapOverlayMode.None },
+                modifier = modifier
+            )
+            return
+        }
+
         is RoadmapOverlayMode.GrammarLesson -> {
             N5GrammarInteractiveLessonView(
                 stageNumber = mode.stageNumber,
@@ -458,33 +516,13 @@ fun N5RoadmapScreen(
             stage = cur,
             onEnterStageStudy = {
                 when (cur.type) {
-                    RoadmapStageType.HIRAGANA_BASIC -> {
-                        val nextRow = uiState.allLessons.firstOrNull {
-                            it.script == "hiragana" && !it.isCompleted && it.characters.firstOrNull()?.category == "basic"
-                        } ?: uiState.allLessons.firstOrNull { it.script == "hiragana" }
-                        if (nextRow != null) {
-                            onStartRowLesson(nextRow.rowName, nextRow.script)
-                        }
-                    }
-
-                    RoadmapStageType.KATAKANA_BASIC -> {
-                        val nextRow = uiState.allLessons.firstOrNull {
-                            it.script == "katakana" && !it.isCompleted && it.characters.firstOrNull()?.category == "basic"
-                        } ?: uiState.allLessons.firstOrNull { it.script == "katakana" }
-                        if (nextRow != null) {
-                            onStartRowLesson(nextRow.rowName, nextRow.script)
-                        }
-                    }
-
-                    RoadmapStageType.DAKUTEN_AND_YOON -> {
-                        val nextRow = uiState.allLessons.firstOrNull {
-                            it.script != "kanji" && it.characters.firstOrNull()?.category != "basic" && !it.isCompleted
-                        } ?: uiState.allLessons.firstOrNull {
-                            it.script != "kanji" && it.characters.firstOrNull()?.category != "basic"
-                        }
-                        if (nextRow != null) {
-                            onStartRowLesson(nextRow.rowName, nextRow.script)
-                        }
+                    RoadmapStageType.HIRAGANA_BASIC,
+                    RoadmapStageType.KATAKANA_BASIC,
+                    RoadmapStageType.DAKUTEN_AND_YOON,
+                    RoadmapStageType.N5_KANJI_1,
+                    RoadmapStageType.N5_KANJI_2_FINAL -> {
+                        // Lộ trình -> Bảng chữ cái của Chặng -> Chọn chữ / Học tiếp -> Tập viết
+                        overlayMode = RoadmapOverlayMode.StageAlphabetBoard(cur)
                     }
 
                     RoadmapStageType.N5_VOCAB_SENTENCES -> {
@@ -498,30 +536,11 @@ fun N5RoadmapScreen(
                         )
                     }
 
-                    RoadmapStageType.N5_KANJI_1 -> {
-                        val nextKanjiRow = uiState.allLessons.firstOrNull {
-                            it.script == "kanji" && !it.isCompleted
-                        } ?: uiState.allLessons.firstOrNull { it.script == "kanji" }
-                        if (nextKanjiRow != null) {
-                            onStartRowLesson(nextKanjiRow.rowName, nextKanjiRow.script)
-                        }
-                    }
-
                     RoadmapStageType.N5_GRAMMAR_2 -> {
                         overlayMode = RoadmapOverlayMode.GrammarLesson(
                             stageNumber = 7,
                             points = N5GrammarCatalog.stage7Points
                         )
-                    }
-
-                    RoadmapStageType.N5_KANJI_2_FINAL -> {
-                        val kanjiPart2Rows = uiState.allLessons.filter { it.script == "kanji" }.drop(5)
-                        val targetRow = kanjiPart2Rows.firstOrNull { !it.isCompleted }
-                            ?: kanjiPart2Rows.firstOrNull()
-                            ?: uiState.allLessons.lastOrNull { it.script == "kanji" }
-                        if (targetRow != null) {
-                            onStartRowLesson(targetRow.rowName, targetRow.script)
-                        }
                     }
                 }
             },
@@ -1368,6 +1387,196 @@ private fun StageUnlockCelebrationDialog(
                 filled = true,
                 onClick = onContinue,
                 modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
+/**
+ * Màn hình Bảng chữ cái của từng Chặng trên Lộ trình N5:
+ * Lộ trình N5 -> Bảng chữ cái của Chặng (hiển thị 4 độ thuộc xám) -> Chọn chữ bất kỳ hoặc bấm "Học tiếp".
+ */
+@Composable
+private fun StageAlphabetBoardView(
+    stage: RoadmapStageNode,
+    allTemplatesByChar: Map<String, KanaStrokeTemplate>,
+    masteryByChar: Map<String, MasteryLevel>,
+    characterProgressByChar: Map<String, vn.kana.app.data.local.CharacterProgressEntity>,
+    isDark: Boolean,
+    onClickCharacter: (KanaStrokeTemplate) -> Unit,
+    onContinueNextUnlearned: (KanaStrokeTemplate?) -> Unit,
+    onStartCheckpointTest: () -> Unit,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val rowsLayout = remember(stage.type) {
+        when (stage.type) {
+            RoadmapStageType.HIRAGANA_BASIC -> HIRAGANA_GOJUON_LAYOUT
+            RoadmapStageType.KATAKANA_BASIC -> KATAKANA_GOJUON_LAYOUT
+            RoadmapStageType.DAKUTEN_AND_YOON -> EXTENDED_KANA_LAYOUT
+            RoadmapStageType.N5_KANJI_1 -> KANJI_N5_LAYOUT.take(8)
+            RoadmapStageType.N5_KANJI_2_FINAL -> KANJI_N5_LAYOUT.drop(8)
+            else -> HIRAGANA_GOJUON_LAYOUT
+        }
+    }
+
+    val stageChars = remember(rowsLayout, allTemplatesByChar) {
+        rowsLayout.flatMap { it.second }.filterNotNull().mapNotNull { allTemplatesByChar[it] }
+    }
+    val nextUnlearned = remember(stageChars, characterProgressByChar) {
+        stageChars.firstOrNull { characterProgressByChar[it.char]?.learned != true }
+    }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        // Header
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            RoadmapActionBtn(text = "← Lộ trình N5", filled = false, onClick = onBack)
+            Text(
+                text = "CHẶNG ${stage.numberFormatted}: ${stage.titleVi.uppercase()}",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
+        // Chú thích 4 mức độ xám
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            for (level in MasteryLevel.entries) {
+                val (bg, _) = masteryColors(level, isDark)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(12.dp)
+                            .background(bg)
+                            .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                    )
+                    Text(
+                        text = level.labelVi,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = 1
+                    )
+                }
+            }
+        }
+
+        // Bảng chữ cái của Chặng (chạm vào chữ bất kỳ để vào luyện viết ngay)
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .border(1.dp, MaterialTheme.colorScheme.outline)
+                .verticalScroll(rememberScrollState())
+                .padding(10.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            for ((rowLabel, slots) in rowsLayout) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = rowLabel,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.width(46.dp)
+                    )
+                    for (ch in slots) {
+                        if (ch == null) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .aspectRatio(1f)
+                            )
+                        } else {
+                            val tmpl = allTemplatesByChar[ch]
+                            val mastery = masteryByChar[ch] ?: MasteryLevel.UNLEARNED
+                            val (bgColor, fgColor) = masteryColors(mastery, isDark)
+                            val strokes = remember(tmpl?.char) { tmpl?.toTypedStrokes().orEmpty() }
+
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .aspectRatio(0.92f)
+                                    .background(bgColor)
+                                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                                    .clickable(enabled = tmpl != null) {
+                                        if (tmpl != null) onClickCharacter(tmpl)
+                                    }
+                                    .padding(3.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .fillMaxWidth()
+                                        .padding(2.dp)
+                                ) {
+                                    Canvas(modifier = Modifier.fillMaxSize()) {
+                                        val w = size.minDimension * 0.08f
+                                        for (s in strokes) {
+                                            drawSmoothStrokePath(
+                                                points = s.points,
+                                                progress = 1f,
+                                                color = fgColor,
+                                                strokeWidth = w
+                                            )
+                                        }
+                                    }
+                                }
+                                Text(
+                                    text = tmpl?.romaji?.substringBefore(" ")?.substringBefore("/") ?: "",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = fgColor,
+                                    maxLines = 1
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Hai nút dưới đáy: Kiểm tra Mở khoá 🔓 | Học tiếp chữ chưa thuộc
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            RoadmapActionBtn(
+                text = "Kiểm tra Mở khoá 🔓",
+                filled = false,
+                onClick = onStartCheckpointTest,
+                modifier = Modifier.weight(1f)
+            )
+            val nextLabel = if (nextUnlearned != null) {
+                "Học tiếp: ${nextUnlearned.char} →"
+            } else {
+                "Ôn lại từ đầu →"
+            }
+            RoadmapActionBtn(
+                text = nextLabel,
+                filled = true,
+                onClick = { onContinueNextUnlearned(nextUnlearned ?: stageChars.firstOrNull()) },
+                modifier = Modifier.weight(1f)
             )
         }
     }
