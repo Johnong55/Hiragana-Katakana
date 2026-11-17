@@ -302,6 +302,25 @@ class LessonMapViewModel(
         }
     }
 
+    fun markSingleCharacterPassed(tmpl: KanaStrokeTemplate, score: Int) {
+        viewModelScope.launch {
+            val now = System.currentTimeMillis()
+            val existing = kanaDao.getCharacterProgress(tmpl.char)
+            kanaDao.upsertCharacterProgress(
+                CharacterProgressEntity(
+                    char = tmpl.char,
+                    script = tmpl.script,
+                    rowName = tmpl.row,
+                    learned = true,
+                    lastScore = score,
+                    practiceCount = (existing?.practiceCount ?: 0) + 1,
+                    errorCount = existing?.errorCount ?: 0,
+                    updatedAtEpochMs = now
+                )
+            )
+        }
+    }
+
     /**
      * Đánh dấu hoàn thành một Chặng (Stage 01..08) trên Lộ trình N5 sau khi người dùng vượt qua bài Kiểm tra Mở khoá.
      */

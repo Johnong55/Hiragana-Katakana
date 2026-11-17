@@ -143,8 +143,13 @@ fun ReviewScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
+                        val scriptBadge = when (q.targetTemplate?.script ?: q.targetWord?.script) {
+                            "katakana" -> "Katakana"
+                            "kanji" -> "Kanji N5"
+                            else -> "Hiragana"
+                        }
                         Text(
-                            text = q.type.labelVi,
+                            text = "$scriptBadge • ${q.type.labelVi}",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

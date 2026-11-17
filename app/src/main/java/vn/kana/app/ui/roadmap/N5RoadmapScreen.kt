@@ -357,6 +357,48 @@ fun N5RoadmapScreen(
         }
     }
 
+    // Tạo bộ câu hỏi Thi thử tổng hợp JLPT N5 (trộn 4 kỹ năng: Kana + Từ vựng + Ngữ pháp + Kanji N5)
+    fun buildN5MockExamQuestions(): List<CheckpointQuestion> {
+        val picks = mutableListOf<CheckpointQuestion>()
+        // 1. 4 chữ Kana (Hiragana + Katakana + Dakuten/Yōon)
+        listOf("あ", "き", "シ", "が").forEach { ch ->
+            byChar[ch]?.let { tmpl ->
+                picks.add(
+                    CheckpointQuestion(
+                        promptVi = "[Phần 1: Kana] Viết chữ '${tmpl.romaji}' (${tmpl.script})",
+                        subPromptVi = "Số nét chuẩn: ${tmpl.strokeCount} nét",
+                        targetTemplate = tmpl
+                    )
+                )
+            }
+        }
+        // 2. 4 câu Ngữ pháp N5
+        (N5GrammarCatalog.stage5Points.take(2) + N5GrammarCatalog.stage7Points.take(2)).forEach { pt ->
+            byChar[pt.quizAnswerChar]?.let { tmpl ->
+                picks.add(
+                    CheckpointQuestion(
+                        promptVi = "[Phần 2: Ngữ pháp] ${pt.quizPromptVi}\n${pt.quizSentenceWithBlank}",
+                        subPromptVi = "Số nét chuẩn: ${tmpl.strokeCount} nét • Đáp án dạng: ${pt.quizAnswerRomaji}",
+                        targetTemplate = tmpl
+                    )
+                )
+            }
+        }
+        // 3. 8 chữ Kanji N5 cốt lõi
+        listOf("一", "日", "月", "人", "学", "時", "行", "大").forEach { ch ->
+            byChar[ch]?.let { tmpl ->
+                picks.add(
+                    CheckpointQuestion(
+                        promptVi = "[Phần 3: Kanji N5] Viết chữ: ${tmpl.romaji}",
+                        subPromptVi = "${tmpl.row} • ${tmpl.strokeCount} nét chuẩn",
+                        targetTemplate = tmpl
+                    )
+                )
+            }
+        }
+        return picks
+    }
+
     // Xử lý khi mở các chế độ toàn màn hình (Bảng chữ cái chặng / Ngữ pháp / Kiểm tra Mở khoá / Pháo hoa Mở khoá)
     when (val mode = overlayMode) {
         is RoadmapOverlayMode.StageAlphabetBoard -> {
@@ -437,6 +479,9 @@ fun N5RoadmapScreen(
                 recognizer = recognizer,
                 strictnessLevel = uiState.settings.strictnessLevel,
                 onSpeak = { ch, ro -> viewModel.speak(ch, ro) },
+                onQuestionPassed = { tmpl, score ->
+                    viewModel.markSingleCharacterPassed(tmpl, score)
+                },
                 onPassedAll = {
                     val charsInStage = when (mode.stage.type) {
                         RoadmapStageType.HIRAGANA_BASIC -> uiState.basicHiragana
@@ -576,6 +621,15 @@ fun N5RoadmapScreen(
                     overlayMode = RoadmapOverlayMode.StageCheckpointTest(
                         stage = cur,
                         questions = qs
+                    )
+                }
+            },
+            onStartN5MockExam = {
+                val examQs = buildN5MockExamQuestions()
+                if (examQs.isNotEmpty()) {
+                    overlayMode = RoadmapOverlayMode.StageCheckpointTest(
+                        stage = cur,
+                        questions = examQs
                     )
                 }
             }
@@ -856,7 +910,8 @@ private fun SCurveInfographicRoadMap(
 private fun SelectedStageActionCard(
     stage: RoadmapStageNode,
     onEnterStageStudy: () -> Unit,
-    onStartStageCheckpointTest: () -> Unit
+    onStartStageCheckpointTest: () -> Unit,
+    onStartN5MockExam: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -930,6 +985,24 @@ private fun SelectedStageActionCard(
                     color = MaterialTheme.colorScheme.onPrimary,
                     maxLines = 1,
                     softWrap = false
+                )
+            }
+        }
+
+        if (stage.stageNumber == 8) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                    .clickable(onClick = onStartN5MockExam)
+                    .padding(vertical = 9.dp, horizontal = 8.dp)
+            ) {
+                Text(
+                    text = "🚩 Thi thử tổng hợp JLPT N5 (16 câu: Kana + Ngữ pháp + Kanji)",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    maxLines = 1
                 )
             }
         }
@@ -1192,6 +1265,7 @@ private fun StageCheckpointTestView(
     recognizer: KanaRecognizer?,
     strictnessLevel: vn.kana.recognizer.StrictnessLevel,
     onSpeak: (String, String) -> Unit,
+    onQuestionPassed: (KanaStrokeTemplate, Int) -> Unit = { _, _ -> },
     onPassedAll: () -> Unit,
     onCancel: () -> Unit,
     localView: android.view.View,
@@ -1316,6 +1390,7 @@ private fun StageCheckpointTestView(
                         isFeedbackError = false
                         localView.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                         onSpeak(tmpl.char, tmpl.romaji)
+                        onQuestionPassed(tmpl, res.score)
                         scope.launch {
                             successOverlayText = "${tmpl.char} • ${res.score} điểm"
                             delay(650L)
