@@ -10,40 +10,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 
 private val LightColors = lightColorScheme(
-    primary = KanaBlack,
-    onPrimary = KanaWhite,
+    primary = KanaPrimaryVintage,
+    onPrimary = KanaPaperLight,
     primaryContainer = KanaGraySubtle,
     onPrimaryContainer = KanaBlack,
     secondary = KanaGrayDark,
-    onSecondary = KanaWhite,
+    onSecondary = KanaPaperLight,
     secondaryContainer = KanaGraySubtle,
     onSecondaryContainer = KanaBlack,
     background = KanaWhite,
     onBackground = KanaBlack,
-    surface = KanaWhite,
+    surface = KanaPaperLight,
     onSurface = KanaBlack,
     surfaceVariant = KanaGraySubtle,
     onSurfaceVariant = KanaGrayDark,
     outline = KanaGrayLight,
     outlineVariant = KanaGrayMedium,
     error = KanaErrorRedLight,
-    onError = KanaWhite
+    onError = KanaPaperLight
 )
 
 private val DarkColors = darkColorScheme(
-    primary = KanaDarkInk,
+    primary = KanaDarkPrimary,
     onPrimary = KanaDarkBg,
-    primaryContainer = KanaDarkSurface,
+    primaryContainer = KanaDarkSurfaceVariant,
     onPrimaryContainer = KanaDarkInk,
     secondary = KanaDarkGrayMedium,
     onSecondary = KanaDarkBg,
-    secondaryContainer = KanaDarkSurface,
+    secondaryContainer = KanaDarkSurfaceVariant,
     onSecondaryContainer = KanaDarkInk,
     background = KanaDarkBg,
     onBackground = KanaDarkInk,
-    surface = KanaDarkBg,
+    surface = KanaDarkSurface,
     onSurface = KanaDarkInk,
-    surfaceVariant = KanaDarkSurface,
+    surfaceVariant = KanaDarkSurfaceVariant,
     onSurfaceVariant = KanaDarkGrayMedium,
     outline = KanaDarkBorder,
     outlineVariant = KanaDarkGrayMedium,
@@ -52,18 +52,18 @@ private val DarkColors = darkColorScheme(
 )
 
 val KanaShapes = Shapes(
-    extraSmall = RoundedCornerShape(2.dp),
-    small = RoundedCornerShape(2.dp),
-    medium = RoundedCornerShape(2.dp),
-    large = RoundedCornerShape(2.dp),
-    extraLarge = RoundedCornerShape(2.dp)
+    extraSmall = RoundedCornerShape(4.dp),
+    small = RoundedCornerShape(4.dp),
+    medium = RoundedCornerShape(4.dp),
+    large = RoundedCornerShape(4.dp),
+    extraLarge = RoundedCornerShape(4.dp)
 )
 
 /**
- * Theme tối giản của ứng dụng Kana:
+ * Theme Sổ tay Retro / Vintage của ứng dụng Kana:
  * - Luôn tắt dynamicColor (dynamicColor = false).
- * - Nền trắng / chữ đen (hoặc dark mode theo hệ thống).
- * - Chỉ có 1 màu nhấn duy nhất cho trạng thái lỗi (error).
+ * - Giấy Washi kem ấm / chữ mực nâu sepia (hoặc chế độ đèn bàn ban đêm).
+ * - Màu đỏ son con dấu Hanko cho trạng thái lỗi (error).
  */
 @Composable
 fun KanaTheme(
