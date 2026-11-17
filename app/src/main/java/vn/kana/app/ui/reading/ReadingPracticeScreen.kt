@@ -41,8 +41,8 @@ import vn.kana.app.domain.N5ReadingPassage
 import vn.kana.app.domain.N5SentenceBuilderItem
 
 private enum class ReadingTab(val label: String) {
-    PASSAGES("📖 Đọc hiểu"),
-    SENTENCE_BUILDER("🧩 Ghép câu ★")
+    PASSAGES("Đọc hiểu"),
+    SENTENCE_BUILDER("Ghép câu ★")
 }
 
 @Composable
@@ -309,7 +309,7 @@ private fun PassageDetailView(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "🔊 Nghe",
+                        text = "Nghe",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
@@ -340,7 +340,7 @@ private fun PassageDetailView(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
-                        text = "🔊 ${sentence.japanese}",
+                        text = sentence.japanese,
                         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -796,7 +796,7 @@ private fun SentenceBuilderView(
                         modifier = Modifier.weight(1f)
                     )
                     Text(
-                        text = "🔊 Nghe",
+                        text = "Nghe",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier

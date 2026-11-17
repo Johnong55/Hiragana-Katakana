@@ -238,8 +238,8 @@ fun OfflineDictionaryScreen(
                             }
                             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                                 Text(
-                                    text = "🔊",
-                                    style = MaterialTheme.typography.labelLarge,
+                                    text = "Nghe",
+                                    style = MaterialTheme.typography.labelMedium,
                                     modifier = Modifier
                                         .border(1.dp, MaterialTheme.colorScheme.outline)
                                         .clickable { onSpeak(t.char, t.romaji) }
@@ -286,8 +286,8 @@ fun OfflineDictionaryScreen(
                                 )
                             }
                             Text(
-                                text = "🔊",
-                                style = MaterialTheme.typography.labelLarge,
+                                text = "Nghe",
+                                style = MaterialTheme.typography.labelMedium,
                                 modifier = Modifier
                                     .border(1.dp, MaterialTheme.colorScheme.outline)
                                     .padding(horizontal = 8.dp, vertical = 5.dp)
@@ -321,7 +321,7 @@ fun OfflineDictionaryScreen(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Text(
-                                text = "🔊 ${g.exampleJp} — ${g.exampleVi}",
+                                text = "Ví dụ: ${g.exampleJp} — ${g.exampleVi}",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier.clickable { onSpeak(g.exampleJp, null) }

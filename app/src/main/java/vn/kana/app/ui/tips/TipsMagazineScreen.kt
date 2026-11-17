@@ -154,7 +154,7 @@ fun DailyTipMagazinePopup(
                 }
                 if (article.speakText.isNotBlank()) {
                     Text(
-                        text = "🔊 Nghe",
+                        text = "Nghe",
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
@@ -405,7 +405,7 @@ fun TipsMagazineScreen(
                         }
                         if (article.speakText.isNotBlank()) {
                             Text(
-                                text = "🔊 Nghe",
+                                text = "Nghe",
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 modifier = Modifier

@@ -234,7 +234,7 @@ fun HomeScreen(
 
                             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                 Text(
-                                    text = "🔊",
+                                    text = "Nghe",
                                     style = MaterialTheme.typography.labelLarge,
                                     color = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier

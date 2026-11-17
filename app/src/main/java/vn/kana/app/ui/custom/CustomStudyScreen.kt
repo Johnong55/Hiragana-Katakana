@@ -504,7 +504,7 @@ private fun VocabSentenceCard(
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                SmallBtn(label = "🔊 Nghe từ", filled = true, onClick = onSpeakWord)
+                SmallBtn(label = "Nghe từ", filled = true, onClick = onSpeakWord)
                 SmallBtn(label = "✎ Tập viết", filled = false, onClick = onPracticeWriteThisWord)
             }
         }
@@ -535,7 +535,7 @@ private fun VocabSentenceCard(
                     )
                 }
 
-                SmallBtn(label = "🔊 Nghe câu", filled = false, onClick = onSpeakSentence)
+                SmallBtn(label = "Nghe câu", filled = false, onClick = onSpeakSentence)
             }
         }
 
@@ -668,9 +668,9 @@ private fun CustomWordWritingPracticeView(
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    SmallBtn(label = "🔊 Từ", filled = true, onClick = onSpeakWord)
+                    SmallBtn(label = "Nghe từ", filled = true, onClick = onSpeakWord)
                     if (word.exampleSentence.isNotBlank()) {
-                        SmallBtn(label = "🔊 Câu", filled = false, onClick = onSpeakSentence)
+                        SmallBtn(label = "Nghe câu", filled = false, onClick = onSpeakSentence)
                     }
                 }
             }

@@ -54,8 +54,8 @@ import vn.kana.recognizer.KanaStrokeTemplate
 import kotlin.math.roundToInt
 
 private enum class PracticeModeTab(val label: String) {
-    CONFUSABLE("👀 Chữ dễ nhầm"),
-    FLASHCARD("🃏 Flashcard")
+    CONFUSABLE("Chữ dễ nhầm"),
+    FLASHCARD("Flashcard")
 }
 
 private enum class FlashcardDeck(val label: String) {
@@ -309,7 +309,7 @@ private fun ConfusablePairsView(
                     onClick = { onSpeak(current.target.char, current.target.romaji) },
                     shape = RoundedCornerShape(0.dp)
                 ) {
-                    Text("🔊 Nghe lại")
+                    Text("Nghe lại")
                 }
             }
 
@@ -398,7 +398,7 @@ private fun ConfusablePairsView(
             shape = RoundedCornerShape(0.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("⚡ Luyện phản xạ tất cả cặp dễ nhầm (10 câu)")
+            Text("Luyện phản xạ tất cả cặp dễ nhầm (10 câu)")
         }
 
         LazyColumn(
@@ -456,7 +456,7 @@ private fun ConfusablePairsView(
                                     color = MaterialTheme.colorScheme.onBackground
                                 )
                                 Text(
-                                    text = "🔊 ${item.romaji}",
+                                    text = item.romaji,
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onBackground
                                 )
@@ -693,7 +693,7 @@ private fun QuickFlashcardView(
                     onClick = { onSpeak(card.speakText, card.readingText) },
                     shape = RoundedCornerShape(0.dp)
                 ) {
-                    Text("🔊 Nghe phát âm")
+                    Text("Nghe phát âm")
                 }
 
                 if (isFlipped) {

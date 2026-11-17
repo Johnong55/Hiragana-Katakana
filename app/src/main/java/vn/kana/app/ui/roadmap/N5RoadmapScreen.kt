@@ -83,6 +83,7 @@ import vn.kana.app.domain.N5GrammarPoint
 import vn.kana.app.domain.RoadmapStageNode
 import vn.kana.app.domain.RoadmapStageType
 import vn.kana.app.ui.components.KanaDrawingCanvas
+import vn.kana.app.ui.components.MemeBadge
 import vn.kana.app.ui.components.drawSmoothStrokePath
 import vn.kana.app.ui.home.EXTENDED_KANA_LAYOUT
 import vn.kana.app.ui.home.HIRAGANA_GOJUON_LAYOUT
@@ -276,7 +277,7 @@ fun N5RoadmapScreen(
                 type = RoadmapStageType.N5_KANJI_2_FINAL,
                 titleVi = "Kanji N5 (Cấp độ 2) & Đích N5",
                 subtitleVi = "42 chữ Hán: Thời gian, Hướng, Động/Tính từ & Thi tổng hợp",
-                badgeIconText = "🚩",
+                badgeIconText = "N5",
                 totalItems = kanjiPart2.size.coerceAtLeast(42),
                 completedItems = if (s8Done) kanjiPart2.size else kanji2Learned,
                 isUnlocked = unlockAll || s7Done,
@@ -731,12 +732,18 @@ fun N5RoadmapScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = "🔥 ${uiState.settings.streakDays} ngày  •  ✓ ${uiState.totalLearnedCount}/${uiState.allCurriculumCharacters.size} chữ  •  ↻ ${uiState.dueSrsCardsCount} ôn",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    maxLines = 1
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    MemeBadge(resId = R.drawable.meme_cat_angry, size = 22.dp)
+                    Text(
+                        text = "${uiState.settings.streakDays} ngày  •  ${uiState.totalLearnedCount}/${uiState.allCurriculumCharacters.size} chữ  •  ${uiState.dueSrsCardsCount} ôn",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = 1
+                    )
+                }
                 Text(
                     text = "Tiến độ →",
                     style = MaterialTheme.typography.labelMedium,
@@ -1017,19 +1024,19 @@ private fun SCurveInfographicRoadMap(
                     )
                     .clickable { onSelectStage(stage) }
             ) {
-                Text(
-                    text = when {
-                        stage.isCompleted -> "✓"
-                        !stage.isUnlocked -> "🔒"
-                        else -> stage.badgeIconText
-                    },
-                    style = MaterialTheme.typography.titleLarge,
-                    color = when {
-                        stage.isCompleted -> MaterialTheme.colorScheme.onPrimary
-                        stage.isUnlocked -> MaterialTheme.colorScheme.onBackground
-                        else -> MaterialTheme.colorScheme.onSurfaceVariant
-                    }
-                )
+                if (!stage.isUnlocked) {
+                    MemeBadge(resId = R.drawable.meme_cat_grumpy, size = 34.dp)
+                } else {
+                    Text(
+                        text = if (stage.isCompleted) "✓" else stage.badgeIconText,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = if (stage.isCompleted) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            MaterialTheme.colorScheme.onBackground
+                        }
+                    )
+                }
             }
 
             // Thẻ nhãn số thứ tự lớn "01".."08" + Tên chặng (đặt lệch sang bên trống của khúc cua)
@@ -1082,7 +1089,7 @@ private fun SCurveInfographicRoadMap(
                             text = when {
                                 stage.isCompleted -> "Đã hoàn thành ✓"
                                 stage.isUnlocked -> "Đang mở (${stage.completedItems}/${stage.totalItems})"
-                                else -> "Bấm để kiểm tra mở khoá 🔓"
+                                else -> "Bấm để kiểm tra mở khoá"
                             },
                             style = MaterialTheme.typography.labelMedium,
                             color = if (isSelected) MaterialTheme.colorScheme.onPrimary
@@ -1160,7 +1167,7 @@ private fun SelectedStageActionCard(
                     .padding(vertical = 10.dp, horizontal = 6.dp)
             ) {
                 Text(
-                    text = if (stage.isCompleted) "Kiểm tra lại chặng" else "Kiểm tra Mở khoá 🔓",
+                    text = if (stage.isCompleted) "Kiểm tra lại chặng" else "Kiểm tra Mở khoá",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1,
@@ -1197,7 +1204,7 @@ private fun SelectedStageActionCard(
                     .padding(vertical = 9.dp, horizontal = 8.dp)
             ) {
                 Text(
-                    text = "🚩 Thi thử tổng hợp JLPT N5 (16 câu: Kana + Ngữ pháp + Kanji)",
+                    text = "Thi thử tổng hợp JLPT N5 (16 câu: Kana + Ngữ pháp + Kanji)",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1
@@ -1336,7 +1343,7 @@ private fun N5GrammarInteractiveLessonView(
                     )
                 }
                 Text(
-                    text = "🔊 Nghe",
+                    text = "Nghe",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
@@ -1660,7 +1667,7 @@ private fun StageUnlockCelebrationDialog(
             }
 
             Text(
-                text = "🔓 MỞ KHOÁ CHẶNG MỚI!",
+                text = "MỞ KHOÁ CHẶNG MỚI!",
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -1861,7 +1868,7 @@ private fun StageAlphabetBoardView(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             RoadmapActionBtn(
-                text = "Kiểm tra Mở khoá 🔓",
+                text = "Kiểm tra Mở khoá",
                 filled = false,
                 onClick = onStartCheckpointTest,
                 modifier = Modifier.weight(1f)

@@ -322,7 +322,7 @@ fun CountersDrillScreen(
                 shape = RoundedCornerShape(0.dp),
                 modifier = Modifier.weight(1f)
             ) {
-                Text("⚡ Luyện tổng hợp")
+                Text("Luyện tổng hợp")
             }
         }
 
@@ -373,7 +373,7 @@ fun CountersDrillScreen(
                         )
                     }
                     Text(
-                        text = "🔊",
+                        text = "Nghe",
                         style = MaterialTheme.typography.labelLarge
                     )
                 }

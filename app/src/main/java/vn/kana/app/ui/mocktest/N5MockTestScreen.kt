@@ -296,7 +296,7 @@ fun N5MockTestScreen(
                                 shape = RoundedCornerShape(0.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("🔊 Nghe câu hỏi tiếng Nhật")
+                                Text("Nghe câu hỏi tiếng Nhật")
                             }
                         } else {
                             Text(
@@ -466,7 +466,7 @@ fun N5MockTestScreen(
                             }
                             if (q.audioJa != null) {
                                 Text(
-                                    text = "🔊 ${q.audioJa}",
+                                    text = "Nghe lại: ${q.audioJa}",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onBackground,
                                     modifier = Modifier.clickable { onSpeak(q.audioJa) }

@@ -31,14 +31,14 @@ import vn.kana.recognizer.Stroke
 import kotlin.math.roundToInt
 
 enum class ReviewDrillStyle(val labelVi: String) {
-    WRITE("✍️ Viết nét"),
-    PICK_CHAR("🎯 Chọn chữ"),
-    PICK_READING("🔤 Chọn nghĩa / đọc")
+    WRITE("Viết nét"),
+    PICK_CHAR("Chọn chữ"),
+    PICK_READING("Chọn nghĩa / đọc")
 }
 
 enum class ReviewSessionFilter(val labelVi: String) {
-    MIXED("🔀 Đa dạng"),
-    WRITE_ONLY("✍️ Chỉ viết")
+    MIXED("Đa dạng"),
+    WRITE_ONLY("Chỉ viết")
 }
 
 data class ReviewUiState(

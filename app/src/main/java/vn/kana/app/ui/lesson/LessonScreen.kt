@@ -564,7 +564,7 @@ private fun PromptHeaderSection(
 @Composable
 private fun SpeakButton(onClick: () -> Unit) {
     Text(
-        text = "🔊 Nghe",
+        text = "Nghe",
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier

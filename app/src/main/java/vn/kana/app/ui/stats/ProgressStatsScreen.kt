@@ -137,7 +137,7 @@ fun ProgressStatsScreen(
                 ) {
                     StatTile(
                         label = "Chuỗi ngày",
-                        value = "🔥 ${uiState.settings.streakDays}",
+                        value = "${uiState.settings.streakDays} ngày",
                         modifier = Modifier.weight(1f)
                     )
                     StatTile(

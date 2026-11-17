@@ -66,7 +66,7 @@ class KanaDailyWidgetProvider : AppWidgetProvider() {
         appWidgetIds.forEach { appWidgetId ->
             val views = RemoteViews(context.packageName, R.layout.widget_kana_daily).apply {
                 setTextViewText(R.id.widget_badge, "${tip.issueLabel} • ${tip.category.uppercase()}")
-                setTextViewText(R.id.widget_streak, "🔥 $streakDays ngày")
+                setTextViewText(R.id.widget_streak, "$streakDays ngày")
                 setTextViewText(R.id.widget_highlight_jp, "${tip.highlightJp}  (${tip.highlightRomaji})")
                 setTextViewText(R.id.widget_title, tip.titleVi)
                 setTextViewText(R.id.widget_example, tip.funFactVi)

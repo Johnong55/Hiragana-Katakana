@@ -38,10 +38,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import vn.kana.app.R
 import vn.kana.app.domain.QuizQuestionType
 import vn.kana.app.ui.components.GenkoYoshiWordBar
 import vn.kana.app.ui.components.KanaDrawingCanvas
 import vn.kana.app.ui.components.KanaStrokeAnimatorCanvas
+import vn.kana.app.ui.components.MemeBadge
 
 @Composable
 fun ReviewScreen(
@@ -118,15 +120,28 @@ fun ReviewScreen(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
-            Text(
-                text = uiState.sessionFilter.labelVi,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
                 modifier = Modifier
                     .border(1.dp, MaterialTheme.colorScheme.outline)
                     .clickable(onClick = viewModel::toggleSessionFilter)
-                    .padding(horizontal = 8.dp, vertical = 5.dp)
-            )
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+                MemeBadge(
+                    resId = if (uiState.sessionFilter == ReviewSessionFilter.MIXED) {
+                        R.drawable.meme_cat_blep
+                    } else {
+                        R.drawable.meme_shiba
+                    },
+                    size = 20.dp
+                )
+                Text(
+                    text = uiState.sessionFilter.labelVi,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
 
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)

@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:text="🔥 0 ngày"
+            android:text="0 ngày"
             android:textColor="#111111"
             android:textSize="11sp"
             android:textStyle="bold" />
@@ -88,7 +88,7 @@
             android:gravity="center"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:text="↻ Đổi Tip"
+            android:text="Đổi Tip"
             android:textColor="#111111"
             android:textSize="11sp"
             android:textStyle="bold" />
@@ -102,7 +102,7 @@
             android:gravity="center"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:text="⚡ Học ngay"
+            android:text="Học ngay"
             android:textColor="#FFFFFF"
             android:textSize="11sp"
             android:textStyle="bold" />

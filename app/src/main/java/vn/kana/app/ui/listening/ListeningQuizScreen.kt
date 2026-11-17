@@ -231,7 +231,7 @@ fun ListeningQuizScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = if (currentCombo >= 2) "🔥 Combo x$currentCombo" else "Combo: $currentCombo",
+                text = if (currentCombo >= 2) "Combo x$currentCombo" else "Combo: $currentCombo",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -266,7 +266,7 @@ fun ListeningQuizScreen(
                     .padding(horizontal = 24.dp, vertical = 12.dp)
             ) {
                 Text(
-                    text = "🔊  Nghe lại phát âm",
+                    text = "Nghe lại phát âm",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
