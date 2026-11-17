@@ -165,7 +165,7 @@ fun CountersDrillScreen(
             val current = quizItems[quizIndex]
             LaunchedEffect(chosenKana) {
                 if (chosenKana == current.target.kana) {
-                    delay(autoAdvanceDelayMs.coerceIn(500L, 1200L))
+                    delay(autoAdvanceDelayMs.coerceAtLeast(1100L))
                     if (quizIndex < quizItems.lastIndex) {
                         quizIndex++
                         chosenKana = null

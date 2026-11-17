@@ -99,7 +99,7 @@ fun ListeningQuizScreen(
     // Tự động chuyển câu nếu chọn đúng
     LaunchedEffect(currentIndex, selectedChar, isCompleted) {
         if (!isCompleted && currentQuestion != null && selectedChar == currentQuestion.target.char) {
-            delay(autoAdvanceDelayMs.coerceIn(500L, 1400L))
+            delay(autoAdvanceDelayMs.coerceAtLeast(1100L))
             if (currentIndex + 1 < questions.size) {
                 currentIndex += 1
                 selectedChar = null

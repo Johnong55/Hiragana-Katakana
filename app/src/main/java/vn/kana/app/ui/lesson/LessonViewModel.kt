@@ -553,7 +553,7 @@ class LessonViewModel(
                     isFeedbackError = false
                 )
             }
-            delay(650L)
+            delay(_uiState.value.settings.autoAdvanceDelayMs.coerceAtLeast(1100L))
             _uiState.update { it.copy(successOverlayText = null) }
             onAfterDelay()
         }

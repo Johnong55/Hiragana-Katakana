@@ -244,7 +244,7 @@ private fun ConfusablePairsView(
 
         LaunchedEffect(selectedChar) {
             if (selectedChar == current.target.char) {
-                delay(autoAdvanceDelayMs.coerceIn(500L, 1200L))
+                delay(autoAdvanceDelayMs.coerceAtLeast(1100L))
                 if (quizIndex < quizQuestions.lastIndex) {
                     quizIndex++
                     selectedChar = null

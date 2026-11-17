@@ -547,7 +547,7 @@ class ReviewViewModel(
                         successOverlayText = "${target.char} (${target.romaji}) • ${result.score} điểm"
                     )
                 }
-                delay(650L)
+                delay(_uiState.value.settings.autoAdvanceDelayMs.coerceAtLeast(1100L))
                 _uiState.update { it.copy(successOverlayText = null) }
                 advanceToNextQuestion(result.score, passedFirstTry)
             }
@@ -622,7 +622,7 @@ class ReviewViewModel(
                         successOverlayText = "${word.word} (${word.meaningVi}) • $avgWordScore điểm"
                     )
                 }
-                delay(650L)
+                delay(_uiState.value.settings.autoAdvanceDelayMs.coerceAtLeast(1100L))
                 _uiState.update { it.copy(successOverlayText = null) }
                 advanceToNextQuestion(avgWordScore, passedFirstTry)
             }
@@ -737,7 +737,7 @@ class ReviewViewModel(
         if (isCorrect) {
             autoAdvanceJob?.cancel()
             autoAdvanceJob = viewModelScope.launch {
-                delay(state.settings.autoAdvanceDelayMs.coerceIn(450L, 1000L))
+                delay(state.settings.autoAdvanceDelayMs.coerceAtLeast(1100L))
                 advanceToNextQuestion(score = 95, passedFirstTry = true)
             }
         }

@@ -159,13 +159,13 @@ fun SettingsScreen(
                 }
             }
 
-            // 3. Thời gian tự chuyển ô khi viết từ vựng
-            SettingCard(title = "3. Thời gian tự chuyển ô (khi viết từ nhiều chữ)") {
+            // 3. Thời gian dừng sau khi hoàn thành / chuyển ô
+            SettingCard(title = "3. Thời gian chuyển sau khi hoàn thành") {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    for (ms in listOf(400L, 700L, 1000L, 1500L)) {
+                    for (ms in listOf(800L, 1300L, 1800L, 2500L)) {
                         SelectableChip(
                             label = "${ms}ms",
                             selected = settings.autoAdvanceDelayMs == ms,

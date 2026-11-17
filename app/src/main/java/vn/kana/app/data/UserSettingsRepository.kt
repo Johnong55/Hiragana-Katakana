@@ -30,7 +30,7 @@ enum class ThemeMode(val displayNameVi: String) {
 data class UserSettings(
     val strictnessLevel: StrictnessLevel = StrictnessLevel.EASY,
     val animationSpeed: Float = 1.0f,
-    val autoAdvanceDelayMs: Long = 700L,
+    val autoAdvanceDelayMs: Long = 1300L,
     val soundEnabled: Boolean = true,
     val unlockAllRows: Boolean = false,
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
@@ -88,7 +88,7 @@ class UserSettingsRepository(
         UserSettings(
             strictnessLevel = strictness,
             animationSpeed = prefs[Keys.ANIMATION_SPEED] ?: 1.0f,
-            autoAdvanceDelayMs = prefs[Keys.AUTO_ADVANCE_DELAY_MS] ?: 700L,
+            autoAdvanceDelayMs = prefs[Keys.AUTO_ADVANCE_DELAY_MS] ?: 1300L,
             soundEnabled = prefs[Keys.SOUND_ENABLED] ?: true,
             unlockAllRows = prefs[Keys.UNLOCK_ALL_ROWS] ?: false,
             themeMode = themeMode,

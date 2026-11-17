@@ -1379,7 +1379,7 @@ private fun N5GrammarInteractiveLessonView(
                         onSpeak(point.exampleJp)
                         scope.launch {
                             successOverlayText = "Đáp án: ${tmpl.char} (${point.quizAnswerRomaji})"
-                            delay(700L)
+                            delay(1300L)
                             successOverlayText = null
                             if (currentIndex + 1 < points.size) {
                                 currentIndex += 1
@@ -1539,7 +1539,7 @@ private fun StageCheckpointTestView(
                         onQuestionPassed(tmpl, res.score)
                         scope.launch {
                             successOverlayText = "${tmpl.char} • ${res.score} điểm"
-                            delay(650L)
+                            delay(1300L)
                             successOverlayText = null
                             if (qIndex + 1 < questions.size) {
                                 qIndex += 1

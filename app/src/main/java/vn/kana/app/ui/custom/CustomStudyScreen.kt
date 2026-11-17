@@ -816,7 +816,7 @@ private fun CustomWordWritingPracticeView(
                         onSpeakWord()
                         scope.launch {
                             successOverlayText = "${word.word} (${word.meaningVi})"
-                            delay(750L)
+                            delay(autoAdvanceDelayMs.coerceAtLeast(1100L))
                             successOverlayText = null
                             onNextWord()
                         }
