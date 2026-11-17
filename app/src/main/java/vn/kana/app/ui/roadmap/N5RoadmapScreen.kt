@@ -13,6 +13,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -63,8 +64,11 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke as ComposeStroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
+import vn.kana.app.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
@@ -571,17 +575,31 @@ fun N5RoadmapScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column {
-                            Text(
-                                text = "LUYỆN TẬP JLPT N5",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onBackground
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.meme_shiba),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clip(CircleShape)
+                                    .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
                             )
-                            Text(
-                                text = "🔥 ${uiState.settings.streakDays} ngày  •  ✓ ${uiState.totalLearnedCount} chữ",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            Column {
+                                Text(
+                                    text = "LUYỆN TẬP JLPT N5",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                Text(
+                                    text = "${uiState.settings.streakDays} ngày • ${uiState.totalLearnedCount} chữ",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
                         Text(
                             text = "✕",
@@ -596,40 +614,62 @@ fun N5RoadmapScreen(
 
                     HorizontalDivider(color = MaterialTheme.colorScheme.outline)
 
-                    val drawerItems = listOf(
-                        Triple("📖 Đọc hiểu & Ghép câu", "8 bài đọc có Kana/dịch & 10 câu ★", onOpenReadingPractice),
-                        Triple("📝 Thi thử JLPT N5", "Đề 24 câu (15 phút) đủ 3 phần", onOpenMockTest),
-                        Triple("🔢 Số đếm, Giờ & Trợ số từ", "Biến âm 〜時, 〜分, 〜日, 〜本", onOpenCountersDrill),
-                        Triple("🃏 Thẻ nhanh & Chữ dễ nhầm", "Flashcard vuốt & phân biệt シ/ツ", onOpenFlashcardsAndConfusables),
-                        Triple("🔍 Từ điển Offline", "Tra nhanh chữ, Kanji, từ vựng, ngữ pháp", onOpenDictionary),
-                        Triple("🎧 Luyện nghe phản xạ", "Nghe TTS & chọn đáp án nhanh", onOpenListeningQuiz),
-                        Triple("📰 Tạp chí Tips N5", "40 mẹo nhớ chữ & văn hoá Nhật", onOpenTipsMagazine),
-                        Triple("📊 Tiến độ & Chữ hay sai", "Thống kê chi tiết & luyện chữ yếu", onOpenProgressStats)
+                    data class DrawerMenuEntry(
+                        val iconRes: Int,
+                        val title: String,
+                        val subtitle: String,
+                        val action: () -> Unit
                     )
 
-                    drawerItems.forEach { (title, subtitle, action) ->
-                        Column(
+                    val drawerItems = listOf(
+                        DrawerMenuEntry(R.drawable.meme_capybara, "Đọc hiểu & Ghép câu", "8 bài đọc có Kana/dịch & 10 câu ★", onOpenReadingPractice),
+                        DrawerMenuEntry(R.drawable.meme_cat_surprised, "Thi thử JLPT N5", "Đề 24 câu (15 phút) đủ 3 phần", onOpenMockTest),
+                        DrawerMenuEntry(R.drawable.meme_duck, "Số đếm, Giờ & Trợ số từ", "Biến âm 〜時, 〜分, 〜日, 〜本", onOpenCountersDrill),
+                        DrawerMenuEntry(R.drawable.meme_red_panda, "Thẻ nhanh & Chữ dễ nhầm", "Flashcard vuốt & phân biệt シ/ツ", onOpenFlashcardsAndConfusables),
+                        DrawerMenuEntry(R.drawable.meme_hamster, "Từ điển Offline", "Tra nhanh chữ, Kanji, từ vựng, ngữ pháp", onOpenDictionary),
+                        DrawerMenuEntry(R.drawable.meme_shiba, "Luyện nghe phản xạ", "Nghe TTS & chọn đáp án nhanh", onOpenListeningQuiz),
+                        DrawerMenuEntry(R.drawable.meme_capybara, "Tạp chí Tips N5", "40 mẹo nhớ chữ & văn hoá Nhật", onOpenTipsMagazine),
+                        DrawerMenuEntry(R.drawable.meme_cat_surprised, "Tiến độ & Chữ hay sai", "Thống kê chi tiết & luyện chữ yếu", onOpenProgressStats)
+                    )
+
+                    drawerItems.forEach { item ->
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .border(1.dp, MaterialTheme.colorScheme.outline)
                                 .background(MaterialTheme.colorScheme.surface)
                                 .clickable {
                                     drawerScope.launch { drawerState.close() }
-                                    action()
+                                    item.action()
                                 }
-                                .padding(horizontal = 14.dp, vertical = 12.dp),
-                            verticalArrangement = Arrangement.spacedBy(2.dp)
+                                .padding(horizontal = 10.dp, vertical = 10.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                text = title,
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.onBackground
+                            Image(
+                                painter = painterResource(id = item.iconRes),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(38.dp)
+                                    .clip(CircleShape)
+                                    .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
                             )
-                            Text(
-                                text = subtitle,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(2.dp)
+                            ) {
+                                Text(
+                                    text = item.title,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                Text(
+                                    text = item.subtitle,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
                     }
                 }

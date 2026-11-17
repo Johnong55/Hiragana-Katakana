@@ -7,6 +7,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +32,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import vn.kana.app.R
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -321,10 +327,9 @@ fun KanaDrawingCanvas(
             }
         }
 
-        // 7. Hiệu ứng thông báo ĐÚNG (✓ HAY BẠN!) nảy đàn hồi dễ thương + lấp lánh
+        // 7. Hiệu ứng thông báo ĐÚNG kèm ảnh meme con vật nảy đàn hồi
         if (successOverlayText != null) {
             val scaleAnim = remember(successOverlayText) { Animatable(0.55f) }
-            val sparkleLift = remember(successOverlayText) { Animatable(0f) }
             LaunchedEffect(successOverlayText) {
                 scaleAnim.animateTo(
                     targetValue = 1.0f,
@@ -334,8 +339,16 @@ fun KanaDrawingCanvas(
                     )
                 )
             }
-            LaunchedEffect(successOverlayText) {
-                sparkleLift.animateTo(1f, animationSpec = tween(durationMillis = 700))
+            val memeRes = remember(successOverlayText) {
+                val memes = listOf(
+                    R.drawable.meme_shiba,
+                    R.drawable.meme_capybara,
+                    R.drawable.meme_red_panda,
+                    R.drawable.meme_hamster,
+                    R.drawable.meme_cat_surprised,
+                    R.drawable.meme_duck
+                )
+                memes[(successOverlayText.hashCode() and 0x7fffffff) % memes.size]
             }
 
             Box(
@@ -344,24 +357,26 @@ fun KanaDrawingCanvas(
                     .size(squareSide)
                     .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.78f))
             ) {
-                Text(
-                    text = "✨  🌸  ⭐  ✨",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .offset(y = (-68 - (sparkleLift.value * 16f)).dp)
-                        .scale(0.85f + sparkleLift.value * 0.25f)
-                )
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier
                         .scale(scaleAnim.value)
                         .background(MaterialTheme.colorScheme.primary)
                         .border(2.dp, MaterialTheme.colorScheme.onBackground)
-                        .padding(horizontal = 28.dp, vertical = 18.dp)
+                        .padding(horizontal = 24.dp, vertical = 16.dp)
                 ) {
+                    Image(
+                        painter = painterResource(id = memeRes),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clip(CircleShape)
+                            .border(2.dp, MaterialTheme.colorScheme.onPrimary, CircleShape)
+                    )
                     Text(
-                        text = "✓ HAY BẠN! 🌸",
+                        text = "✓ HAY BẠN!",
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
