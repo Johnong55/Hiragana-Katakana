@@ -117,6 +117,7 @@ fun N5RoadmapScreen(
     },
     onOpenTabWithFilter: (CurriculumTab) -> Unit,
     onOpenTipsMagazine: () -> Unit = {},
+    onOpenListeningQuiz: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -544,34 +545,48 @@ fun N5RoadmapScreen(
         ) {
             Text(
                 text = "LỘ TRÌNH JLPT N5",
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
-                maxLines = 1
+                maxLines = 1,
+                modifier = Modifier.weight(1f)
             )
             Row(
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
                         .border(1.dp, MaterialTheme.colorScheme.outline)
+                        .clickable { onOpenListeningQuiz() }
+                        .padding(horizontal = 7.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "🎧 Nghe",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = 1
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .border(1.dp, MaterialTheme.colorScheme.outline)
                         .clickable { onOpenTipsMagazine() }
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .padding(horizontal = 7.dp, vertical = 4.dp)
                 ) {
                     Text(
                         text = "📰 Tips",
-                        style = MaterialTheme.typography.labelLarge,
+                        style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onBackground,
                         maxLines = 1
                     )
                 }
                 Text(
-                    text = "$completedStagesCount/8 Chặng",
-                    style = MaterialTheme.typography.labelLarge,
+                    text = "$completedStagesCount/8",
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.primary)
-                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
             }
         }

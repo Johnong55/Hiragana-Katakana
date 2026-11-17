@@ -361,6 +361,12 @@ class LessonMapViewModel(
         }
     }
 
+    fun recordStudyActivityToday() {
+        viewModelScope.launch {
+            settingsRepository.recordStudyActivityToday()
+        }
+    }
+
     fun clearAllProgress() {
         viewModelScope.launch {
             kanaDao.clearLessonProgress()
