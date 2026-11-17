@@ -37,6 +37,7 @@ import vn.kana.app.ui.custom.CustomStudyScreen
 import vn.kana.app.ui.debug.RecognizerDebugScreen
 import vn.kana.app.ui.debug.RecognizerDebugViewModel
 import vn.kana.app.ui.home.HomeScreen
+import vn.kana.app.ui.counters.CountersDrillScreen
 import vn.kana.app.ui.dictionary.OfflineDictionaryScreen
 import vn.kana.app.ui.lesson.LessonScreen
 import vn.kana.app.ui.lesson.LessonViewModel
@@ -70,6 +71,7 @@ private enum class AppDestination(val isMainTab: Boolean, val tabLabelVi: String
     MOCK_TEST(isMainTab = false),
     FLASHCARDS_CONFUSABLES(isMainTab = false),
     DICTIONARY(isMainTab = false),
+    COUNTERS_DRILL(isMainTab = false),
     PROGRESS_STATS(isMainTab = false),
     DEBUG_RECOGNIZER(isMainTab = false),
     LICENSES(isMainTab = false)
@@ -224,6 +226,10 @@ class MainActivity : ComponentActivity() {
                                         onOpenDictionary = {
                                             returnTab = AppDestination.ROADMAP_N5
                                             destination = AppDestination.DICTIONARY
+                                        },
+                                        onOpenCountersDrill = {
+                                            returnTab = AppDestination.ROADMAP_N5
+                                            destination = AppDestination.COUNTERS_DRILL
                                         },
                                         onOpenProgressStats = {
                                             returnTab = AppDestination.ROADMAP_N5
@@ -445,6 +451,15 @@ class MainActivity : ComponentActivity() {
                                             sessionCounter++
                                             destination = AppDestination.ACTIVE_LESSON
                                         },
+                                        onBack = { destination = returnTab }
+                                    )
+                                }
+
+                                AppDestination.COUNTERS_DRILL -> {
+                                    CountersDrillScreen(
+                                        autoAdvanceDelayMs = mapState.settings.autoAdvanceDelayMs,
+                                        onSpeak = { text, romaji -> mapViewModel.speak(text, romaji) },
+                                        onRecordStudyActivity = { mapViewModel.recordStudyActivityToday() },
                                         onBack = { destination = returnTab }
                                     )
                                 }

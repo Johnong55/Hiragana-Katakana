@@ -123,6 +123,7 @@ fun N5RoadmapScreen(
     onOpenMockTest: () -> Unit = {},
     onOpenFlashcardsAndConfusables: () -> Unit = {},
     onOpenDictionary: () -> Unit = {},
+    onOpenCountersDrill: () -> Unit = {},
     onOpenProgressStats: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -601,6 +602,7 @@ fun N5RoadmapScreen(
             val quickTools = listOf(
                 "📖 Đọc hiểu" to onOpenReadingPractice,
                 "📝 Thi thử N5" to onOpenMockTest,
+                "🔢 Số & Giờ" to onOpenCountersDrill,
                 "🃏 Thẻ & Dễ nhầm" to onOpenFlashcardsAndConfusables,
                 "🔍 Từ điển" to onOpenDictionary,
                 "🎧 Nghe" to onOpenListeningQuiz,
