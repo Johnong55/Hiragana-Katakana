@@ -31,10 +31,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -536,95 +541,166 @@ fun N5RoadmapScreen(
     }
 
     val completedStagesCount = stages.count { it.isCompleted }
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val drawerScope = rememberCoroutineScope()
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 16.dp, vertical = 6.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp)
+    BackHandler(enabled = drawerState.isOpen) {
+        drawerScope.launch { drawerState.close() }
+    }
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet(
+                drawerShape = RoundedCornerShape(0.dp),
+                drawerContainerColor = MaterialTheme.colorScheme.background,
+                modifier = Modifier.width(296.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(
+                                text = "LUYỆN TẬP JLPT N5",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            Text(
+                                text = "🔥 ${uiState.settings.streakDays} ngày  •  ✓ ${uiState.totalLearnedCount} chữ",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Text(
+                            text = "✕",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier
+                                .border(1.dp, MaterialTheme.colorScheme.outline)
+                                .clickable { drawerScope.launch { drawerState.close() } }
+                                .padding(horizontal = 10.dp, vertical = 6.dp)
+                        )
+                    }
+
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+
+                    val drawerItems = listOf(
+                        Triple("📖 Đọc hiểu & Ghép câu", "8 bài đọc có Kana/dịch & 10 câu ★", onOpenReadingPractice),
+                        Triple("📝 Thi thử JLPT N5", "Đề 24 câu (15 phút) đủ 3 phần", onOpenMockTest),
+                        Triple("🔢 Số đếm, Giờ & Trợ số từ", "Biến âm 〜時, 〜分, 〜日, 〜本", onOpenCountersDrill),
+                        Triple("🃏 Thẻ nhanh & Chữ dễ nhầm", "Flashcard vuốt & phân biệt シ/ツ", onOpenFlashcardsAndConfusables),
+                        Triple("🔍 Từ điển Offline", "Tra nhanh chữ, Kanji, từ vựng, ngữ pháp", onOpenDictionary),
+                        Triple("🎧 Luyện nghe phản xạ", "Nghe TTS & chọn đáp án nhanh", onOpenListeningQuiz),
+                        Triple("📰 Tạp chí Tips N5", "40 mẹo nhớ chữ & văn hoá Nhật", onOpenTipsMagazine),
+                        Triple("📊 Tiến độ & Chữ hay sai", "Thống kê chi tiết & luyện chữ yếu", onOpenProgressStats)
+                    )
+
+                    drawerItems.forEach { (title, subtitle, action) ->
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .border(1.dp, MaterialTheme.colorScheme.outline)
+                                .background(MaterialTheme.colorScheme.surface)
+                                .clickable {
+                                    drawerScope.launch { drawerState.close() }
+                                    action()
+                                }
+                                .padding(horizontal = 14.dp, vertical = 12.dp),
+                            verticalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
+                            Text(
+                                text = title,
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            Text(
+                                text = subtitle,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+        }
     ) {
-        // 1. Header Lộ trình N5 gọn gàng
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(horizontal = 16.dp, vertical = 6.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            Text(
-                text = "LỘ TRÌNH JLPT N5",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                maxLines = 1,
-                modifier = Modifier.weight(1f)
-            )
-            Text(
-                text = "$completedStagesCount/8 chặng",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.primary)
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            )
-        }
-
-        // Thanh tóm tắt Streak & Tiến độ 1 dòng (chạm để xem chi tiết & chữ hay sai)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(1.dp, MaterialTheme.colorScheme.outline)
-                .background(MaterialTheme.colorScheme.surface)
-                .clickable { onOpenProgressStats() }
-                .padding(horizontal = 10.dp, vertical = 6.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "🔥 ${uiState.settings.streakDays} ngày  •  ✓ ${uiState.totalLearnedCount}/${uiState.allCurriculumCharacters.size} chữ  •  ↻ ${uiState.dueSrsCardsCount} ôn",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                maxLines = 1
-            )
-            Text(
-                text = "Tiến độ →",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1
-            )
-        }
-
-        // Thanh công cụ luyện N5 nhanh (cuộn ngang gọn gàng)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            val quickTools = listOf(
-                "📖 Đọc hiểu" to onOpenReadingPractice,
-                "📝 Thi thử N5" to onOpenMockTest,
-                "🔢 Số & Giờ" to onOpenCountersDrill,
-                "🃏 Thẻ & Dễ nhầm" to onOpenFlashcardsAndConfusables,
-                "🔍 Từ điển" to onOpenDictionary,
-                "🎧 Nghe" to onOpenListeningQuiz,
-                "📰 Tips" to onOpenTipsMagazine
-            )
-            quickTools.forEach { (label, onClick) ->
+            // 1. Header Lộ trình N5 với nút 3 chấm/menu bên trái
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 Box(
                     modifier = Modifier
                         .border(1.dp, MaterialTheme.colorScheme.outline)
                         .background(MaterialTheme.colorScheme.surface)
-                        .clickable { onClick() }
-                        .padding(horizontal = 9.dp, vertical = 5.dp)
+                        .clickable { drawerScope.launch { drawerState.open() } }
+                        .padding(horizontal = 11.dp, vertical = 6.dp),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = label,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        maxLines = 1
+                        text = "⋮☰",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
+                Text(
+                    text = "LỘ TRÌNH JLPT N5",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    maxLines = 1,
+                    modifier = Modifier.weight(1f)
+                )
+                Text(
+                    text = "$completedStagesCount/8 chặng",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                )
             }
-        }
+
+            // Thanh tóm tắt Streak & Tiến độ 1 dòng (chạm để xem chi tiết & chữ hay sai)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .clickable { onOpenProgressStats() }
+                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "🔥 ${uiState.settings.streakDays} ngày  •  ✓ ${uiState.totalLearnedCount}/${uiState.allCurriculumCharacters.size} chữ  •  ↻ ${uiState.dueSrsCardsCount} ôn",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    maxLines = 1
+                )
+                Text(
+                    text = "Tiến độ →",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+            }
 
         // 2. Bản đồ Con đường Uốn lượn Chữ S (S-Curve Winding Road Map 01 -> 08)
         Box(
@@ -703,6 +779,7 @@ fun N5RoadmapScreen(
                 }
             }
         )
+        }
     }
 }
 
