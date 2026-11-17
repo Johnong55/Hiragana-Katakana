@@ -30,10 +30,26 @@ import vn.kana.recognizer.RecognizerConfig
 import vn.kana.recognizer.Stroke
 import kotlin.math.roundToInt
 
+enum class ReviewDrillStyle(val labelVi: String) {
+    WRITE("✍️ Viết nét"),
+    PICK_CHAR("🎯 Chọn chữ"),
+    PICK_READING("🔤 Chọn nghĩa / đọc")
+}
+
+enum class ReviewSessionFilter(val labelVi: String) {
+    MIXED("🔀 Đa dạng"),
+    WRITE_ONLY("✍️ Chỉ viết")
+}
+
 data class ReviewUiState(
     val isLoading: Boolean = true,
     val settings: UserSettings = UserSettings(),
     val questions: List<QuizQuestion> = emptyList(),
+    val drillStyles: List<ReviewDrillStyle> = emptyList(),
+    val choiceOptionsByIndex: Map<Int, List<String>> = emptyMap(),
+    val correctChoiceIndexByIndex: Map<Int, Int> = emptyMap(),
+    val selectedChoiceIndex: Int? = null,
+    val sessionFilter: ReviewSessionFilter = ReviewSessionFilter.MIXED,
     val currentIndex: Int = 0,
     val dueCardsCountAtStart: Int = 0,
 
@@ -63,6 +79,19 @@ data class ReviewUiState(
 ) {
     val currentQuestion: QuizQuestion?
         get() = questions.getOrNull(currentIndex)
+
+    val currentDrillStyle: ReviewDrillStyle
+        get() = if (sessionFilter == ReviewSessionFilter.WRITE_ONLY) {
+            ReviewDrillStyle.WRITE
+        } else {
+            drillStyles.getOrElse(currentIndex) { ReviewDrillStyle.WRITE }
+        }
+
+    val currentChoiceOptions: List<String>
+        get() = choiceOptionsByIndex[currentIndex].orEmpty()
+
+    val currentCorrectChoiceIndex: Int
+        get() = correctChoiceIndexByIndex[currentIndex] ?: 0
 
     val isMultiBoxMode: Boolean
         get() = currentQuestion?.type == QuizQuestionType.MEANING_ROMAJI_TO_WORD ||
@@ -201,11 +230,71 @@ class ReviewViewModel(
             val initialSlots = firstQ?.targetWord?.let { buildWordSlotsForReview(it) }.orEmpty()
             val firstWritable = initialSlots.indexOfFirst { !it.isPreFilledUnlearned }.coerceAtLeast(0)
 
+            // Đa dạng hóa hình thức dò bài: xen kẽ Viết nét -> Chọn chữ -> Chọn nghĩa/đọc
+            val drillStyles = questions.indices.map { qIdx ->
+                when (qIdx % 3) {
+                    0 -> ReviewDrillStyle.WRITE
+                    1 -> ReviewDrillStyle.PICK_CHAR
+                    else -> ReviewDrillStyle.PICK_READING
+                }
+            }
+            val choiceOptionsByIndex = mutableMapOf<Int, List<String>>()
+            val correctChoiceIndexByIndex = mutableMapOf<Int, Int>()
+
+            questions.forEachIndexed { qIdx, q ->
+                val style = drillStyles[qIdx]
+                if (style != ReviewDrillStyle.WRITE) {
+                    val tmpl = q.targetTemplate
+                    val word = q.targetWord
+                    if (tmpl != null) {
+                        if (style == ReviewDrillStyle.PICK_CHAR) {
+                            val pool = allChars.filter { it.script == tmpl.script && it.char != tmpl.char }
+                                .ifEmpty { allChars.filter { it.char != tmpl.char } }
+                            val distractors = pool.shuffled().take(3).map { it.char }
+                            val options = (distractors + tmpl.char).shuffled()
+                            choiceOptionsByIndex[qIdx] = options
+                            correctChoiceIndexByIndex[qIdx] = options.indexOf(tmpl.char)
+                        } else {
+                            val pool = allChars.filter { it.script == tmpl.script && it.romaji != tmpl.romaji }
+                                .distinctBy { it.romaji }
+                                .ifEmpty { allChars.filter { it.romaji != tmpl.romaji }.distinctBy { it.romaji } }
+                            val distractors = pool.shuffled().take(3).map { it.romaji }
+                            val options = (distractors + tmpl.romaji).shuffled()
+                            choiceOptionsByIndex[qIdx] = options
+                            correctChoiceIndexByIndex[qIdx] = options.indexOf(tmpl.romaji)
+                        }
+                    } else if (word != null) {
+                        if (style == ReviewDrillStyle.PICK_CHAR) {
+                            val distractors = allWords.filter { it.word != word.word }
+                                .distinctBy { it.word }
+                                .shuffled()
+                                .take(3)
+                                .map { it.word }
+                            val options = (distractors + word.word).shuffled()
+                            choiceOptionsByIndex[qIdx] = options
+                            correctChoiceIndexByIndex[qIdx] = options.indexOf(word.word)
+                        } else {
+                            val distractors = allWords.filter { it.meaningVi != word.meaningVi }
+                                .distinctBy { it.meaningVi }
+                                .shuffled()
+                                .take(3)
+                                .map { it.meaningVi }
+                            val options = (distractors + word.meaningVi).shuffled()
+                            choiceOptionsByIndex[qIdx] = options
+                            correctChoiceIndexByIndex[qIdx] = options.indexOf(word.meaningVi)
+                        }
+                    }
+                }
+            }
+
             _uiState.update {
                 ReviewUiState(
                     isLoading = false,
                     settings = settings,
                     questions = questions,
+                    drillStyles = drillStyles,
+                    choiceOptionsByIndex = choiceOptionsByIndex,
+                    correctChoiceIndexByIndex = correctChoiceIndexByIndex,
                     currentIndex = 0,
                     dueCardsCountAtStart = dueCardsCount,
                     wordSlots = initialSlots,
@@ -589,6 +678,7 @@ class ReviewViewModel(
                     correctionTemplate = null,
                     mustRewriteAfterError = false,
                     showFallbackRomajiInListenMode = false,
+                    selectedChoiceIndex = null,
                     feedbackMessage = null,
                     isFeedbackError = false
                 )
@@ -607,6 +697,63 @@ class ReviewViewModel(
                 )
             }
         }
+    }
+
+    fun toggleSessionFilter() {
+        _uiState.update { state ->
+            val next = if (state.sessionFilter == ReviewSessionFilter.MIXED) {
+                ReviewSessionFilter.WRITE_ONLY
+            } else {
+                ReviewSessionFilter.MIXED
+            }
+            state.copy(sessionFilter = next, selectedChoiceIndex = null, feedbackMessage = null)
+        }
+    }
+
+    fun submitChoiceAnswer(optionIndex: Int) {
+        val state = _uiState.value
+        if (state.selectedChoiceIndex != null) return
+        val q = state.currentQuestion ?: return
+        val isCorrect = optionIndex == state.currentCorrectChoiceIndex
+        val score = if (isCorrect) 95 else 50
+
+        q.targetTemplate?.let {
+            updateSrsForChar(it, score = score, passedFirstAttempt = isCorrect)
+            audioProvider.speak(it.char, it.romaji)
+        }
+        q.targetWord?.let {
+            updateSrsForWord(it, score = score, passedFirstAttempt = isCorrect)
+            audioProvider.speak(it.word, it.romaji)
+        }
+
+        _uiState.update {
+            it.copy(
+                selectedChoiceIndex = optionIndex,
+                feedbackMessage = if (isCorrect) "✓ Chính xác!" else "✗ Chưa đúng — xem đáp án đúng bên trên.",
+                isFeedbackError = !isCorrect
+            )
+        }
+
+        if (isCorrect) {
+            autoAdvanceJob?.cancel()
+            autoAdvanceJob = viewModelScope.launch {
+                delay(state.settings.autoAdvanceDelayMs.coerceIn(450L, 1000L))
+                advanceToNextQuestion(score = 95, passedFirstTry = true)
+            }
+        }
+    }
+
+    fun continueAfterWrongChoice() {
+        autoAdvanceJob?.cancel()
+        advanceToNextQuestion(score = 50, passedFirstTry = false)
+    }
+
+    fun skipCurrentQuestion() {
+        autoAdvanceJob?.cancel()
+        val q = _uiState.value.currentQuestion ?: return
+        q.targetTemplate?.let { updateSrsForChar(it, score = 50, passedFirstAttempt = false) }
+        q.targetWord?.let { updateSrsForWord(it, score = 50, passedFirstAttempt = false) }
+        advanceToNextQuestion(score = 50, passedFirstTry = false)
     }
 
     private fun updateSrsForChar(

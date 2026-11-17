@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import vn.kana.app.widget.KanaDailyWidgetProvider
 import vn.kana.recognizer.StrictnessLevel
 import java.time.LocalDate
 
@@ -140,6 +141,7 @@ class UserSettingsRepository(
 
     suspend fun recordStudyActivityToday() {
         val today = LocalDate.now().toEpochDay()
+        var updatedStreak = 1
         appContext.dataStore.edit { prefs ->
             val lastDay = prefs[Keys.LAST_STUDY_EPOCH_DAY] ?: -1L
             val currentStreak = prefs[Keys.STREAK_DAYS] ?: 0
@@ -148,9 +150,11 @@ class UserSettingsRepository(
                 lastDay == today - 1L -> currentStreak + 1
                 else -> 1
             }
+            updatedStreak = nextStreak
             prefs[Keys.STREAK_DAYS] = nextStreak
             prefs[Keys.LAST_STUDY_EPOCH_DAY] = today
         }
+        KanaDailyWidgetProvider.notifyWidgetDataChanged(appContext, updatedStreak)
     }
 
     suspend fun markDailyTipSeenToday() {

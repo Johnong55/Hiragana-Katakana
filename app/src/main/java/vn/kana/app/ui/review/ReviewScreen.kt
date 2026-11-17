@@ -114,14 +114,18 @@ fun ReviewScreen(
                     .padding(horizontal = 10.dp, vertical = 6.dp)
             )
             Text(
-                text = "ÔN TẬP SRS (${uiState.currentIndex + 1}/${uiState.questions.size})",
+                text = "ÔN TẬP (${uiState.currentIndex + 1}/${uiState.questions.size})",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                text = "Đúng: ${uiState.firstAttemptCorrectCount}",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = uiState.sessionFilter.labelVi,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                    .clickable(onClick = viewModel::toggleSessionFilter)
+                    .padding(horizontal = 8.dp, vertical = 5.dp)
             )
         }
 
@@ -149,40 +153,54 @@ fun ReviewScreen(
                             else -> "Hiragana"
                         }
                         Text(
-                            text = "$scriptBadge • ${q.type.labelVi}",
+                            text = "$scriptBadge • ${uiState.currentDrillStyle.labelVi}",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        val title = when (q.type) {
-                            QuizQuestionType.ROMAJI_TO_KANA -> {
-                                val t = q.targetTemplate
-                                if (uiState.showingCorrectionAnimation) {
-                                    "Đáp án: ${t?.char} (${t?.romaji})"
-                                } else {
-                                    "Viết chữ Kana có âm: \"${t?.romaji}\""
+                        val title = when (uiState.currentDrillStyle) {
+                            ReviewDrillStyle.PICK_CHAR -> {
+                                q.targetTemplate?.let { "Chọn đúng chữ cho âm: \"${it.romaji}\"" }
+                                    ?: q.targetWord?.let { "Chọn từ có nghĩa: \"${it.meaningVi}\"" }
+                                    ?: ""
+                            }
+
+                            ReviewDrillStyle.PICK_READING -> {
+                                q.targetTemplate?.let { "Chữ 「${it.char}」 đọc là gì?" }
+                                    ?: q.targetWord?.let { "Từ 「${it.word}」 có nghĩa là gì?" }
+                                    ?: ""
+                            }
+
+                            ReviewDrillStyle.WRITE -> when (q.type) {
+                                QuizQuestionType.ROMAJI_TO_KANA -> {
+                                    val t = q.targetTemplate
+                                    if (uiState.showingCorrectionAnimation) {
+                                        "Đáp án: ${t?.char} (${t?.romaji})"
+                                    } else {
+                                        "Viết chữ Kana có âm: \"${t?.romaji}\""
+                                    }
                                 }
-                            }
 
-                            QuizQuestionType.LISTEN_TO_KANA -> {
-                                val t = q.targetTemplate
-                                when {
-                                    uiState.showingCorrectionAnimation -> "Đáp án: ${t?.char} (${t?.romaji})"
-                                    uiState.showFallbackRomajiInListenMode -> "Nghe & viết chữ Kana (${t?.romaji})"
-                                    else -> "Nghe phát âm & viết chữ Kana"
+                                QuizQuestionType.LISTEN_TO_KANA -> {
+                                    val t = q.targetTemplate
+                                    when {
+                                        uiState.showingCorrectionAnimation -> "Đáp án: ${t?.char} (${t?.romaji})"
+                                        uiState.showFallbackRomajiInListenMode -> "Nghe & viết chữ Kana (${t?.romaji})"
+                                        else -> "Nghe phát âm & viết chữ Kana"
+                                    }
                                 }
-                            }
 
-                            QuizQuestionType.MEANING_ROMAJI_TO_WORD -> {
-                                val w = q.targetWord
-                                "${w?.meaningVi} • Romaji: ${w?.romaji}"
-                            }
+                                QuizQuestionType.MEANING_ROMAJI_TO_WORD -> {
+                                    val w = q.targetWord
+                                    "${w?.meaningVi} • Romaji: ${w?.romaji}"
+                                }
 
-                            QuizQuestionType.LISTEN_TO_WORD -> {
-                                val w = q.targetWord
-                                when {
-                                    uiState.showingCorrectionAnimation -> "Đáp án: ${w?.word} (${w?.romaji})"
-                                    uiState.showFallbackRomajiInListenMode -> "${w?.meaningVi} (${w?.romaji})"
-                                    else -> "Nghe phát âm & viết từ: \"${w?.meaningVi}\""
+                                QuizQuestionType.LISTEN_TO_WORD -> {
+                                    val w = q.targetWord
+                                    when {
+                                        uiState.showingCorrectionAnimation -> "Đáp án: ${w?.word} (${w?.romaji})"
+                                        uiState.showFallbackRomajiInListenMode -> "${w?.meaningVi} (${w?.romaji})"
+                                        else -> "Nghe phát âm & viết từ: \"${w?.meaningVi}\""
+                                    }
                                 }
                             }
                         }
@@ -216,7 +234,7 @@ fun ReviewScreen(
                     )
                 }
 
-                if (uiState.isMultiBoxMode) {
+                if (uiState.isMultiBoxMode && uiState.currentDrillStyle == ReviewDrillStyle.WRITE) {
                     GenkoYoshiWordBar(
                         slots = uiState.wordSlots,
                         activeSlotIndex = uiState.activeSlotIndex,
@@ -244,86 +262,154 @@ fun ReviewScreen(
             )
         }
 
-        // Vùng Canvas 1:1 trung tâm
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-        ) {
-            if (uiState.showingCorrectionAnimation) {
-                KanaStrokeAnimatorCanvas(
-                    strokes = correctionStrokes,
-                    activeStrokeIndex = animStrokeIdx,
-                    activeStrokeProgress = animStrokeProgress,
-                    showGhostStrokes = true,
-                    showStrokeNumbers = true,
-                    showDirectionArrows = true,
-                    modifier = Modifier.fillMaxSize()
-                )
-            } else {
-                val activeStrokes = if (uiState.isMultiBoxMode) {
-                    uiState.wordSlots.getOrNull(uiState.activeSlotIndex)?.userStrokes.orEmpty()
-                } else {
-                    uiState.singleCharStrokes
+        if (uiState.currentDrillStyle != ReviewDrillStyle.WRITE) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                uiState.currentChoiceOptions.forEachIndexed { idx, optText ->
+                    val chosen = uiState.selectedChoiceIndex
+                    val isChosen = chosen == idx
+                    val isCorrect = idx == uiState.currentCorrectChoiceIndex
+                    val borderColor = when {
+                        chosen == null -> MaterialTheme.colorScheme.outline
+                        isCorrect -> MaterialTheme.colorScheme.primary
+                        isChosen -> MaterialTheme.colorScheme.error
+                        else -> MaterialTheme.colorScheme.outline
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                width = if (chosen != null && (isCorrect || isChosen)) 2.dp else 1.dp,
+                                color = borderColor
+                            )
+                            .background(MaterialTheme.colorScheme.surface)
+                            .clickable(enabled = chosen == null) {
+                                viewModel.submitChoiceAnswer(idx)
+                                if (isCorrect) {
+                                    localView.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                                } else {
+                                    localView.performHapticFeedback(HapticFeedbackConstants.REJECT)
+                                    vibrateReviewError(context)
+                                }
+                            }
+                            .padding(horizontal = 14.dp, vertical = 14.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "${('A' + idx)}. $optText",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        if (chosen != null && isCorrect) {
+                            Text("✓", color = MaterialTheme.colorScheme.primary)
+                        } else if (chosen != null && isChosen) {
+                            Text("✗", color = MaterialTheme.colorScheme.error)
+                        }
+                    }
                 }
+            }
 
-                KanaDrawingCanvas(
-                    userStrokes = activeStrokes,
-                    onStrokeCompleted = viewModel::onStrokeCompleted,
-                    onStrokeActivity = viewModel::onUserCanvasActivity,
-                    showGhostTemplate = false,
-                    showTemplateComparison = false,
-                    nextHintStrokeIndex = null,
-                    shakeTrigger = uiState.shakeTrigger,
-                    successOverlayText = uiState.successOverlayText,
-                    enabled = uiState.successOverlayText == null,
-                    modifier = Modifier.fillMaxSize()
+            if (uiState.selectedChoiceIndex != null && uiState.selectedChoiceIndex != uiState.currentCorrectChoiceIndex) {
+                ReviewActionButton(
+                    text = "Tiếp theo →",
+                    filled = true,
+                    onClick = viewModel::continueAfterWrongChoice,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
-        }
-
-        // Cụm nút hành động dưới cùng
-        if (uiState.showingCorrectionAnimation) {
-            ReviewActionButton(
-                text = "Đã xem đáp án • Viết lại 1 lần",
-                filled = true,
-                onClick = viewModel::dismissCorrectionAndStartRewrite,
-                modifier = Modifier.fillMaxWidth()
-            )
         } else {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            // Vùng Canvas 1:1 trung tâm
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
             ) {
+                if (uiState.showingCorrectionAnimation) {
+                    KanaStrokeAnimatorCanvas(
+                        strokes = correctionStrokes,
+                        activeStrokeIndex = animStrokeIdx,
+                        activeStrokeProgress = animStrokeProgress,
+                        showGhostStrokes = true,
+                        showStrokeNumbers = true,
+                        showDirectionArrows = true,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    val activeStrokes = if (uiState.isMultiBoxMode) {
+                        uiState.wordSlots.getOrNull(uiState.activeSlotIndex)?.userStrokes.orEmpty()
+                    } else {
+                        uiState.singleCharStrokes
+                    }
+
+                    KanaDrawingCanvas(
+                        userStrokes = activeStrokes,
+                        onStrokeCompleted = viewModel::onStrokeCompleted,
+                        onStrokeActivity = viewModel::onUserCanvasActivity,
+                        showGhostTemplate = false,
+                        showTemplateComparison = false,
+                        nextHintStrokeIndex = null,
+                        shakeTrigger = uiState.shakeTrigger,
+                        successOverlayText = uiState.successOverlayText,
+                        enabled = uiState.successOverlayText == null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
+
+            // Cụm nút hành động dưới cùng
+            if (uiState.showingCorrectionAnimation) {
                 ReviewActionButton(
-                    text = "Hoàn tác nét cuối",
-                    filled = false,
-                    onClick = viewModel::undoLastStroke,
-                    modifier = Modifier.weight(1f)
-                )
-                ReviewActionButton(
-                    text = "Xoá hết",
-                    filled = false,
-                    onClick = viewModel::clearCanvas,
-                    modifier = Modifier.weight(0.75f)
-                )
-                ReviewActionButton(
-                    text = "Kiểm tra",
+                    text = "Đã xem đáp án • Viết lại 1 lần",
                     filled = true,
-                    onClick = {
-                        if (uiState.successOverlayText == null) {
-                            val passed = viewModel.checkCurrentSubmission()
-                            if (passed) {
-                                localView.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
-                            } else {
-                                localView.performHapticFeedback(HapticFeedbackConstants.REJECT)
-                                vibrateReviewError(context)
-                            }
-                        }
-                    },
-                    modifier = Modifier.weight(1f)
+                    onClick = viewModel::dismissCorrectionAndStartRewrite,
+                    modifier = Modifier.fillMaxWidth()
                 )
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    ReviewActionButton(
+                        text = "Hoàn tác",
+                        filled = false,
+                        onClick = viewModel::undoLastStroke,
+                        modifier = Modifier.weight(0.9f)
+                    )
+                    ReviewActionButton(
+                        text = "Xoá",
+                        filled = false,
+                        onClick = viewModel::clearCanvas,
+                        modifier = Modifier.weight(0.6f)
+                    )
+                    ReviewActionButton(
+                        text = "Bỏ qua",
+                        filled = false,
+                        onClick = viewModel::skipCurrentQuestion,
+                        modifier = Modifier.weight(0.75f)
+                    )
+                    ReviewActionButton(
+                        text = "Kiểm tra",
+                        filled = true,
+                        onClick = {
+                            if (uiState.successOverlayText == null) {
+                                val passed = viewModel.checkCurrentSubmission()
+                                if (passed) {
+                                    localView.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                                } else {
+                                    localView.performHapticFeedback(HapticFeedbackConstants.REJECT)
+                                    vibrateReviewError(context)
+                                }
+                            }
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
         }
     }
