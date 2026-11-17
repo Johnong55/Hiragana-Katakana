@@ -1,5 +1,11 @@
 package vn.kana.app.ui.practice
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -32,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -619,11 +626,32 @@ private fun QuickFlashcardView(
         }
 
         val card = deckQueue.first()
+        val animatedOffsetX by animateFloatAsState(
+            targetValue = dragOffsetX,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessMediumLow
+            ),
+            label = "card_drag"
+        )
+        val cardScale by animateFloatAsState(
+            targetValue = if (isFlipped) 1.02f else 1.0f,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessMedium
+            ),
+            label = "card_flip_scale"
+        )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .offset { IntOffset(dragOffsetX.roundToInt(), 0) }
+                .offset { IntOffset(animatedOffsetX.roundToInt(), 0) }
+                .graphicsLayer {
+                    rotationZ = (animatedOffsetX / 35f).coerceIn(-10f, 10f)
+                    scaleX = cardScale
+                    scaleY = cardScale
+                }
                 .border(2.dp, MaterialTheme.colorScheme.outline)
                 .background(MaterialTheme.colorScheme.surface)
                 .pointerInput(card.id) {

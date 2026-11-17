@@ -5,9 +5,12 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -942,12 +945,21 @@ private fun SCurveInfographicRoadMap(
             val nodeX = (xr * widthPx) - with(density) { (nodeSizeDp / 2).toPx() }
             val nodeY = (yr * heightPx) - with(density) { (nodeSizeDp / 2).toPx() }
             val isSelected = stage.stageNumber == selectedStageNumber
+            val nodeScale by animateFloatAsState(
+                targetValue = if (isSelected) 1.14f else 1.0f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMediumLow
+                ),
+                label = "station_bounce_${stage.stageNumber}"
+            )
 
             // Nút tròn Trạm dừng nằm ngay trên mặt đường
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .offset { IntOffset(nodeX.roundToInt(), nodeY.roundToInt()) }
+                    .scale(nodeScale)
                     .size(nodeSizeDp)
                     .clip(CircleShape)
                     .background(

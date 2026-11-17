@@ -3,6 +3,8 @@ package vn.kana.app.ui.components
 import android.graphics.Paint
 import android.graphics.Typeface
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -319,19 +321,36 @@ fun KanaDrawingCanvas(
             }
         }
 
-        // 7. Hiệu ứng thông báo ĐÚNG (✓ CHÍNH XÁC!) nổi bật giữa ô vẽ khi người dùng vượt qua
+        // 7. Hiệu ứng thông báo ĐÚNG (✓ HAY BẠN!) nảy đàn hồi dễ thương + lấp lánh
         if (successOverlayText != null) {
-            val scaleAnim = remember(successOverlayText) { Animatable(0.72f) }
+            val scaleAnim = remember(successOverlayText) { Animatable(0.55f) }
+            val sparkleLift = remember(successOverlayText) { Animatable(0f) }
             LaunchedEffect(successOverlayText) {
-                scaleAnim.animateTo(1.0f, animationSpec = tween(durationMillis = 160))
+                scaleAnim.animateTo(
+                    targetValue = 1.0f,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessMediumLow
+                    )
+                )
+            }
+            LaunchedEffect(successOverlayText) {
+                sparkleLift.animateTo(1f, animationSpec = tween(durationMillis = 700))
             }
 
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(squareSide)
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f))
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.78f))
             ) {
+                Text(
+                    text = "✨  🌸  ⭐  ✨",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .offset(y = (-68 - (sparkleLift.value * 16f)).dp)
+                        .scale(0.85f + sparkleLift.value * 0.25f)
+                )
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -342,7 +361,7 @@ fun KanaDrawingCanvas(
                         .padding(horizontal = 28.dp, vertical = 18.dp)
                 ) {
                     Text(
-                        text = "✓ HAY BẠN!",
+                        text = "✓ HAY BẠN! 🌸",
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )

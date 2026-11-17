@@ -4,6 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -135,7 +143,16 @@ class MainActivity : ComponentActivity() {
                                 .weight(1f)
                                 .fillMaxWidth()
                         ) {
-                            when (destination) {
+                            AnimatedContent(
+                                targetState = destination,
+                                transitionSpec = {
+                                    (fadeIn(animationSpec = tween(220)) +
+                                        slideInVertically(animationSpec = tween(220)) { it / 32 })
+                                        .togetherWith(fadeOut(animationSpec = tween(150)))
+                                },
+                                label = "screen_transition"
+                            ) { activeDestination ->
+                                when (activeDestination) {
                                 AppDestination.HOME -> {
                                     HomeScreen(
                                         viewModel = mapViewModel,
@@ -484,10 +501,15 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             }
+                            }
                         }
 
-                        // Thanh điều hướng 4 Tab cố định dưới đáy màn hình (gọn gàng, không bao giờ bấm nhầm)
-                        if (destination.isMainTab) {
+                        // Thanh điều hướng 4 Tab cố định dưới đáy màn hình (trượt mượt mà)
+                        AnimatedVisibility(
+                            visible = destination.isMainTab,
+                            enter = slideInVertically(animationSpec = tween(220)) { it } + fadeIn(tween(200)),
+                            exit = slideOutVertically(animationSpec = tween(160)) { it } + fadeOut(tween(140))
+                        ) {
                             MainBottomNavigationBar(
                                 currentDestination = destination,
                                 onSelectTab = { tab ->
