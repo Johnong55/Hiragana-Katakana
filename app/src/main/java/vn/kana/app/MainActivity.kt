@@ -42,6 +42,7 @@ import vn.kana.app.ui.lesson.LessonViewModel
 import vn.kana.app.ui.license.LicenseScreen
 import vn.kana.app.ui.listening.ListeningQuizScreen
 import vn.kana.app.ui.map.LessonMapViewModel
+import vn.kana.app.ui.reading.ReadingPracticeScreen
 import vn.kana.app.ui.reference.KanaReferenceScreen
 import vn.kana.app.ui.review.ReviewScreen
 import vn.kana.app.ui.review.ReviewViewModel
@@ -62,6 +63,7 @@ private enum class AppDestination(val isMainTab: Boolean, val tabLabelVi: String
     REFERENCE_TABLE(isMainTab = false),
     TIPS_MAGAZINE(isMainTab = false),
     LISTENING_QUIZ(isMainTab = false),
+    READING_PRACTICE(isMainTab = false),
     PROGRESS_STATS(isMainTab = false),
     DEBUG_RECOGNIZER(isMainTab = false),
     LICENSES(isMainTab = false)
@@ -200,6 +202,10 @@ class MainActivity : ComponentActivity() {
                                         onOpenListeningQuiz = {
                                             returnTab = AppDestination.ROADMAP_N5
                                             destination = AppDestination.LISTENING_QUIZ
+                                        },
+                                        onOpenReadingPractice = {
+                                            returnTab = AppDestination.ROADMAP_N5
+                                            destination = AppDestination.READING_PRACTICE
                                         },
                                         onOpenProgressStats = {
                                             returnTab = AppDestination.ROADMAP_N5
@@ -371,6 +377,14 @@ class MainActivity : ComponentActivity() {
                                         n5KanjiCharacters = mapState.n5KanjiCharacters,
                                         autoAdvanceDelayMs = mapState.settings.autoAdvanceDelayMs,
                                         onSpeak = { text, romaji -> mapViewModel.speak(text, romaji) },
+                                        onRecordStudyActivity = { mapViewModel.recordStudyActivityToday() },
+                                        onBack = { destination = returnTab }
+                                    )
+                                }
+
+                                AppDestination.READING_PRACTICE -> {
+                                    ReadingPracticeScreen(
+                                        onSpeak = { text -> mapViewModel.speak(text, null) },
                                         onRecordStudyActivity = { mapViewModel.recordStudyActivityToday() },
                                         onBack = { destination = returnTab }
                                     )

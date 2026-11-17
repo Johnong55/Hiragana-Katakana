@@ -118,6 +118,7 @@ fun N5RoadmapScreen(
     onOpenTabWithFilter: (CurriculumTab) -> Unit,
     onOpenTipsMagazine: () -> Unit = {},
     onOpenListeningQuiz: () -> Unit = {},
+    onOpenReadingPractice: () -> Unit = {},
     onOpenProgressStats: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -545,7 +546,7 @@ fun N5RoadmapScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "LỘ TRÌNH JLPT N5",
+                text = "LỘ TRÌNH N5",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 maxLines = 1,
@@ -555,6 +556,19 @@ fun N5RoadmapScreen(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Box(
+                    modifier = Modifier
+                        .border(1.dp, MaterialTheme.colorScheme.outline)
+                        .clickable { onOpenReadingPractice() }
+                        .padding(horizontal = 7.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "📖 Đọc",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = 1
+                    )
+                }
                 Box(
                     modifier = Modifier
                         .border(1.dp, MaterialTheme.colorScheme.outline)
