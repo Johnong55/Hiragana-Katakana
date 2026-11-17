@@ -3,6 +3,7 @@ package vn.kana.app.ui.custom
 import android.Manifest
 import android.content.pm.PackageManager
 import android.view.HapticFeedbackConstants
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -122,6 +123,14 @@ fun CustomStudyScreen(
     }
     var stage by remember { mutableStateOf(CustomStudyStage.SELECT_ROWS) }
     var writingWordIndex by remember { mutableIntStateOf(0) }
+
+    BackHandler(enabled = stage != CustomStudyStage.SELECT_ROWS) {
+        stage = when (stage) {
+            CustomStudyStage.WRITING_PRACTICE -> CustomStudyStage.VOCAB_AND_PRONUNCIATION
+            CustomStudyStage.VOCAB_AND_PRONUNCIATION -> CustomStudyStage.SELECT_ROWS
+            CustomStudyStage.SELECT_ROWS -> CustomStudyStage.SELECT_ROWS
+        }
+    }
 
     val selectedChars = remember(checkedRowIds, uiState.allLessons) {
         uiState.allLessons
@@ -809,6 +818,7 @@ private fun CustomWordWritingPracticeView(
                             successOverlayText = "${word.word} (${word.meaningVi})"
                             delay(750L)
                             successOverlayText = null
+                            onNextWord()
                         }
                     } else {
                         isFeedbackError = true

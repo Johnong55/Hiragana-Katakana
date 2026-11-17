@@ -1,6 +1,7 @@
 package vn.kana.app.ui.roadmap
 
 import android.view.HapticFeedbackConstants
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -270,65 +271,89 @@ fun N5RoadmapScreen(
     }
     var overlayMode by remember { mutableStateOf<RoadmapOverlayMode>(RoadmapOverlayMode.None) }
 
-    // Tạo bộ câu hỏi Kiểm tra Mở khoá cho từng Chặng (Stage 01..08)
+    BackHandler(enabled = overlayMode != RoadmapOverlayMode.None) {
+        overlayMode = RoadmapOverlayMode.None
+    }
+
+    // Tạo bộ câu hỏi Kiểm tra Mở khoá ĐẦY ĐỦ cho từng Chặng (kiểm tra toàn bộ chữ/kiến thức của Chặng)
     fun buildCheckpointQuestions(stage: RoadmapStageNode): List<CheckpointQuestion> {
-        val sampleChars: List<Pair<String, String>> = when (stage.type) {
-            RoadmapStageType.HIRAGANA_BASIC -> listOf(
-                "あ" to "Viết chữ Hiragana 'a' (あ)",
-                "か" to "Viết chữ Hiragana 'ka' (か)",
-                "さ" to "Viết chữ Hiragana 'sa' (さ)",
-                "ん" to "Viết chữ Hiragana 'n' (ん)"
-            )
-            RoadmapStageType.KATAKANA_BASIC -> listOf(
-                "ア" to "Viết chữ Katakana 'a' (ア)",
-                "カ" to "Viết chữ Katakana 'ka' (カ)",
-                "テレビ".take(1) to "Viết chữ Katakana 'te' (テ) trong テレビ",
-                "ン" to "Viết chữ Katakana 'n' (ン)"
-            )
-            RoadmapStageType.DAKUTEN_AND_YOON -> listOf(
-                "が" to "Viết chữ âm đục 'ga' (が)",
-                "ぱ" to "Viết chữ âm nửa đục 'pa' (ぱ)",
-                "ゃ" to "Viết chữ nhỏ 'ya' (ゃ)",
-                "ー" to "Viết dấu trường âm (ー)"
-            )
-            RoadmapStageType.N5_VOCAB_SENTENCES -> listOf(
-                "あ" to "Từ 'あめ' (cơn mưa): Viết chữ đầu 'a'",
-                "い" to "Từ 'いぬ' (con chó): Viết chữ đầu 'i'",
-                "う" to "Từ 'うみ' (biển): Viết chữ đầu 'u'",
-                "え" to "Từ 'えき' (nhà ga): Viết chữ đầu 'e'"
-            )
-            RoadmapStageType.N5_GRAMMAR_1 -> listOf(
-                "は" to "わたし [ ? ] がくせい です (Trợ từ chủ đề 'wa')",
-                "の" to "わたし [ ? ] ほん です (Trợ từ sở hữu 'no')",
-                "を" to "みず [ ? ] のみます (Trợ từ tân ngữ 'wo')",
-                "で" to "でんしゃ [ ? ] いきます (Trợ từ phương tiện 'de')"
-            )
-            RoadmapStageType.N5_KANJI_1 -> listOf(
-                "一" to "Viết chữ Kanji NHẤT - số 1 (ichi)",
-                "日" to "Viết chữ Kanji NHẬT - mặt trời/ngày (nichi/hi)",
-                "人" to "Viết chữ Kanji NHÂN - con người (jin/hito)",
-                "本" to "Viết chữ Kanji BẢN - sách/Nhật Bản (hon)"
-            )
-            RoadmapStageType.N5_GRAMMAR_2 -> listOf(
-                "か" to "なんじ です [ ? ] (Trợ từ cuối câu hỏi)",
-                "と" to "ともだち [ ? ] いきます (Trợ từ 'cùng với')",
-                "も" to "わたし [ ? ] がくせい です (Trợ từ 'cũng')",
-                "て" to "これ を み [ ? ] ください (Động từ thể て)"
-            )
-            RoadmapStageType.N5_KANJI_2_FINAL -> listOf(
-                "上" to "Viết chữ Kanji THƯỢNG - phía trên (ue)",
-                "下" to "Viết chữ Kanji HẠ - phía dưới (shita)",
-                "大" to "Viết chữ Kanji ĐẠI - to lớn (ookii)",
-                "行" to "Viết chữ Kanji HÀNH - đi (iku)"
-            )
-        }
-        return sampleChars.mapNotNull { (ch, prompt) ->
-            val tmpl = byChar[ch] ?: return@mapNotNull null
-            CheckpointQuestion(
-                promptVi = prompt,
-                subPromptVi = "Số nét chuẩn: ${tmpl.strokeCount} nét • Phiên âm: ${tmpl.romaji}",
-                targetTemplate = tmpl
-            )
+        return when (stage.type) {
+            RoadmapStageType.HIRAGANA_BASIC -> {
+                uiState.basicHiragana.shuffled().map { tmpl ->
+                    CheckpointQuestion(
+                        promptVi = "Viết chữ Hiragana '${tmpl.romaji}'",
+                        subPromptVi = "Hàng ${tmpl.row} • ${tmpl.strokeCount} nét chuẩn",
+                        targetTemplate = tmpl
+                    )
+                }
+            }
+            RoadmapStageType.KATAKANA_BASIC -> {
+                uiState.basicKatakana.shuffled().map { tmpl ->
+                    CheckpointQuestion(
+                        promptVi = "Viết chữ Katakana '${tmpl.romaji}'",
+                        subPromptVi = "Hàng ${tmpl.row} • ${tmpl.strokeCount} nét chuẩn",
+                        targetTemplate = tmpl
+                    )
+                }
+            }
+            RoadmapStageType.DAKUTEN_AND_YOON -> {
+                uiState.extendedCharacters.shuffled().map { tmpl ->
+                    CheckpointQuestion(
+                        promptVi = "Viết chữ '${tmpl.romaji}' (${tmpl.row})",
+                        subPromptVi = "Số nét chuẩn: ${tmpl.strokeCount} nét",
+                        targetTemplate = tmpl
+                    )
+                }
+            }
+            RoadmapStageType.N5_VOCAB_SENTENCES -> {
+                val allWords = uiState.wordsByChar.values.flatten().distinctBy { it.word }.shuffled()
+                allWords.take(20).mapNotNull { w ->
+                    val tmpl = byChar[w.introduces] ?: return@mapNotNull null
+                    CheckpointQuestion(
+                        promptVi = "Từ '${w.romaji}' (${w.meaningVi}): Viết chữ trọng tâm '${tmpl.romaji}'",
+                        subPromptVi = "Câu mẫu: ${w.exampleVi} • ${tmpl.strokeCount} nét",
+                        targetTemplate = tmpl
+                    )
+                }
+            }
+            RoadmapStageType.N5_GRAMMAR_1 -> {
+                N5GrammarCatalog.stage5Points.mapNotNull { pt ->
+                    val tmpl = byChar[pt.quizAnswerChar] ?: return@mapNotNull null
+                    CheckpointQuestion(
+                        promptVi = "${pt.quizPromptVi}\n${pt.quizSentenceWithBlank}",
+                        subPromptVi = "Số nét chuẩn: ${tmpl.strokeCount} nét • Phiên âm: ${pt.quizAnswerRomaji}",
+                        targetTemplate = tmpl
+                    )
+                }
+            }
+            RoadmapStageType.N5_KANJI_1 -> {
+                uiState.n5KanjiCharacters.take(38).shuffled().map { tmpl ->
+                    CheckpointQuestion(
+                        promptVi = "Viết chữ Kanji: ${tmpl.romaji}",
+                        subPromptVi = "${tmpl.row} • ${tmpl.strokeCount} nét chuẩn",
+                        targetTemplate = tmpl
+                    )
+                }
+            }
+            RoadmapStageType.N5_GRAMMAR_2 -> {
+                N5GrammarCatalog.stage7Points.mapNotNull { pt ->
+                    val tmpl = byChar[pt.quizAnswerChar] ?: return@mapNotNull null
+                    CheckpointQuestion(
+                        promptVi = "${pt.quizPromptVi}\n${pt.quizSentenceWithBlank}",
+                        subPromptVi = "Số nét chuẩn: ${tmpl.strokeCount} nét • Phiên âm: ${pt.quizAnswerRomaji}",
+                        targetTemplate = tmpl
+                    )
+                }
+            }
+            RoadmapStageType.N5_KANJI_2_FINAL -> {
+                uiState.n5KanjiCharacters.drop(38).shuffled().map { tmpl ->
+                    CheckpointQuestion(
+                        promptVi = "Viết chữ Kanji: ${tmpl.romaji}",
+                        subPromptVi = "${tmpl.row} • ${tmpl.strokeCount} nét chuẩn",
+                        targetTemplate = tmpl
+                    )
+                }
+            }
         }
     }
 

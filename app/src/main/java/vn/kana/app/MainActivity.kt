@@ -84,6 +84,7 @@ class MainActivity : ComponentActivity() {
             KanaTheme(darkTheme = useDarkTheme) {
                 // Đặt Lộ trình N5 làm Trang chủ mặc định khi mở app
                 var destination by rememberSaveable { mutableStateOf(AppDestination.ROADMAP_N5) }
+                var returnTab by rememberSaveable { mutableStateOf(AppDestination.ROADMAP_N5) }
                 var selectedRowName by rememberSaveable { mutableStateOf("あ行") }
                 var selectedScript by rememberSaveable { mutableStateOf("hiragana") }
                 var startLessonInTestOutMode by rememberSaveable { mutableStateOf(false) }
@@ -95,6 +96,8 @@ class MainActivity : ComponentActivity() {
                     destination = when (destination) {
                         AppDestination.DEBUG_RECOGNIZER,
                         AppDestination.LICENSES -> AppDestination.SETTINGS
+                        AppDestination.ACTIVE_LESSON,
+                        AppDestination.REFERENCE_TABLE -> returnTab
                         else -> AppDestination.ROADMAP_N5
                     }
                 }
@@ -119,6 +122,7 @@ class MainActivity : ComponentActivity() {
                                             destination = AppDestination.REVIEW
                                         },
                                         onStartRowLesson = { rowName, script ->
+                                            returnTab = AppDestination.HOME
                                             selectedRowName = rowName
                                             selectedScript = script
                                             startLessonInTestOutMode = false
@@ -133,10 +137,12 @@ class MainActivity : ComponentActivity() {
                                             destination = AppDestination.CUSTOM_STUDY
                                         },
                                         onOpenReference = { char ->
+                                            returnTab = AppDestination.HOME
                                             referenceInitialChar = char
                                             destination = AppDestination.REFERENCE_TABLE
                                         },
                                         onPracticeCharacter = { rowName, script, targetChar ->
+                                            returnTab = AppDestination.HOME
                                             selectedRowName = rowName
                                             selectedScript = script
                                             startLessonInTestOutMode = false
@@ -154,6 +160,7 @@ class MainActivity : ComponentActivity() {
                                     N5RoadmapScreen(
                                         viewModel = mapViewModel,
                                         onStartRowLesson = { rowName, script ->
+                                            returnTab = AppDestination.ROADMAP_N5
                                             selectedRowName = rowName
                                             selectedScript = script
                                             startLessonInTestOutMode = false
@@ -162,6 +169,7 @@ class MainActivity : ComponentActivity() {
                                             destination = AppDestination.ACTIVE_LESSON
                                         },
                                         onPracticeCharacter = { rowName, script, targetChar ->
+                                            returnTab = AppDestination.ROADMAP_N5
                                             selectedRowName = rowName
                                             selectedScript = script
                                             startLessonInTestOutMode = false
@@ -180,6 +188,7 @@ class MainActivity : ComponentActivity() {
                                     CustomStudyScreen(
                                         viewModel = mapViewModel,
                                         onStartRowLesson = { rowName, script ->
+                                            returnTab = AppDestination.CUSTOM_STUDY
                                             selectedRowName = rowName
                                             selectedScript = script
                                             startLessonInTestOutMode = false
@@ -188,7 +197,7 @@ class MainActivity : ComponentActivity() {
                                             destination = AppDestination.ACTIVE_LESSON
                                         },
                                         onBack = {
-                                            destination = AppDestination.HOME
+                                            destination = AppDestination.ROADMAP_N5
                                         }
                                     )
                                 }
@@ -211,7 +220,7 @@ class MainActivity : ComponentActivity() {
                                     LessonScreen(
                                         viewModel = lessonViewModel,
                                         onExitLesson = {
-                                            destination = AppDestination.ROADMAP_N5
+                                            destination = returnTab
                                         },
                                         onContinueNextRow = {
                                             // Tìm hàng tiếp theo ngay sau hàng vừa hoàn thành để học tiếp không bị lặp lại
@@ -252,7 +261,7 @@ class MainActivity : ComponentActivity() {
                                     ReviewScreen(
                                         viewModel = reviewViewModel,
                                         onExitReview = {
-                                            destination = AppDestination.HOME
+                                            destination = AppDestination.ROADMAP_N5
                                         }
                                     )
                                 }
@@ -270,7 +279,7 @@ class MainActivity : ComponentActivity() {
                                             destination = AppDestination.ACTIVE_LESSON
                                         },
                                         onBack = {
-                                            destination = AppDestination.HOME
+                                            destination = returnTab
                                         }
                                     )
                                 }
@@ -292,7 +301,7 @@ class MainActivity : ComponentActivity() {
                                             destination = AppDestination.LICENSES
                                         },
                                         onBack = {
-                                            destination = AppDestination.HOME
+                                            destination = returnTab
                                         }
                                     )
                                 }
