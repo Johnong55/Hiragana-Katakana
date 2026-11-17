@@ -496,17 +496,17 @@ internal val KANJI_N5_LAYOUT = listOf(
 internal fun masteryColors(level: MasteryLevel, isDark: Boolean): Pair<Color, Color> {
     return if (!isDark) {
         when (level) {
-            MasteryLevel.UNLEARNED -> Color(0xFFFFFFFF) to Color(0xFF757575)
-            MasteryLevel.LEARNING -> Color(0xFFE2E2E2) to Color(0xFF111111)
-            MasteryLevel.FAMILIAR -> Color(0xFF8C8C8C) to Color(0xFFFFFFFF)
-            MasteryLevel.MASTERED -> Color(0xFF111111) to Color(0xFFFFFFFF)
+            MasteryLevel.UNLEARNED -> Color(0xFFFBF7EC) to Color(0xFF7B634E)
+            MasteryLevel.LEARNING -> Color(0xFFEAE0C8) to Color(0xFF2C1E14)
+            MasteryLevel.FAMILIAR -> Color(0xFF8C6B4D) to Color(0xFFFBF7EC)
+            MasteryLevel.MASTERED -> Color(0xFF5C3A21) to Color(0xFFFBF7EC)
         }
     } else {
         when (level) {
-            MasteryLevel.UNLEARNED -> Color(0xFF161616) to Color(0xFF757575)
-            MasteryLevel.LEARNING -> Color(0xFF333333) to Color(0xFFF5F5F5)
-            MasteryLevel.FAMILIAR -> Color(0xFF757575) to Color(0xFF111111)
-            MasteryLevel.MASTERED -> Color(0xFFF5F5F5) to Color(0xFF111111)
+            MasteryLevel.UNLEARNED -> Color(0xFF282019) to Color(0xFFA6927A)
+            MasteryLevel.LEARNING -> Color(0xFF3D3127) to Color(0xFFEFE3CE)
+            MasteryLevel.FAMILIAR -> Color(0xFF8A6F52) to Color(0xFF1E1813)
+            MasteryLevel.MASTERED -> Color(0xFFD9B382) to Color(0xFF1E1813)
         }
     }
 }
