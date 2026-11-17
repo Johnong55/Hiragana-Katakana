@@ -46,6 +46,7 @@ import vn.kana.app.ui.reference.KanaReferenceScreen
 import vn.kana.app.ui.review.ReviewScreen
 import vn.kana.app.ui.review.ReviewViewModel
 import vn.kana.app.ui.roadmap.N5RoadmapScreen
+import vn.kana.app.ui.stats.ProgressStatsScreen
 import vn.kana.app.ui.tips.DailyTipMagazinePopup
 import vn.kana.app.ui.tips.TipsMagazineScreen
 import vn.kana.app.ui.settings.SettingsScreen
@@ -61,6 +62,7 @@ private enum class AppDestination(val isMainTab: Boolean, val tabLabelVi: String
     REFERENCE_TABLE(isMainTab = false),
     TIPS_MAGAZINE(isMainTab = false),
     LISTENING_QUIZ(isMainTab = false),
+    PROGRESS_STATS(isMainTab = false),
     DEBUG_RECOGNIZER(isMainTab = false),
     LICENSES(isMainTab = false)
 }
@@ -106,7 +108,8 @@ class MainActivity : ComponentActivity() {
                         AppDestination.ACTIVE_LESSON,
                         AppDestination.REFERENCE_TABLE,
                         AppDestination.TIPS_MAGAZINE,
-                        AppDestination.LISTENING_QUIZ -> returnTab
+                        AppDestination.LISTENING_QUIZ,
+                        AppDestination.PROGRESS_STATS -> returnTab
                         else -> AppDestination.ROADMAP_N5
                     }
                 }
@@ -197,6 +200,10 @@ class MainActivity : ComponentActivity() {
                                         onOpenListeningQuiz = {
                                             returnTab = AppDestination.ROADMAP_N5
                                             destination = AppDestination.LISTENING_QUIZ
+                                        },
+                                        onOpenProgressStats = {
+                                            returnTab = AppDestination.ROADMAP_N5
+                                            destination = AppDestination.PROGRESS_STATS
                                         }
                                     )
                                 }
@@ -365,6 +372,26 @@ class MainActivity : ComponentActivity() {
                                         autoAdvanceDelayMs = mapState.settings.autoAdvanceDelayMs,
                                         onSpeak = { text, romaji -> mapViewModel.speak(text, romaji) },
                                         onRecordStudyActivity = { mapViewModel.recordStudyActivityToday() },
+                                        onBack = { destination = returnTab }
+                                    )
+                                }
+
+                                AppDestination.PROGRESS_STATS -> {
+                                    ProgressStatsScreen(
+                                        uiState = mapState,
+                                        onPracticeCharacter = { rowName, script, targetChar ->
+                                            returnTab = AppDestination.PROGRESS_STATS
+                                            selectedRowName = rowName
+                                            selectedScript = script
+                                            startLessonInTestOutMode = false
+                                            lessonInitialFocusChar = targetChar
+                                            sessionCounter++
+                                            destination = AppDestination.ACTIVE_LESSON
+                                        },
+                                        onStartReview = {
+                                            sessionCounter++
+                                            destination = AppDestination.REVIEW
+                                        },
                                         onBack = { destination = returnTab }
                                     )
                                 }

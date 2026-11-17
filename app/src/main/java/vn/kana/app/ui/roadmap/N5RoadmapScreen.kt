@@ -118,6 +118,7 @@ fun N5RoadmapScreen(
     onOpenTabWithFilter: (CurriculumTab) -> Unit,
     onOpenTipsMagazine: () -> Unit = {},
     onOpenListeningQuiz: () -> Unit = {},
+    onOpenProgressStats: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -589,6 +590,31 @@ fun N5RoadmapScreen(
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
             }
+        }
+
+        // Thanh tóm tắt Streak & Tiến độ 1 dòng (chạm để xem chi tiết & chữ hay sai)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(1.dp, MaterialTheme.colorScheme.outline)
+                .background(MaterialTheme.colorScheme.surface)
+                .clickable { onOpenProgressStats() }
+                .padding(horizontal = 10.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "🔥 ${uiState.settings.streakDays} ngày  •  ✓ ${uiState.totalLearnedCount}/${uiState.allCurriculumCharacters.size} chữ  •  ↻ ${uiState.dueSrsCardsCount} ôn",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1
+            )
+            Text(
+                text = "Tiến độ →",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1
+            )
         }
 
         // 2. Bản đồ Con đường Uốn lượn Chữ S (S-Curve Winding Road Map 01 -> 08)
