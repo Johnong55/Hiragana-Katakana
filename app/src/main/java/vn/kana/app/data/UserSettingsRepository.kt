@@ -34,7 +34,8 @@ data class UserSettings(
     val unlockAllRows: Boolean = false,
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val streakDays: Int = 0,
-    val lastStudyEpochDay: Long = -1L
+    val lastStudyEpochDay: Long = -1L,
+    val lastTipEpochDay: Long = -1L
 )
 
 /**
@@ -52,6 +53,7 @@ class UserSettingsRepository(
         val THEME_MODE = stringPreferencesKey("theme_mode")
         val STREAK_DAYS = intPreferencesKey("streak_days")
         val LAST_STUDY_EPOCH_DAY = longPreferencesKey("last_study_epoch_day")
+        val LAST_TIP_EPOCH_DAY = longPreferencesKey("last_tip_epoch_day")
     }
 
     val settingsFlow: Flow<UserSettings> = appContext.dataStore.data.map { prefs ->
@@ -80,7 +82,8 @@ class UserSettingsRepository(
             unlockAllRows = prefs[Keys.UNLOCK_ALL_ROWS] ?: false,
             themeMode = themeMode,
             streakDays = effectiveStreak,
-            lastStudyEpochDay = lastEpochDay
+            lastStudyEpochDay = lastEpochDay,
+            lastTipEpochDay = prefs[Keys.LAST_TIP_EPOCH_DAY] ?: -1L
         )
     }
 
@@ -132,6 +135,13 @@ class UserSettingsRepository(
             }
             prefs[Keys.STREAK_DAYS] = nextStreak
             prefs[Keys.LAST_STUDY_EPOCH_DAY] = today
+        }
+    }
+
+    suspend fun markDailyTipSeenToday() {
+        val today = LocalDate.now().toEpochDay()
+        appContext.dataStore.edit { prefs ->
+            prefs[Keys.LAST_TIP_EPOCH_DAY] = today
         }
     }
 

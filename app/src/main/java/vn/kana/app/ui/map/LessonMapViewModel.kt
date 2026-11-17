@@ -302,6 +302,12 @@ class LessonMapViewModel(
         }
     }
 
+    fun markDailyTipSeenToday() {
+        viewModelScope.launch {
+            settingsRepository.markDailyTipSeenToday()
+        }
+    }
+
     fun markSingleCharacterPassed(tmpl: KanaStrokeTemplate, score: Int) {
         viewModelScope.launch {
             val now = System.currentTimeMillis()

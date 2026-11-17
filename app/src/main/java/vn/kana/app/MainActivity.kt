@@ -30,7 +30,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.time.LocalDate
 import vn.kana.app.data.ThemeMode
+import vn.kana.app.domain.DailyTipsCatalog
 import vn.kana.app.ui.custom.CustomStudyScreen
 import vn.kana.app.ui.debug.RecognizerDebugScreen
 import vn.kana.app.ui.debug.RecognizerDebugViewModel
@@ -43,6 +45,8 @@ import vn.kana.app.ui.reference.KanaReferenceScreen
 import vn.kana.app.ui.review.ReviewScreen
 import vn.kana.app.ui.review.ReviewViewModel
 import vn.kana.app.ui.roadmap.N5RoadmapScreen
+import vn.kana.app.ui.tips.DailyTipMagazinePopup
+import vn.kana.app.ui.tips.TipsMagazineScreen
 import vn.kana.app.ui.settings.SettingsScreen
 import vn.kana.app.ui.theme.KanaTheme
 
@@ -54,6 +58,7 @@ private enum class AppDestination(val isMainTab: Boolean, val tabLabelVi: String
     SETTINGS(isMainTab = true, tabLabelVi = "Cài đặt"),
     ACTIVE_LESSON(isMainTab = false),
     REFERENCE_TABLE(isMainTab = false),
+    TIPS_MAGAZINE(isMainTab = false),
     DEBUG_RECOGNIZER(isMainTab = false),
     LICENSES(isMainTab = false)
 }
@@ -97,7 +102,8 @@ class MainActivity : ComponentActivity() {
                         AppDestination.DEBUG_RECOGNIZER,
                         AppDestination.LICENSES -> AppDestination.SETTINGS
                         AppDestination.ACTIVE_LESSON,
-                        AppDestination.REFERENCE_TABLE -> returnTab
+                        AppDestination.REFERENCE_TABLE,
+                        AppDestination.TIPS_MAGAZINE -> returnTab
                         else -> AppDestination.ROADMAP_N5
                     }
                 }
@@ -180,6 +186,10 @@ class MainActivity : ComponentActivity() {
                                         onOpenTabWithFilter = { tab ->
                                             mapViewModel.selectTab(tab)
                                             destination = AppDestination.CUSTOM_STUDY
+                                        },
+                                        onOpenTipsMagazine = {
+                                            returnTab = AppDestination.ROADMAP_N5
+                                            destination = AppDestination.TIPS_MAGAZINE
                                         }
                                     )
                                 }
@@ -329,6 +339,15 @@ class MainActivity : ComponentActivity() {
                                         }
                                     )
                                 }
+
+                                AppDestination.TIPS_MAGAZINE -> {
+                                    val todayTip = DailyTipsCatalog.getTipForEpochDay(LocalDate.now().toEpochDay())
+                                    TipsMagazineScreen(
+                                        todayTip = todayTip,
+                                        onSpeak = { text -> mapViewModel.speak(text, null) },
+                                        onBack = { destination = returnTab }
+                                    )
+                                }
                             }
                         }
 
@@ -345,6 +364,23 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
+                }
+
+                val todayEpochDay = LocalDate.now().toEpochDay()
+                if (!mapState.isLoading && mapState.settings.lastTipEpochDay != todayEpochDay) {
+                    val todayTip = DailyTipsCatalog.getTipForEpochDay(todayEpochDay)
+                    DailyTipMagazinePopup(
+                        article = todayTip,
+                        onSpeak = { text -> mapViewModel.speak(text, null) },
+                        onReadMoreInMagazine = {
+                            mapViewModel.markDailyTipSeenToday()
+                            returnTab = destination.takeIf { it.isMainTab } ?: AppDestination.ROADMAP_N5
+                            destination = AppDestination.TIPS_MAGAZINE
+                        },
+                        onDismiss = {
+                            mapViewModel.markDailyTipSeenToday()
+                        }
+                    )
                 }
             }
         }

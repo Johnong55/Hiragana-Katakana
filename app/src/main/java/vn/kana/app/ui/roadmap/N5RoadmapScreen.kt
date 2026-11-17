@@ -116,6 +116,7 @@ fun N5RoadmapScreen(
         onStartRowLesson(r, s)
     },
     onOpenTabWithFilter: (CurriculumTab) -> Unit,
+    onOpenTipsMagazine: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -547,14 +548,32 @@ fun N5RoadmapScreen(
                 color = MaterialTheme.colorScheme.onBackground,
                 maxLines = 1
             )
-            Text(
-                text = "$completedStagesCount/8 Chặng",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.primary)
-                    .padding(horizontal = 10.dp, vertical = 4.dp)
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .border(1.dp, MaterialTheme.colorScheme.outline)
+                        .clickable { onOpenTipsMagazine() }
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "📰 Tips",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = 1
+                    )
+                }
+                Text(
+                    text = "$completedStagesCount/8 Chặng",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                )
+            }
         }
 
         // 2. Bản đồ Con đường Uốn lượn Chữ S (S-Curve Winding Road Map 01 -> 08)
