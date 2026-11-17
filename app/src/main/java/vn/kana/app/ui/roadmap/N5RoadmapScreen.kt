@@ -13,6 +13,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -119,6 +120,9 @@ fun N5RoadmapScreen(
     onOpenTipsMagazine: () -> Unit = {},
     onOpenListeningQuiz: () -> Unit = {},
     onOpenReadingPractice: () -> Unit = {},
+    onOpenMockTest: () -> Unit = {},
+    onOpenFlashcardsAndConfusables: () -> Unit = {},
+    onOpenDictionary: () -> Unit = {},
     onOpenProgressStats: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -539,71 +543,27 @@ fun N5RoadmapScreen(
             .padding(horizontal = 16.dp, vertical = 6.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        // 1. Header Lộ trình N5 gọn gàng (sát trên/dưới)
+        // 1. Header Lộ trình N5 gọn gàng
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "LỘ TRÌNH N5",
+                text = "LỘ TRÌNH JLPT N5",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 maxLines = 1,
                 modifier = Modifier.weight(1f)
             )
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .border(1.dp, MaterialTheme.colorScheme.outline)
-                        .clickable { onOpenReadingPractice() }
-                        .padding(horizontal = 7.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = "📖 Đọc",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        maxLines = 1
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .border(1.dp, MaterialTheme.colorScheme.outline)
-                        .clickable { onOpenListeningQuiz() }
-                        .padding(horizontal = 7.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = "🎧 Nghe",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        maxLines = 1
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .border(1.dp, MaterialTheme.colorScheme.outline)
-                        .clickable { onOpenTipsMagazine() }
-                        .padding(horizontal = 7.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = "📰 Tips",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        maxLines = 1
-                    )
-                }
-                Text(
-                    text = "$completedStagesCount/8",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.primary)
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                )
-            }
+            Text(
+                text = "$completedStagesCount/8 chặng",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.primary)
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            )
         }
 
         // Thanh tóm tắt Streak & Tiến độ 1 dòng (chạm để xem chi tiết & chữ hay sai)
@@ -629,6 +589,39 @@ fun N5RoadmapScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1
             )
+        }
+
+        // Thanh công cụ luyện N5 nhanh (cuộn ngang gọn gàng)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            val quickTools = listOf(
+                "📖 Đọc hiểu" to onOpenReadingPractice,
+                "📝 Thi thử N5" to onOpenMockTest,
+                "🃏 Thẻ & Dễ nhầm" to onOpenFlashcardsAndConfusables,
+                "🔍 Từ điển" to onOpenDictionary,
+                "🎧 Nghe" to onOpenListeningQuiz,
+                "📰 Tips" to onOpenTipsMagazine
+            )
+            quickTools.forEach { (label, onClick) ->
+                Box(
+                    modifier = Modifier
+                        .border(1.dp, MaterialTheme.colorScheme.outline)
+                        .background(MaterialTheme.colorScheme.surface)
+                        .clickable { onClick() }
+                        .padding(horizontal = 9.dp, vertical = 5.dp)
+                ) {
+                    Text(
+                        text = label,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = 1
+                    )
+                }
+            }
         }
 
         // 2. Bản đồ Con đường Uốn lượn Chữ S (S-Curve Winding Road Map 01 -> 08)

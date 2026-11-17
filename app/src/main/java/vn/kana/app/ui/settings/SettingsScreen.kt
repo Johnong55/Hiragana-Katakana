@@ -1,6 +1,11 @@
 package vn.kana.app.ui.settings
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,8 +33,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import vn.kana.app.data.ThemeMode
 import vn.kana.app.data.UserSettings
+import vn.kana.app.notifications.DailyReminderScheduler
 import vn.kana.recognizer.StrictnessLevel
 
 /**
@@ -50,6 +57,7 @@ fun SettingsScreen(
     onChangeSoundEnabled: (Boolean) -> Unit,
     onChangeUnlockAllRows: (Boolean) -> Unit = {},
     onChangeThemeMode: (ThemeMode) -> Unit = {},
+    onChangeDailyReminder: (enabled: Boolean, hour: Int, minute: Int) -> Unit = { _, _, _ -> },
     onClearProgress: () -> Unit,
     onOpenDebugScreen: () -> Unit,
     onOpenLicenses: () -> Unit,
@@ -206,6 +214,72 @@ fun SettingsScreen(
                             }
                         }
                         .padding(10.dp)
+                )
+            }
+
+            // 4b. Nhắc học hằng ngày & Widget
+            SettingCard(title = "4b. Nhắc học hằng ngày & Widget") {
+                val notificationLauncher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.RequestPermission()
+                ) { granted ->
+                    if (granted) {
+                        DailyReminderScheduler.scheduleDaily(context, settings.reminderHour, settings.reminderMinute)
+                        onChangeDailyReminder(true, settings.reminderHour, settings.reminderMinute)
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    SelectableChip(
+                        label = "Tắt nhắc",
+                        selected = !settings.reminderEnabled,
+                        onClick = {
+                            DailyReminderScheduler.cancelDaily(context)
+                            onChangeDailyReminder(false, settings.reminderHour, settings.reminderMinute)
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                    SelectableChip(
+                        label = "Bật nhắc",
+                        selected = settings.reminderEnabled,
+                        onClick = {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                                ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+                            ) {
+                                notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            } else {
+                                DailyReminderScheduler.scheduleDaily(context, settings.reminderHour, settings.reminderMinute)
+                                onChangeDailyReminder(true, settings.reminderHour, settings.reminderMinute)
+                            }
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                if (settings.reminderEnabled) {
+                    val presetTimes = listOf(7 to 30, 12 to 30, 20 to 0, 21 to 30)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        presetTimes.forEach { (h, m) ->
+                            val isSelected = settings.reminderHour == h && settings.reminderMinute == m
+                            SelectableChip(
+                                label = "%02d:%02d".format(h, m),
+                                selected = isSelected,
+                                onClick = {
+                                    DailyReminderScheduler.scheduleDaily(context, h, m)
+                                    onChangeDailyReminder(true, h, m)
+                                },
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                }
+                Text(
+                    text = "Mẹo: Nhấn giữ màn hình chính Android → Tiện ích (Widgets) → thêm \"Kana N5 Hôm Nay\" để xem Tip mỗi ngày.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 

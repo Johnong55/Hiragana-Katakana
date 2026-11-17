@@ -35,7 +35,12 @@ data class UserSettings(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val streakDays: Int = 0,
     val lastStudyEpochDay: Long = -1L,
-    val lastTipEpochDay: Long = -1L
+    val lastTipEpochDay: Long = -1L,
+    val bestMockScorePercent: Int = 0,
+    val mockTestAttemptCount: Int = 0,
+    val reminderEnabled: Boolean = false,
+    val reminderHour: Int = 20,
+    val reminderMinute: Int = 0
 )
 
 /**
@@ -54,6 +59,11 @@ class UserSettingsRepository(
         val STREAK_DAYS = intPreferencesKey("streak_days")
         val LAST_STUDY_EPOCH_DAY = longPreferencesKey("last_study_epoch_day")
         val LAST_TIP_EPOCH_DAY = longPreferencesKey("last_tip_epoch_day")
+        val BEST_MOCK_SCORE_PERCENT = intPreferencesKey("best_mock_score_percent")
+        val MOCK_TEST_ATTEMPT_COUNT = intPreferencesKey("mock_test_attempt_count")
+        val REMINDER_ENABLED = booleanPreferencesKey("reminder_enabled")
+        val REMINDER_HOUR = intPreferencesKey("reminder_hour")
+        val REMINDER_MINUTE = intPreferencesKey("reminder_minute")
     }
 
     val settingsFlow: Flow<UserSettings> = appContext.dataStore.data.map { prefs ->
@@ -83,7 +93,12 @@ class UserSettingsRepository(
             themeMode = themeMode,
             streakDays = effectiveStreak,
             lastStudyEpochDay = lastEpochDay,
-            lastTipEpochDay = prefs[Keys.LAST_TIP_EPOCH_DAY] ?: -1L
+            lastTipEpochDay = prefs[Keys.LAST_TIP_EPOCH_DAY] ?: -1L,
+            bestMockScorePercent = prefs[Keys.BEST_MOCK_SCORE_PERCENT] ?: 0,
+            mockTestAttemptCount = prefs[Keys.MOCK_TEST_ATTEMPT_COUNT] ?: 0,
+            reminderEnabled = prefs[Keys.REMINDER_ENABLED] ?: false,
+            reminderHour = prefs[Keys.REMINDER_HOUR] ?: 20,
+            reminderMinute = prefs[Keys.REMINDER_MINUTE] ?: 0
         )
     }
 
@@ -142,6 +157,23 @@ class UserSettingsRepository(
         val today = LocalDate.now().toEpochDay()
         appContext.dataStore.edit { prefs ->
             prefs[Keys.LAST_TIP_EPOCH_DAY] = today
+        }
+    }
+
+    suspend fun recordMockTestResult(scorePercent: Int) {
+        appContext.dataStore.edit { prefs ->
+            val currentBest = prefs[Keys.BEST_MOCK_SCORE_PERCENT] ?: 0
+            val attempts = prefs[Keys.MOCK_TEST_ATTEMPT_COUNT] ?: 0
+            prefs[Keys.BEST_MOCK_SCORE_PERCENT] = maxOf(currentBest, scorePercent)
+            prefs[Keys.MOCK_TEST_ATTEMPT_COUNT] = attempts + 1
+        }
+    }
+
+    suspend fun setDailyReminder(enabled: Boolean, hour: Int, minute: Int) {
+        appContext.dataStore.edit { prefs ->
+            prefs[Keys.REMINDER_ENABLED] = enabled
+            prefs[Keys.REMINDER_HOUR] = hour
+            prefs[Keys.REMINDER_MINUTE] = minute
         }
     }
 

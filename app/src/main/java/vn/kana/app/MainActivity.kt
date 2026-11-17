@@ -37,11 +37,14 @@ import vn.kana.app.ui.custom.CustomStudyScreen
 import vn.kana.app.ui.debug.RecognizerDebugScreen
 import vn.kana.app.ui.debug.RecognizerDebugViewModel
 import vn.kana.app.ui.home.HomeScreen
+import vn.kana.app.ui.dictionary.OfflineDictionaryScreen
 import vn.kana.app.ui.lesson.LessonScreen
 import vn.kana.app.ui.lesson.LessonViewModel
 import vn.kana.app.ui.license.LicenseScreen
 import vn.kana.app.ui.listening.ListeningQuizScreen
 import vn.kana.app.ui.map.LessonMapViewModel
+import vn.kana.app.ui.mocktest.N5MockTestScreen
+import vn.kana.app.ui.practice.ConfusableAndFlashcardScreen
 import vn.kana.app.ui.reading.ReadingPracticeScreen
 import vn.kana.app.ui.reference.KanaReferenceScreen
 import vn.kana.app.ui.review.ReviewScreen
@@ -64,6 +67,9 @@ private enum class AppDestination(val isMainTab: Boolean, val tabLabelVi: String
     TIPS_MAGAZINE(isMainTab = false),
     LISTENING_QUIZ(isMainTab = false),
     READING_PRACTICE(isMainTab = false),
+    MOCK_TEST(isMainTab = false),
+    FLASHCARDS_CONFUSABLES(isMainTab = false),
+    DICTIONARY(isMainTab = false),
     PROGRESS_STATS(isMainTab = false),
     DEBUG_RECOGNIZER(isMainTab = false),
     LICENSES(isMainTab = false)
@@ -207,6 +213,18 @@ class MainActivity : ComponentActivity() {
                                             returnTab = AppDestination.ROADMAP_N5
                                             destination = AppDestination.READING_PRACTICE
                                         },
+                                        onOpenMockTest = {
+                                            returnTab = AppDestination.ROADMAP_N5
+                                            destination = AppDestination.MOCK_TEST
+                                        },
+                                        onOpenFlashcardsAndConfusables = {
+                                            returnTab = AppDestination.ROADMAP_N5
+                                            destination = AppDestination.FLASHCARDS_CONFUSABLES
+                                        },
+                                        onOpenDictionary = {
+                                            returnTab = AppDestination.ROADMAP_N5
+                                            destination = AppDestination.DICTIONARY
+                                        },
                                         onOpenProgressStats = {
                                             returnTab = AppDestination.ROADMAP_N5
                                             destination = AppDestination.PROGRESS_STATS
@@ -323,6 +341,7 @@ class MainActivity : ComponentActivity() {
                                         onChangeSoundEnabled = mapViewModel::updateSoundEnabled,
                                         onChangeUnlockAllRows = mapViewModel::updateUnlockAllRows,
                                         onChangeThemeMode = mapViewModel::updateThemeMode,
+                                        onChangeDailyReminder = mapViewModel::updateDailyReminder,
                                         onClearProgress = mapViewModel::clearAllProgress,
                                         onOpenDebugScreen = {
                                             destination = AppDestination.DEBUG_RECOGNIZER
@@ -386,6 +405,46 @@ class MainActivity : ComponentActivity() {
                                     ReadingPracticeScreen(
                                         onSpeak = { text -> mapViewModel.speak(text, null) },
                                         onRecordStudyActivity = { mapViewModel.recordStudyActivityToday() },
+                                        onBack = { destination = returnTab }
+                                    )
+                                }
+
+                                AppDestination.MOCK_TEST -> {
+                                    N5MockTestScreen(
+                                        bestScorePercent = mapState.settings.bestMockScorePercent,
+                                        attemptCount = mapState.settings.mockTestAttemptCount,
+                                        onSpeak = { text -> mapViewModel.speak(text, null) },
+                                        onSaveMockResult = { score -> mapViewModel.recordMockTestResult(score) },
+                                        onRecordStudyActivity = { mapViewModel.recordStudyActivityToday() },
+                                        onBack = { destination = returnTab }
+                                    )
+                                }
+
+                                AppDestination.FLASHCARDS_CONFUSABLES -> {
+                                    ConfusableAndFlashcardScreen(
+                                        n5KanjiCharacters = mapState.n5KanjiCharacters,
+                                        wordsByChar = mapState.wordsByChar,
+                                        autoAdvanceDelayMs = mapState.settings.autoAdvanceDelayMs,
+                                        onSpeak = { text, romaji -> mapViewModel.speak(text, romaji) },
+                                        onRecordStudyActivity = { mapViewModel.recordStudyActivityToday() },
+                                        onBack = { destination = returnTab }
+                                    )
+                                }
+
+                                AppDestination.DICTIONARY -> {
+                                    OfflineDictionaryScreen(
+                                        allCharacters = mapState.allCurriculumCharacters,
+                                        wordsByChar = mapState.wordsByChar,
+                                        onSpeak = { text, romaji -> mapViewModel.speak(text, romaji) },
+                                        onPracticeCharacter = { rowName, script, targetChar ->
+                                            returnTab = AppDestination.DICTIONARY
+                                            selectedRowName = rowName
+                                            selectedScript = script
+                                            startLessonInTestOutMode = false
+                                            lessonInitialFocusChar = targetChar
+                                            sessionCounter++
+                                            destination = AppDestination.ACTIVE_LESSON
+                                        },
                                         onBack = { destination = returnTab }
                                     )
                                 }

@@ -9,6 +9,9 @@
     <!-- Ghi âm giọng đọc cục bộ để người học tự nghe lại khi luyện phát âm (tuỳ chọn, 100% offline) -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!-- Thông báo nhắc học hằng ngày hoàn toàn offline (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />
@@ -32,6 +35,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".notifications.DailyReminderReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".widget.KanaDailyWidgetProvider"
+            android:exported="true"
+            android:label="Kana N5 Hôm Nay">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/kana_daily_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

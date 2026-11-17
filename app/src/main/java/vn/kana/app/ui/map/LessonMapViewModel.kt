@@ -367,6 +367,19 @@ class LessonMapViewModel(
         }
     }
 
+    fun recordMockTestResult(scorePercent: Int) {
+        viewModelScope.launch {
+            settingsRepository.recordMockTestResult(scorePercent)
+            settingsRepository.recordStudyActivityToday()
+        }
+    }
+
+    fun updateDailyReminder(enabled: Boolean, hour: Int, minute: Int) {
+        viewModelScope.launch {
+            settingsRepository.setDailyReminder(enabled, hour, minute)
+        }
+    }
+
     fun clearAllProgress() {
         viewModelScope.launch {
             kanaDao.clearLessonProgress()
