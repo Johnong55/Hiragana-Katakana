@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import vn.kana.app.ui.components.AnimatedMemeFeedbackBanner
 import vn.kana.recognizer.KanaStrokeTemplate
 
 enum class ListeningScope(val labelVi: String) {
@@ -371,6 +372,18 @@ fun ListeningQuizScreen(
                     }
                 }
             }
+        }
+
+        if (hasAnswered) {
+            AnimatedMemeFeedbackBanner(
+                message = if (isCorrectAnswer) {
+                    "Đáp án: ${q.target.char} (${q.target.romaji})"
+                } else {
+                    "Đáp án đúng là: ${q.target.char} (${q.target.romaji})"
+                },
+                isError = !isCorrectAnswer,
+                seed = currentIndex * 13 + (selectedChar?.hashCode() ?: 0)
+            )
         }
 
         // Nút Tiếp tục khi trả lời sai (khi đúng đã tự chuyển câu)

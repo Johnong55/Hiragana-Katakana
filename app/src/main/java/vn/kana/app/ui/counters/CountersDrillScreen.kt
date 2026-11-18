@@ -36,6 +36,7 @@ import kotlinx.coroutines.delay
 import vn.kana.app.domain.CounterCategory
 import vn.kana.app.domain.CounterEntry
 import vn.kana.app.domain.N5CountersCatalog
+import vn.kana.app.ui.components.AnimatedMemeFeedbackBanner
 
 private data class CounterQuizItem(
     val target: CounterEntry,
@@ -254,6 +255,15 @@ fun CountersDrillScreen(
                         Text("✗", color = MaterialTheme.colorScheme.error)
                     }
                 }
+            }
+
+            if (chosenKana != null) {
+                val isAnsCorrect = chosenKana == current.target.kana
+                AnimatedMemeFeedbackBanner(
+                    message = "Đáp án: ${current.target.kanji} = ${current.target.kana} (${current.target.romaji})",
+                    isError = !isAnsCorrect,
+                    seed = quizIndex * 19 + (chosenKana?.hashCode() ?: 0)
+                )
             }
 
             if (chosenKana != null && chosenKana != current.target.kana) {

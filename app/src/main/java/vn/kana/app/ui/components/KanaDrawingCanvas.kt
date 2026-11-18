@@ -34,8 +34,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import kotlinx.coroutines.delay
 import vn.kana.app.R
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -105,12 +108,33 @@ fun KanaDrawingCanvas(
     val latestEnabled by rememberUpdatedState(enabled)
 
     val shakeOffset = remember { Animatable(0f) }
+    var showErrorStamp by remember { mutableStateOf(false) }
+    val errorScaleAnim = remember { Animatable(0.4f) }
+    val errorTiltAnim = remember { Animatable(0f) }
+
     LaunchedEffect(shakeTrigger) {
         if (shakeTrigger > 0) {
-            val offsets = listOf(-18f, 18f, -12f, 12f, -6f, 6f, 0f)
-            for (target in offsets) {
-                shakeOffset.animateTo(target, animationSpec = tween(durationMillis = 42))
+            showErrorStamp = true
+            errorScaleAnim.snapTo(0.45f)
+            errorScaleAnim.animateTo(
+                targetValue = 1.0f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            )
+        }
+    }
+    LaunchedEffect(shakeTrigger) {
+        if (shakeTrigger > 0) {
+            val offsets = listOf(-22f, 22f, -15f, 15f, -8f, 8f, 0f)
+            val tilts = listOf(-16f, 16f, -11f, 11f, -5f, 5f, 0f)
+            for (i in offsets.indices) {
+                shakeOffset.animateTo(offsets[i], animationSpec = tween(durationMillis = 42))
+                errorTiltAnim.animateTo(tilts[i], animationSpec = tween(durationMillis = 42))
             }
+            delay(650L)
+            showErrorStamp = false
         }
     }
 
@@ -327,9 +351,13 @@ fun KanaDrawingCanvas(
             }
         }
 
-        // 7. Hiệu ứng thông báo ĐÚNG kèm ảnh meme con vật nảy đàn hồi
+        // 7. Hiệu ứng thông báo ĐÚNG kèm ảnh meme Pinterest & lời khen đa dạng
         if (successOverlayText != null) {
-            val scaleAnim = remember(successOverlayText) { Animatable(0.55f) }
+            val scaleAnim = remember(successOverlayText) { Animatable(0.45f) }
+            val tiltAnim = remember(successOverlayText) { Animatable(0f) }
+            val praise = remember(successOverlayText) {
+                MemeReactionCatalog.pickPraise(successOverlayText.hashCode())
+            }
             LaunchedEffect(successOverlayText) {
                 scaleAnim.animateTo(
                     targetValue = 1.0f,
@@ -339,23 +367,17 @@ fun KanaDrawingCanvas(
                     )
                 )
             }
-            val memeRes = remember(successOverlayText) {
-                val memes = listOf(
-                    R.drawable.meme_shiba,
-                    R.drawable.meme_capybara,
-                    R.drawable.meme_red_panda,
-                    R.drawable.meme_hamster,
-                    R.drawable.meme_cat_surprised,
-                    R.drawable.meme_duck
-                )
-                memes[(successOverlayText.hashCode() and 0x7fffffff) % memes.size]
+            LaunchedEffect(successOverlayText) {
+                for (angle in listOf(-12f, 12f, -8f, 8f, -4f, 4f, 0f)) {
+                    tiltAnim.animateTo(angle, animationSpec = tween(durationMillis = 65))
+                }
             }
 
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(squareSide)
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.78f))
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.82f))
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -364,26 +386,69 @@ fun KanaDrawingCanvas(
                         .scale(scaleAnim.value)
                         .background(MaterialTheme.colorScheme.primary)
                         .border(2.dp, MaterialTheme.colorScheme.onBackground)
-                        .padding(horizontal = 24.dp, vertical = 16.dp)
+                        .padding(horizontal = 22.dp, vertical = 16.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = memeRes),
+                        painter = painterResource(id = praise.resId),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(64.dp)
+                            .size(76.dp)
+                            .graphicsLayer { rotationZ = tiltAnim.value }
                             .clip(CircleShape)
                             .border(2.dp, MaterialTheme.colorScheme.onPrimary, CircleShape)
                     )
                     Text(
-                        text = "✓ HAY BẠN!",
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        text = praise.headlineVi,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        textAlign = TextAlign.Center
                     )
                     Text(
                         text = successOverlayText,
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
+
+        // 8. Hiệu ứng khi VIẾT SAI: Bật meme mèo khóc / hốt hoảng / bốc lửa lắc lư
+        if (showErrorStamp && successOverlayText == null) {
+            val errReaction = remember(shakeTrigger) {
+                MemeReactionCatalog.pickError(shakeTrigger)
+            }
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(squareSide)
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f))
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier
+                        .scale(errorScaleAnim.value)
+                        .background(MaterialTheme.colorScheme.error)
+                        .border(2.dp, MaterialTheme.colorScheme.onBackground)
+                        .padding(horizontal = 20.dp, vertical = 14.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = errReaction.resId),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(72.dp)
+                            .graphicsLayer { rotationZ = errorTiltAnim.value }
+                            .clip(CircleShape)
+                            .border(2.dp, MaterialTheme.colorScheme.onError, CircleShape)
+                    )
+                    Text(
+                        text = errReaction.headlineVi,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onError,
+                        textAlign = TextAlign.Center
                     )
                 }
             }

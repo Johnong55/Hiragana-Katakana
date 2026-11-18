@@ -50,6 +50,7 @@ import vn.kana.app.domain.ConfusableCharItem
 import vn.kana.app.domain.ConfusableGroup
 import vn.kana.app.domain.ConfusablePairsCatalog
 import vn.kana.app.domain.KanaVocabWord
+import vn.kana.app.ui.components.AnimatedMemeFeedbackBanner
 import vn.kana.recognizer.KanaStrokeTemplate
 import kotlin.math.roundToInt
 
@@ -349,39 +350,33 @@ private fun ConfusablePairsView(
                 }
             }
 
+            if (selectedChar != null) {
+                val isAnsCorrect = selectedChar == current.target.char
+                AnimatedMemeFeedbackBanner(
+                    message = if (isAnsCorrect) {
+                        "Đúng rồi: ${current.target.char} (${current.target.romaji})"
+                    } else {
+                        "Đáp án là ${current.target.char} (${current.target.romaji}). ${current.group.tipVi}"
+                    },
+                    isError = !isAnsCorrect,
+                    seed = quizIndex * 23 + (selectedChar?.hashCode() ?: 0)
+                )
+            }
+
             if (selectedChar != null && selectedChar != current.target.char) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(1.dp, MaterialTheme.colorScheme.error)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                Button(
+                    onClick = {
+                        if (quizIndex < quizQuestions.lastIndex) {
+                            quizIndex++
+                            selectedChar = null
+                        } else {
+                            quizDone = true
+                        }
+                    },
+                    shape = RoundedCornerShape(0.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(
-                        text = "✗ Chưa đúng — Đáp án là ${current.target.char} (${current.target.romaji})",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                    Text(
-                        text = current.group.tipVi,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Button(
-                        onClick = {
-                            if (quizIndex < quizQuestions.lastIndex) {
-                                quizIndex++
-                                selectedChar = null
-                            } else {
-                                quizDone = true
-                            }
-                        },
-                        shape = RoundedCornerShape(0.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Tiếp theo →")
-                    }
+                    Text("Tiếp theo →")
                 }
             }
         }

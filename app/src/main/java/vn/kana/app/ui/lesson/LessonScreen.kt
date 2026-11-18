@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import vn.kana.app.domain.LessonStepType
 import vn.kana.app.domain.QuizQuestionType
+import vn.kana.app.ui.components.AnimatedMemeFeedbackBanner
 import vn.kana.app.ui.components.GenkoYoshiWordBar
 import vn.kana.app.ui.components.KanaDrawingCanvas
 import vn.kana.app.ui.components.KanaStrokeAnimatorCanvas
@@ -192,21 +193,12 @@ fun LessonScreen(
             onRevealRomajiFallback = viewModel::revealListenRomajiFallback
         )
 
-        // 3. Thông báo phản hồi (nếu có)
+        // 3. Thông báo phản hồi kèm hoạt ảnh meme (nếu có)
         uiState.feedbackMessage?.let { msg ->
-            val col = if (uiState.isFeedbackError) {
-                MaterialTheme.colorScheme.error
-            } else {
-                MaterialTheme.colorScheme.onBackground
-            }
-            Text(
-                text = msg,
-                style = MaterialTheme.typography.bodyMedium,
-                color = col,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(1.dp, col)
-                    .padding(horizontal = 10.dp, vertical = 6.dp)
+            AnimatedMemeFeedbackBanner(
+                message = msg,
+                isError = uiState.isFeedbackError,
+                seed = uiState.currentCharIndex + uiState.shakeTrigger * 31
             )
         }
 
