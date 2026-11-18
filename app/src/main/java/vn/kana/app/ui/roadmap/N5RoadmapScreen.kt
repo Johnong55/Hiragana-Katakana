@@ -1729,6 +1729,9 @@ private fun StageAlphabetBoardView(
     val nextUnlearned = remember(stageChars, characterProgressByChar) {
         stageChars.firstOrNull { characterProgressByChar[it.char]?.learned != true }
     }
+    var selectedPreviewTmpl by remember(stage.stageNumber) {
+        mutableStateOf(nextUnlearned ?: stageChars.firstOrNull())
+    }
 
     Column(
         modifier = modifier
@@ -1780,7 +1783,51 @@ private fun StageAlphabetBoardView(
             }
         }
 
-        // Bảng chữ cái của Chặng (chạm vào chữ bất kỳ để vào luyện viết ngay)
+        // Khung hiển thị đầy đủ Âm đọc & Tất cả ý nghĩa của chữ đang chọn (tự xuống dòng, không bị cắt "...")
+        selectedPreviewTmpl?.let { preview ->
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                    .padding(10.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Text(
+                            text = preview.char,
+                            style = MaterialTheme.typography.headlineLarge,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            text = "${preview.row} • ${preview.strokeCount} nét",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    RoadmapActionBtn(
+                        text = "✎ Luyện viết '${preview.char}' →",
+                        filled = true,
+                        onClick = { onClickCharacter(preview) }
+                    )
+                }
+                Text(
+                    text = "Âm & Nghĩa: ${preview.romaji}",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+
+        // Bảng chữ cái của Chặng (chạm 1 lần để xem trọn vẹn nghĩa, chạm lần 2 hoặc nút Luyện viết để vào viết)
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -1822,9 +1869,19 @@ private fun StageAlphabetBoardView(
                                     .weight(1f)
                                     .aspectRatio(0.92f)
                                     .background(bgColor)
-                                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                                    .border(
+                                        width = if (selectedPreviewTmpl?.char == ch) 2.dp else 1.dp,
+                                        color = if (selectedPreviewTmpl?.char == ch) MaterialTheme.colorScheme.onBackground
+                                        else MaterialTheme.colorScheme.outline
+                                    )
                                     .clickable(enabled = tmpl != null) {
-                                        if (tmpl != null) onClickCharacter(tmpl)
+                                        if (tmpl != null) {
+                                            if (selectedPreviewTmpl?.char == tmpl.char) {
+                                                onClickCharacter(tmpl)
+                                            } else {
+                                                selectedPreviewTmpl = tmpl
+                                            }
+                                        }
                                     }
                                     .padding(3.dp)
                             ) {

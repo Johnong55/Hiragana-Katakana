@@ -387,24 +387,26 @@ private fun PromptHeaderSection(
                             style = MaterialTheme.typography.displayMedium,
                             color = MaterialTheme.colorScheme.onBackground
                         )
-                        Column {
+                        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                             val strokeLabel = if (uiState.stepType == LessonStepType.STEP_1_OBSERVE) {
                                 "${ch.strokeCount} nét"
                             } else {
                                 "Đã vẽ: ${uiState.singleCharStrokes.size}/${ch.strokeCount} nét"
                             }
                             Text(
-                                text = "${uiState.stepType.titleVi} • Âm: ${ch.romaji} ($strokeLabel)",
+                                text = "${uiState.stepType.titleVi} • $strokeLabel",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = "Âm & Nghĩa: ${ch.romaji}",
                                 style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                             Text(
                                 text = uiState.stepType.instructionVi,
                                 style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 2
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }

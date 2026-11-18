@@ -188,122 +188,140 @@ fun HomeScreen(
         ) {
             val activeTmpl = displayTemplate
             if (activeTmpl != null) {
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
                         .border(1.dp, MaterialTheme.colorScheme.onBackground)
                         .padding(10.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Box(modifier = Modifier.size(124.dp)) {
-                        KanaStrokeAnimatorCanvas(
-                            strokes = selectedStrokes,
-                            activeStrokeIndex = animStrokeIdx,
-                            activeStrokeProgress = animStrokeProgress,
-                            showGhostStrokes = true,
-                            showStrokeNumbers = true,
-                            showDirectionArrows = true,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.Top
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = "${activeTmpl.char} (${activeTmpl.romaji})",
-                                    style = MaterialTheme.typography.titleLarge,
-                                    color = MaterialTheme.colorScheme.onBackground,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                                Text(
-                                    text = "${activeTmpl.row} • ${activeTmpl.strokeCount} nét",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-
-                            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Text(
-                                    text = "Nghe",
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    modifier = Modifier
-                                        .background(MaterialTheme.colorScheme.primary)
-                                        .clickable {
-                                            replayTrigger++
-                                            viewModel.speak(activeTmpl.char, activeTmpl.romaji)
-                                        }
-                                        .padding(horizontal = 8.dp, vertical = 5.dp)
-                                )
-                                Text(
-                                    text = "✕",
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.onBackground,
-                                    modifier = Modifier
-                                        .border(1.dp, MaterialTheme.colorScheme.outline)
-                                        .clickable { selectedChar = null }
-                                        .padding(horizontal = 8.dp, vertical = 5.dp)
-                                )
-                            }
+                        Box(modifier = Modifier.size(96.dp)) {
+                            KanaStrokeAnimatorCanvas(
+                                strokes = selectedStrokes,
+                                activeStrokeIndex = animStrokeIdx,
+                                activeStrokeProgress = animStrokeProgress,
+                                showGhostStrokes = true,
+                                showStrokeNumbers = true,
+                                showDirectionArrows = true,
+                                modifier = Modifier.fillMaxSize()
+                            )
                         }
 
-                        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
-
-                        for (w in selectedWords.take(2)) {
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
                             Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { viewModel.speak(w.word, w.romaji) }
-                                    .padding(vertical = 1.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Text(
+                                        text = activeTmpl.char,
+                                        style = MaterialTheme.typography.headlineMedium,
+                                        color = MaterialTheme.colorScheme.onBackground
+                                    )
+                                    Text(
+                                        text = "${activeTmpl.row} • ${activeTmpl.strokeCount} nét",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+
+                                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Text(
+                                        text = "Nghe",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        modifier = Modifier
+                                            .background(MaterialTheme.colorScheme.primary)
+                                            .clickable {
+                                                replayTrigger++
+                                                viewModel.speak(activeTmpl.char, activeTmpl.romaji)
+                                            }
+                                            .padding(horizontal = 8.dp, vertical = 5.dp)
+                                    )
+                                    Text(
+                                        text = "✕",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                        modifier = Modifier
+                                            .border(1.dp, MaterialTheme.colorScheme.outline)
+                                            .clickable { selectedChar = null }
+                                            .padding(horizontal = 8.dp, vertical = 5.dp)
+                                    )
+                                }
+                            }
+
+                            // Hiển thị đầy đủ toàn bộ âm đọc & tất cả các nghĩa (tự xuống dòng, không bao giờ cắt "...")
+                            Text(
+                                text = "Âm & Nghĩa: ${activeTmpl.romaji}",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colorScheme.primary)
+                                    .clickable {
+                                        onPracticeCharacter(
+                                            activeTmpl.row,
+                                            activeTmpl.script,
+                                            activeTmpl.char
+                                        )
+                                    }
+                                    .padding(vertical = 7.dp)
+                            ) {
                                 Text(
-                                    text = "${w.word} (${w.romaji})",
+                                    text = "✎ Luyện viết chữ '${activeTmpl.char}' →",
                                     style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.onBackground,
-                                    maxLines = 1
-                                )
-                                Text(
-                                    text = w.meaningVi,
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
+                                    color = MaterialTheme.colorScheme.onPrimary
                                 )
                             }
                         }
+                    }
 
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.primary)
-                                .clickable {
-                                    onPracticeCharacter(
-                                        activeTmpl.row,
-                                        activeTmpl.script,
-                                        activeTmpl.char
+                    if (selectedWords.isNotEmpty()) {
+                        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
+
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            for (w in selectedWords.take(3)) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(MaterialTheme.colorScheme.background)
+                                        .border(1.dp, MaterialTheme.colorScheme.outline)
+                                        .clickable { viewModel.speak(w.word, w.romaji) }
+                                        .padding(horizontal = 8.dp, vertical = 5.dp),
+                                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                                ) {
+                                    Text(
+                                        text = "${w.word} (${w.romaji})",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = MaterialTheme.colorScheme.onBackground
+                                    )
+                                    Text(
+                                        text = "Nghĩa: ${w.meaningVi}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
-                                .padding(vertical = 6.dp)
-                        ) {
-                            Text(
-                                text = "✎ Luyện viết chữ '${activeTmpl.char}' →",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                maxLines = 1
-                            )
+                            }
                         }
                     }
                 }

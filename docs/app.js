@@ -272,13 +272,14 @@ function renderAlphabet() {
       <div style="display:flex;justify-content:space-between;align-items:center">
         <div>
           <span style="font-size:28px;font-weight:800">${cur.char}</span>
-          <span style="font-size:15px;font-weight:700;margin-left:8px;color:var(--ink-muted)">${cur.romaji} • ${cur.strokeCount} nét</span>
+          <span style="font-size:13px;font-weight:700;margin-left:8px;color:var(--ink-muted)">${cur.row} • ${cur.strokeCount} nét</span>
         </div>
         <div style="display:flex;gap:6px">
           <button class="btn" id="btn-Ghost">${state.showGhost ? 'Ẩn nét mờ' : 'Hiện nét mờ'}</button>
           <button class="btn btn-primary" id="btn-speak-cur">Nghe</button>
         </div>
       </div>
+      <div style="font-size:15px;font-weight:700;margin-top:6px;line-height:1.4">Âm & Nghĩa: ${cur.romaji}</div>
       <div class="canvas-wrap">
         <canvas id="draw-canvas" width="310" height="310"></canvas>
       </div>
@@ -287,6 +288,11 @@ function renderAlphabet() {
         <button class="btn" style="flex:1" id="btn-clear">Xoá</button>
         <button class="btn btn-primary" style="flex:1.4" id="btn-check-write">Kiểm tra</button>
       </div>
+      ${state.words.filter((w) => w.introduces === cur.char || (w.chars && w.chars.includes(cur.char))).slice(0, 3).map((w) => `
+        <div style="margin-top:6px;padding:6px 8px;border:1px solid var(--outline);border-radius:4px;font-size:13px;line-height:1.4">
+          <strong>${w.word} (${w.romaji})</strong>: ${w.meaning_vi}
+        </div>
+      `).join('')}
     </div>
     ` : ''}
 
