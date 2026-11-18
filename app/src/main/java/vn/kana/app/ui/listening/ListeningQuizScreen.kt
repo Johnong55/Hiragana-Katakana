@@ -382,7 +382,17 @@ fun ListeningQuizScreen(
                     "Đáp án đúng là: ${q.target.char} (${q.target.romaji})"
                 },
                 isError = !isCorrectAnswer,
-                seed = currentIndex * 13 + (selectedChar?.hashCode() ?: 0)
+                seed = currentIndex * 13 + (selectedChar?.hashCode() ?: 0),
+                onContinueAction = if (!isCorrectAnswer) {
+                    {
+                        if (currentIndex + 1 < questions.size) {
+                            currentIndex += 1
+                            selectedChar = null
+                        } else {
+                            isCompleted = true
+                        }
+                    }
+                } else null
             )
         }
 

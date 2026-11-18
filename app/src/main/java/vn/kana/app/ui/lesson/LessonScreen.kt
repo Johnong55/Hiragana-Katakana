@@ -193,12 +193,21 @@ fun LessonScreen(
             onRevealRomajiFallback = viewModel::revealListenRomajiFallback
         )
 
-        // 3. Thông báo phản hồi kèm hoạt ảnh meme (nếu có)
+        // 3. Ghi chú hướng dẫn ngắn (Pop-up Meme Đúng/Sai đã hiển thị trực tiếp chính giữa ô vẽ)
         uiState.feedbackMessage?.let { msg ->
-            AnimatedMemeFeedbackBanner(
-                message = msg,
-                isError = uiState.isFeedbackError,
-                seed = uiState.currentCharIndex + uiState.shakeTrigger * 31
+            val col = if (uiState.isFeedbackError) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.onBackground
+            }
+            Text(
+                text = msg,
+                style = MaterialTheme.typography.bodySmall,
+                color = col,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, col)
+                    .padding(horizontal = 10.dp, vertical = 5.dp)
             )
         }
 

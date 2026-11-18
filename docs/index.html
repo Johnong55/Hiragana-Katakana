@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Kana N5 • Sổ Tay Tiếng Nhật Offline</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#5C3A21" />
+  <!-- Chuẩn PWA Toàn màn hình cho iOS (Safari Add to Home Screen) -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Kana N5" />
+  <link rel="apple-touch-icon" href="assets/memes/meme_shiba.jpg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Thanh tiêu đề Sổ tay -->
+  <header class="topbar">
+    <button class="btn" id="btn-open-drawer" aria-label="Menu">⋮☰</button>
+    <div style="font-weight:800;font-size:16px;flex:1" id="screen-title">LỘ TRÌNH JLPT N5</div>
+    <button class="btn" id="btn-theme-toggle">Sáng/Tối</button>
+  </header>
+
+  <!-- Thanh Streak với Meme Mèo Lửa -->
+  <div class="streak-strip" id="streak-strip">
+    <div style="display:flex;align-items:center;gap:8px">
+      <img src="assets/memes/meme_cat_angry.jpg" class="meme-avatar" alt="streak" />
+      <span id="streak-summary-text">1 ngày • 0/241 chữ</span>
+    </div>
+    <span style="color:var(--ink-muted)">Offline iOS/Android</span>
+  </div>
+
+  <!-- Nội dung chính -->
+  <main class="container" id="app-content"></main>
+
+  <!-- Menu trượt bên trái (Beside Navigator) với 10 ảnh Meme Mèo Pinterest -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <aside class="drawer-sheet" id="drawer-sheet">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <img src="assets/memes/meme_shiba.jpg" class="meme-avatar-lg" alt="avatar" />
+        <div>
+          <div style="font-weight:800;font-size:15px">LUYỆN TẬP JLPT N5</div>
+          <div style="font-size:12px;color:var(--ink-muted)">100% Offline • Không cần mạng</div>
+        </div>
+      </div>
+      <button class="btn" id="btn-close-drawer">✕</button>
+    </div>
+    <div id="drawer-menu-list"></div>
+  </aside>
+
+  <!-- Pop-up Meme Đúng/Sai đồng bộ chính giữa màn hình cho MỌI loại câu hỏi -->
+  <div class="meme-popup-overlay" id="meme-popup-overlay">
+    <div class="meme-popup-box" id="meme-popup-box">
+      <img src="assets/memes/meme_hamster.jpg" class="meme-popup-img" id="meme-popup-img" alt="meme" />
+      <div style="font-weight:800;font-size:18px;margin-top:8px" id="meme-popup-headline">ĐỈNH NÓC KỊCH TRẦN!</div>
+      <div style="font-size:14px;margin-top:6px;line-height:1.4" id="meme-popup-msg"></div>
+      <button class="btn" style="width:100%;margin-top:12px;display:none" id="meme-popup-btn">Tiếp theo →</button>
+    </div>
+  </div>
+
+  <!-- Thanh điều hướng 4 Tab cố định dưới đáy -->
+  <nav class="bottom-nav">
+    <div class="nav-tab active" data-tab="roadmap">Trang chủ</div>
+    <div class="nav-tab" data-tab="alphabet">Bảng chữ</div>
+    <div class="nav-tab" data-tab="quiz">Ôn tập</div>
+    <div class="nav-tab" data-tab="tips">Tips & Từ điển</div>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>

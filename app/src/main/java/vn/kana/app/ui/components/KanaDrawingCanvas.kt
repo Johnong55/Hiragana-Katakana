@@ -351,106 +351,35 @@ fun KanaDrawingCanvas(
             }
         }
 
-        // 7. Hiệu ứng thông báo ĐÚNG kèm ảnh meme Pinterest & lời khen đa dạng
+        // 7. Hiệu ứng thông báo ĐÚNG kèm ảnh meme Pinterest & lời khen đa dạng (dùng MemeReactionPopupBox đồng bộ)
         if (successOverlayText != null) {
-            val scaleAnim = remember(successOverlayText) { Animatable(0.45f) }
-            val tiltAnim = remember(successOverlayText) { Animatable(0f) }
-            val praise = remember(successOverlayText) {
-                MemeReactionCatalog.pickPraise(successOverlayText.hashCode())
-            }
-            LaunchedEffect(successOverlayText) {
-                scaleAnim.animateTo(
-                    targetValue = 1.0f,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessMediumLow
-                    )
-                )
-            }
-            LaunchedEffect(successOverlayText) {
-                for (angle in listOf(-12f, 12f, -8f, 8f, -4f, 4f, 0f)) {
-                    tiltAnim.animateTo(angle, animationSpec = tween(durationMillis = 65))
-                }
-            }
-
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(squareSide)
                     .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.82f))
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier
-                        .scale(scaleAnim.value)
-                        .background(MaterialTheme.colorScheme.primary)
-                        .border(2.dp, MaterialTheme.colorScheme.onBackground)
-                        .padding(horizontal = 22.dp, vertical = 16.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = praise.resId),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(76.dp)
-                            .graphicsLayer { rotationZ = tiltAnim.value }
-                            .clip(CircleShape)
-                            .border(2.dp, MaterialTheme.colorScheme.onPrimary, CircleShape)
-                    )
-                    Text(
-                        text = praise.headlineVi,
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = successOverlayText,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        textAlign = TextAlign.Center
-                    )
-                }
+                MemeReactionPopupBox(
+                    message = successOverlayText,
+                    isError = false,
+                    seed = successOverlayText.hashCode()
+                )
             }
         }
 
-        // 8. Hiệu ứng khi VIẾT SAI: Bật meme mèo khóc / hốt hoảng / bốc lửa lắc lư
+        // 8. Hiệu ứng khi VIẾT SAI: Bật Pop-up Meme đồng bộ chính giữa ô vẽ
         if (showErrorStamp && successOverlayText == null) {
-            val errReaction = remember(shakeTrigger) {
-                MemeReactionCatalog.pickError(shakeTrigger)
-            }
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(squareSide)
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f))
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.76f))
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(6.dp),
-                    modifier = Modifier
-                        .scale(errorScaleAnim.value)
-                        .background(MaterialTheme.colorScheme.error)
-                        .border(2.dp, MaterialTheme.colorScheme.onBackground)
-                        .padding(horizontal = 20.dp, vertical = 14.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = errReaction.resId),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(72.dp)
-                            .graphicsLayer { rotationZ = errorTiltAnim.value }
-                            .clip(CircleShape)
-                            .border(2.dp, MaterialTheme.colorScheme.onError, CircleShape)
-                    )
-                    Text(
-                        text = errReaction.headlineVi,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onError,
-                        textAlign = TextAlign.Center
-                    )
-                }
+                MemeReactionPopupBox(
+                    message = "Nhìn lại nét mẫu rồi thử lại nhé!",
+                    isError = true,
+                    seed = shakeTrigger
+                )
             }
         }
     }

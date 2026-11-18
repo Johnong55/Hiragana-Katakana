@@ -1,0 +1,19 @@
+{
+  "name": "Kana N5 • Sổ Tay Tiếng Nhật Offline",
+  "short_name": "Kana N5",
+  "description": "Học Hiragana, Katakana & JLPT N5 100% Offline cho iOS & Android",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F6EFE0",
+  "theme_color": "#5C3A21",
+  "icons": [
+    {
+      "src": "assets/memes/meme_shiba.jpg",
+      "sizes": "280x280",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

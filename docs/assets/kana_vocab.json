@@ -1,0 +1,4791 @@
+{
+  "totalWords": 302,
+  "words": [
+    {
+      "id": "vocab_001",
+      "word": "あめ",
+      "romaji": "ame",
+      "meaning_vi": "cơn mưa / cái kẹo",
+      "chars": [
+        "あ",
+        "め"
+      ],
+      "introduces": "あ",
+      "script": "hiragana",
+      "example_sentence": "あめ が ふる。",
+      "example_romaji": "ame ga furu.",
+      "example_vi": "Trời mưa."
+    },
+    {
+      "id": "vocab_002",
+      "word": "あり",
+      "romaji": "ari",
+      "meaning_vi": "con kiến",
+      "chars": [
+        "あ",
+        "り"
+      ],
+      "introduces": "あ",
+      "script": "hiragana",
+      "example_sentence": "ちいさい あり が あるく。",
+      "example_romaji": "chiisai ari ga aruku.",
+      "example_vi": "Con kiến nhỏ đang đi bộ."
+    },
+    {
+      "id": "vocab_003",
+      "word": "いぬ",
+      "romaji": "inu",
+      "meaning_vi": "con chó",
+      "chars": [
+        "い",
+        "ぬ"
+      ],
+      "introduces": "い",
+      "script": "hiragana",
+      "example_sentence": "かわいい いぬ が はしる。",
+      "example_romaji": "kawaii inu ga hashiru.",
+      "example_vi": "Chú chó dễ thương đang chạy."
+    },
+    {
+      "id": "vocab_004",
+      "word": "いす",
+      "romaji": "isu",
+      "meaning_vi": "cái ghế",
+      "chars": [
+        "い",
+        "す"
+      ],
+      "introduces": "い",
+      "script": "hiragana",
+      "example_sentence": "いす に すわる。",
+      "example_romaji": "isu ni suwaru.",
+      "example_vi": "Ngồi lên chiếc ghế."
+    },
+    {
+      "id": "vocab_005",
+      "word": "うみ",
+      "romaji": "umi",
+      "meaning_vi": "biển",
+      "chars": [
+        "う",
+        "み"
+      ],
+      "introduces": "う",
+      "script": "hiragana",
+      "example_sentence": "あおい うみ へ いく。",
+      "example_romaji": "aoi umi e iku.",
+      "example_vi": "Đi ra biển xanh."
+    },
+    {
+      "id": "vocab_006",
+      "word": "うし",
+      "romaji": "ushi",
+      "meaning_vi": "con bò",
+      "chars": [
+        "う",
+        "し"
+      ],
+      "introduces": "う",
+      "script": "hiragana",
+      "example_sentence": "うし が くさ を たべる。",
+      "example_romaji": "ushi ga kusa wo taberu.",
+      "example_vi": "Con bò ăn cỏ."
+    },
+    {
+      "id": "vocab_007",
+      "word": "うえ",
+      "romaji": "ue",
+      "meaning_vi": "phía trên",
+      "chars": [
+        "う",
+        "え"
+      ],
+      "introduces": "え",
+      "script": "hiragana",
+      "example_sentence": "つくえ の うえ に ある。",
+      "example_romaji": "tsukue no ue ni aru.",
+      "example_vi": "Ở phía trên cái bàn."
+    },
+    {
+      "id": "vocab_008",
+      "word": "えび",
+      "romaji": "ebi",
+      "meaning_vi": "con tôm",
+      "chars": [
+        "え",
+        "び"
+      ],
+      "introduces": "え",
+      "script": "hiragana",
+      "example_sentence": "おいしい えび を たべる。",
+      "example_romaji": "oishii ebi wo taberu.",
+      "example_vi": "Ăn món tôm ngon."
+    },
+    {
+      "id": "vocab_009",
+      "word": "あおい",
+      "romaji": "aoi",
+      "meaning_vi": "màu xanh dương",
+      "chars": [
+        "あ",
+        "お",
+        "い"
+      ],
+      "introduces": "お",
+      "script": "hiragana",
+      "example_sentence": "そら が あおい です。",
+      "example_romaji": "sora ga aoi desu.",
+      "example_vi": "Bầu trời màu xanh dương."
+    },
+    {
+      "id": "vocab_010",
+      "word": "おに",
+      "romaji": "oni",
+      "meaning_vi": "con quỷ (truyện cổ tích)",
+      "chars": [
+        "お",
+        "に"
+      ],
+      "introduces": "お",
+      "script": "hiragana",
+      "example_sentence": "あかい おに が くる。",
+      "example_romaji": "akai oni ga kuru.",
+      "example_vi": "Con quỷ đỏ đang đến."
+    },
+    {
+      "id": "vocab_011",
+      "word": "かさ",
+      "romaji": "kasa",
+      "meaning_vi": "cái ô (dù)",
+      "chars": [
+        "か",
+        "さ"
+      ],
+      "introduces": "か",
+      "script": "hiragana",
+      "example_sentence": "あかい かさ を さす。",
+      "example_romaji": "akai kasa wo sasu.",
+      "example_vi": "Che chiếc ô màu đỏ."
+    },
+    {
+      "id": "vocab_012",
+      "word": "かお",
+      "romaji": "kao",
+      "meaning_vi": "khuôn mặt",
+      "chars": [
+        "か",
+        "お"
+      ],
+      "introduces": "か",
+      "script": "hiragana",
+      "example_sentence": "あさ かお を あらう。",
+      "example_romaji": "asa kao wo arau.",
+      "example_vi": "Buổi sáng rửa mặt."
+    },
+    {
+      "id": "vocab_013",
+      "word": "えき",
+      "romaji": "eki",
+      "meaning_vi": "nhà ga",
+      "chars": [
+        "え",
+        "き"
+      ],
+      "introduces": "き",
+      "script": "hiragana",
+      "example_sentence": "でんしゃ で えき へ いく。",
+      "example_romaji": "densha de eki e iku.",
+      "example_vi": "Đi tàu điện đến nhà ga."
+    },
+    {
+      "id": "vocab_014",
+      "word": "きつね",
+      "romaji": "kitsune",
+      "meaning_vi": "con cáo",
+      "chars": [
+        "き",
+        "つ",
+        "ね"
+      ],
+      "introduces": "き",
+      "script": "hiragana",
+      "example_sentence": "やま に きつね が いる。",
+      "example_romaji": "yama ni kitsune ga iru.",
+      "example_vi": "Trên núi có con cáo."
+    },
+    {
+      "id": "vocab_015",
+      "word": "くつ",
+      "romaji": "kutsu",
+      "meaning_vi": "đôi giày",
+      "chars": [
+        "く",
+        "つ"
+      ],
+      "introduces": "く",
+      "script": "hiragana",
+      "example_sentence": "あたらしい くつ を はく。",
+      "example_romaji": "atarashii kutsu wo haku.",
+      "example_vi": "Đi đôi giày mới."
+    },
+    {
+      "id": "vocab_016",
+      "word": "きく",
+      "romaji": "kiku",
+      "meaning_vi": "hoa cúc",
+      "chars": [
+        "き",
+        "く"
+      ],
+      "introduces": "く",
+      "script": "hiragana",
+      "example_sentence": "きいろい きく が さく。",
+      "example_romaji": "kiiroi kiku ga saku.",
+      "example_vi": "Hoa cúc vàng nở."
+    },
+    {
+      "id": "vocab_017",
+      "word": "いけ",
+      "romaji": "ike",
+      "meaning_vi": "cái ao",
+      "chars": [
+        "い",
+        "け"
+      ],
+      "introduces": "け",
+      "script": "hiragana",
+      "example_sentence": "いけ に こい が およぐ。",
+      "example_romaji": "ike ni koi ga oyogu.",
+      "example_vi": "Cá chép bơi trong ao."
+    },
+    {
+      "id": "vocab_018",
+      "word": "けむし",
+      "romaji": "kemushi",
+      "meaning_vi": "con sâu róm",
+      "chars": [
+        "け",
+        "む",
+        "し"
+      ],
+      "introduces": "け",
+      "script": "hiragana",
+      "example_sentence": "はっぱ に けむし が いる。",
+      "example_romaji": "happa ni kemushi ga iru.",
+      "example_vi": "Trên lá có con sâu róm."
+    },
+    {
+      "id": "vocab_019",
+      "word": "こい",
+      "romaji": "koi",
+      "meaning_vi": "cá chép",
+      "chars": [
+        "こ",
+        "い"
+      ],
+      "introduces": "こ",
+      "script": "hiragana",
+      "example_sentence": "おおきい こい を みる。",
+      "example_romaji": "ookii koi wo miru.",
+      "example_vi": "Ngắm con cá chép lớn."
+    },
+    {
+      "id": "vocab_020",
+      "word": "こま",
+      "romaji": "koma",
+      "meaning_vi": "con quay (đồ chơi)",
+      "chars": [
+        "こ",
+        "ま"
+      ],
+      "introduces": "こ",
+      "script": "hiragana",
+      "example_sentence": "こま を まわして あそぶ。",
+      "example_romaji": "koma wo mawashite asobu.",
+      "example_vi": "Quay con vụ để chơi."
+    },
+    {
+      "id": "vocab_021",
+      "word": "さかな",
+      "romaji": "sakana",
+      "meaning_vi": "con cá",
+      "chars": [
+        "さ",
+        "か",
+        "な"
+      ],
+      "introduces": "さ",
+      "script": "hiragana",
+      "example_sentence": "かわ で さかな を つる。",
+      "example_romaji": "kawa de sakana wo tsuru.",
+      "example_vi": "Câu cá ở trên sông."
+    },
+    {
+      "id": "vocab_022",
+      "word": "さる",
+      "romaji": "saru",
+      "meaning_vi": "con khỉ",
+      "chars": [
+        "さ",
+        "る"
+      ],
+      "introduces": "さ",
+      "script": "hiragana",
+      "example_sentence": "さる が き に のぼる。",
+      "example_romaji": "saru ga ki ni noboru.",
+      "example_vi": "Con khỉ trèo lên cây."
+    },
+    {
+      "id": "vocab_023",
+      "word": "しか",
+      "romaji": "shika",
+      "meaning_vi": "con hươu / nai",
+      "chars": [
+        "し",
+        "か"
+      ],
+      "introduces": "し",
+      "script": "hiragana",
+      "example_sentence": "こうえん に しか が いる。",
+      "example_romaji": "kouen ni shika ga iru.",
+      "example_vi": "Trong công viên có con hươu."
+    },
+    {
+      "id": "vocab_024",
+      "word": "あし",
+      "romaji": "ashi",
+      "meaning_vi": "đôi chân",
+      "chars": [
+        "あ",
+        "し"
+      ],
+      "introduces": "し",
+      "script": "hiragana",
+      "example_sentence": "あし が はやい です。",
+      "example_romaji": "ashi ga hayai desu.",
+      "example_vi": "Đôi chân chạy rất nhanh."
+    },
+    {
+      "id": "vocab_025",
+      "word": "すいか",
+      "romaji": "suika",
+      "meaning_vi": "quả dưa hấu",
+      "chars": [
+        "す",
+        "い",
+        "か"
+      ],
+      "introduces": "す",
+      "script": "hiragana",
+      "example_sentence": "なつ に すいか を たべる。",
+      "example_romaji": "natsu ni suika wo taberu.",
+      "example_vi": "Mùa hè ăn dưa hấu."
+    },
+    {
+      "id": "vocab_026",
+      "word": "すし",
+      "romaji": "sushi",
+      "meaning_vi": "món sushi",
+      "chars": [
+        "す",
+        "し"
+      ],
+      "introduces": "す",
+      "script": "hiragana",
+      "example_sentence": "わたし は すし が すき です。",
+      "example_romaji": "watashi wa sushi ga suki desu.",
+      "example_vi": "Tôi thích món sushi."
+    },
+    {
+      "id": "vocab_027",
+      "word": "せみ",
+      "romaji": "semi",
+      "meaning_vi": "con ve sầu",
+      "chars": [
+        "せ",
+        "み"
+      ],
+      "introduces": "せ",
+      "script": "hiragana",
+      "example_sentence": "き で せみ が なく。",
+      "example_romaji": "ki de semi ga naku.",
+      "example_vi": "Ve sầu kêu trên cây."
+    },
+    {
+      "id": "vocab_028",
+      "word": "あせ",
+      "romaji": "ase",
+      "meaning_vi": "mồ hôi",
+      "chars": [
+        "あ",
+        "せ"
+      ],
+      "introduces": "せ",
+      "script": "hiragana",
+      "example_sentence": "あつい ので あせ が でる。",
+      "example_romaji": "atsui node ase ga deru.",
+      "example_vi": "Trời nóng nên đổ mồ hôi."
+    },
+    {
+      "id": "vocab_029",
+      "word": "そら",
+      "romaji": "sora",
+      "meaning_vi": "bầu trời",
+      "chars": [
+        "そ",
+        "ら"
+      ],
+      "introduces": "そ",
+      "script": "hiragana",
+      "example_sentence": "ひろい そら を みあげる。",
+      "example_romaji": "hiroi sora wo miageru.",
+      "example_vi": "Ngước nhìn bầu trời rộng lớn."
+    },
+    {
+      "id": "vocab_030",
+      "word": "うそ",
+      "romaji": "uso",
+      "meaning_vi": "lời nói dối",
+      "chars": [
+        "う",
+        "そ"
+      ],
+      "introduces": "そ",
+      "script": "hiragana",
+      "example_sentence": "うそ を ついて は いけない。",
+      "example_romaji": "uso wo tsuite wa ikenai.",
+      "example_vi": "Không được nói dối."
+    },
+    {
+      "id": "vocab_031",
+      "word": "たこ",
+      "romaji": "tako",
+      "meaning_vi": "bạch tuộc / cánh diều",
+      "chars": [
+        "た",
+        "こ"
+      ],
+      "introduces": "た",
+      "script": "hiragana",
+      "example_sentence": "うみ に たこ が いる。",
+      "example_romaji": "umi ni tako ga iru.",
+      "example_vi": "Dưới biển có con bạch tuộc."
+    },
+    {
+      "id": "vocab_032",
+      "word": "うた",
+      "romaji": "uta",
+      "meaning_vi": "bài hát",
+      "chars": [
+        "う",
+        "た"
+      ],
+      "introduces": "た",
+      "script": "hiragana",
+      "example_sentence": "たのしい うた を うたう。",
+      "example_romaji": "tanoshii uta wo utau.",
+      "example_vi": "Hát bài ca vui vẻ."
+    },
+    {
+      "id": "vocab_033",
+      "word": "くち",
+      "romaji": "kuchi",
+      "meaning_vi": "cái miệng",
+      "chars": [
+        "く",
+        "ち"
+      ],
+      "introduces": "ち",
+      "script": "hiragana",
+      "example_sentence": "おおきく くち を あける。",
+      "example_romaji": "ookiku kuchi wo akeru.",
+      "example_vi": "Há miệng thật to."
+    },
+    {
+      "id": "vocab_034",
+      "word": "いち",
+      "romaji": "ichi",
+      "meaning_vi": "số một (1)",
+      "chars": [
+        "い",
+        "ち"
+      ],
+      "introduces": "ち",
+      "script": "hiragana",
+      "example_sentence": "いち から かぞえる。",
+      "example_romaji": "ichi kara kazoeru.",
+      "example_vi": "Đếm từ số một."
+    },
+    {
+      "id": "vocab_035",
+      "word": "つき",
+      "romaji": "tsuki",
+      "meaning_vi": "mặt trăng",
+      "chars": [
+        "つ",
+        "き"
+      ],
+      "introduces": "つ",
+      "script": "hiragana",
+      "example_sentence": "よる に まるい つき が でる。",
+      "example_romaji": "yoru ni marui tsuki ga deru.",
+      "example_vi": "Đêm xuống mặt trăng tròn hiện lên."
+    },
+    {
+      "id": "vocab_036",
+      "word": "つくえ",
+      "romaji": "tsukue",
+      "meaning_vi": "cái bàn học",
+      "chars": [
+        "つ",
+        "く",
+        "え"
+      ],
+      "introduces": "つ",
+      "script": "hiragana",
+      "example_sentence": "つくえ で べんきょう する。",
+      "example_romaji": "tsukue de benkyou suru.",
+      "example_vi": "Học bài trên bàn học."
+    },
+    {
+      "id": "vocab_037",
+      "word": "て",
+      "romaji": "te",
+      "meaning_vi": "bàn tay",
+      "chars": [
+        "て"
+      ],
+      "introduces": "て",
+      "script": "hiragana",
+      "example_sentence": "きれい に て を あらう。",
+      "example_romaji": "kirei ni te wo arau.",
+      "example_vi": "Rửa tay thật sạch."
+    },
+    {
+      "id": "vocab_038",
+      "word": "てがみ",
+      "romaji": "tegami",
+      "meaning_vi": "lá thư",
+      "chars": [
+        "て",
+        "が",
+        "み"
+      ],
+      "introduces": "て",
+      "script": "hiragana",
+      "example_sentence": "ともだち に てがみ を かく。",
+      "example_romaji": "tomodachi ni tegami wo kaku.",
+      "example_vi": "Viết thư cho bạn bè."
+    },
+    {
+      "id": "vocab_039",
+      "word": "とけい",
+      "romaji": "tokei",
+      "meaning_vi": "đồng hồ",
+      "chars": [
+        "と",
+        "け",
+        "い"
+      ],
+      "introduces": "と",
+      "script": "hiragana",
+      "example_sentence": "とけい の はり を みる。",
+      "example_romaji": "tokei no hari wo miru.",
+      "example_vi": "Nhìn kim đồng hồ."
+    },
+    {
+      "id": "vocab_040",
+      "word": "とり",
+      "romaji": "tori",
+      "meaning_vi": "con chim",
+      "chars": [
+        "と",
+        "り"
+      ],
+      "introduces": "と",
+      "script": "hiragana",
+      "example_sentence": "とり が そら を とぶ。",
+      "example_romaji": "tori ga sora wo tobu.",
+      "example_vi": "Con chim bay trên bầu trời."
+    },
+    {
+      "id": "vocab_041",
+      "word": "なつ",
+      "romaji": "natsu",
+      "meaning_vi": "mùa hè",
+      "chars": [
+        "な",
+        "つ"
+      ],
+      "introduces": "な",
+      "script": "hiragana",
+      "example_sentence": "あつい なつ が きた。",
+      "example_romaji": "atsui natsu ga kita.",
+      "example_vi": "Mùa hè nóng bức đã đến."
+    },
+    {
+      "id": "vocab_042",
+      "word": "なし",
+      "romaji": "nashi",
+      "meaning_vi": "quả lê",
+      "chars": [
+        "な",
+        "し"
+      ],
+      "introduces": "な",
+      "script": "hiragana",
+      "example_sentence": "あまい なし を たべる。",
+      "example_romaji": "amai nashi wo taberu.",
+      "example_vi": "Ăn quả lê ngọt."
+    },
+    {
+      "id": "vocab_043",
+      "word": "にく",
+      "romaji": "niku",
+      "meaning_vi": "thịt",
+      "chars": [
+        "に",
+        "く"
+      ],
+      "introduces": "に",
+      "script": "hiragana",
+      "example_sentence": "おいしい にく を やく。",
+      "example_romaji": "oishii niku wo yaku.",
+      "example_vi": "Nướng miếng thịt ngon."
+    },
+    {
+      "id": "vocab_044",
+      "word": "かに",
+      "romaji": "kani",
+      "meaning_vi": "con cua",
+      "chars": [
+        "か",
+        "に"
+      ],
+      "introduces": "に",
+      "script": "hiragana",
+      "example_sentence": "すなはま に かに が いる。",
+      "example_romaji": "sunahama ni kani ga iru.",
+      "example_vi": "Trên bãi cát có con cua."
+    },
+    {
+      "id": "vocab_045",
+      "word": "ぬの",
+      "romaji": "nuno",
+      "meaning_vi": "tấm vải",
+      "chars": [
+        "ぬ",
+        "の"
+      ],
+      "introduces": "ぬ",
+      "script": "hiragana",
+      "example_sentence": "しろい ぬの で ふく を ぬう。",
+      "example_romaji": "shiroi nuno de fuku wo nuu.",
+      "example_vi": "May áo bằng tấm vải trắng."
+    },
+    {
+      "id": "vocab_046",
+      "word": "たぬき",
+      "romaji": "tanuki",
+      "meaning_vi": "con lửng chó (tanuki)",
+      "chars": [
+        "た",
+        "ぬ",
+        "き"
+      ],
+      "introduces": "ぬ",
+      "script": "hiragana",
+      "example_sentence": "これ は たぬき です。",
+      "example_romaji": "kore wa tanuki desu.",
+      "example_vi": "Đây là con lửng chó (tanuki)."
+    },
+    {
+      "id": "vocab_047",
+      "word": "ねこ",
+      "romaji": "neko",
+      "meaning_vi": "con mèo",
+      "chars": [
+        "ね",
+        "こ"
+      ],
+      "introduces": "ね",
+      "script": "hiragana",
+      "example_sentence": "ねこ が ひるね を する。",
+      "example_romaji": "neko ga hirune wo suru.",
+      "example_vi": "Con mèo đang ngủ trưa."
+    },
+    {
+      "id": "vocab_048",
+      "word": "ふね",
+      "romaji": "fune",
+      "meaning_vi": "con thuyền",
+      "chars": [
+        "ふ",
+        "ね"
+      ],
+      "introduces": "ね",
+      "script": "hiragana",
+      "example_sentence": "ふね に のって わたる。",
+      "example_romaji": "fune ni notte wataru.",
+      "example_vi": "Đi thuyền qua sông."
+    },
+    {
+      "id": "vocab_049",
+      "word": "つの",
+      "romaji": "tsuno",
+      "meaning_vi": "cái sừng",
+      "chars": [
+        "つ",
+        "の"
+      ],
+      "introduces": "の",
+      "script": "hiragana",
+      "example_sentence": "これ は つの です。",
+      "example_romaji": "kore wa tsuno desu.",
+      "example_vi": "Đây là cái sừng."
+    },
+    {
+      "id": "vocab_050",
+      "word": "きのこ",
+      "romaji": "kinoko",
+      "meaning_vi": "cây nấm",
+      "chars": [
+        "き",
+        "の",
+        "こ"
+      ],
+      "introduces": "の",
+      "script": "hiragana",
+      "example_sentence": "これ は きのこ です。",
+      "example_romaji": "kore wa kinoko desu.",
+      "example_vi": "Đây là cây nấm."
+    },
+    {
+      "id": "vocab_051",
+      "word": "はな",
+      "romaji": "hana",
+      "meaning_vi": "bông hoa / cái mũi",
+      "chars": [
+        "は",
+        "な"
+      ],
+      "introduces": "は",
+      "script": "hiragana",
+      "example_sentence": "にわ に きれい な はな が さく。",
+      "example_romaji": "niwa ni kirei na hana ga saku.",
+      "example_vi": "Hoa đẹp nở trong vườn."
+    },
+    {
+      "id": "vocab_052",
+      "word": "はこ",
+      "romaji": "hako",
+      "meaning_vi": "cái hộp",
+      "chars": [
+        "は",
+        "こ"
+      ],
+      "introduces": "は",
+      "script": "hiragana",
+      "example_sentence": "はこ の なか を あける。",
+      "example_romaji": "hako no naka wo akeru.",
+      "example_vi": "Mở bên trong chiếc hộp ra."
+    },
+    {
+      "id": "vocab_053",
+      "word": "ひと",
+      "romaji": "hito",
+      "meaning_vi": "con người",
+      "chars": [
+        "ひ",
+        "と"
+      ],
+      "introduces": "ひ",
+      "script": "hiragana",
+      "example_sentence": "やさしい ひと に あう。",
+      "example_romaji": "yasashii hito ni au.",
+      "example_vi": "Gặp người tốt bụng."
+    },
+    {
+      "id": "vocab_054",
+      "word": "ひこうき",
+      "romaji": "hikouki",
+      "meaning_vi": "máy bay",
+      "chars": [
+        "ひ",
+        "こ",
+        "う",
+        "き"
+      ],
+      "introduces": "ひ",
+      "script": "hiragana",
+      "example_sentence": "ひこうき が たかく とぶ。",
+      "example_romaji": "hikouki ga takaku tobu.",
+      "example_vi": "Máy bay bay thật cao."
+    },
+    {
+      "id": "vocab_055",
+      "word": "ふく",
+      "romaji": "fuku",
+      "meaning_vi": "quần áo",
+      "chars": [
+        "ふ",
+        "く"
+      ],
+      "introduces": "ふ",
+      "script": "hiragana",
+      "example_sentence": "あたたかい ふく を きる。",
+      "example_romaji": "atatakai fuku wo kiru.",
+      "example_vi": "Mặc quần áo ấm."
+    },
+    {
+      "id": "vocab_056",
+      "word": "ふえ",
+      "romaji": "fue",
+      "meaning_vi": "cái sáo / còi",
+      "chars": [
+        "ふ",
+        "え"
+      ],
+      "introduces": "ふ",
+      "script": "hiragana",
+      "example_sentence": "これ は ふえ です。",
+      "example_romaji": "kore wa fue desu.",
+      "example_vi": "Đây là cái sáo / còi."
+    },
+    {
+      "id": "vocab_057",
+      "word": "へび",
+      "romaji": "hebi",
+      "meaning_vi": "con rắn",
+      "chars": [
+        "へ",
+        "び"
+      ],
+      "introduces": "へ",
+      "script": "hiragana",
+      "example_sentence": "これ は へび です。",
+      "example_romaji": "kore wa hebi desu.",
+      "example_vi": "Đây là con rắn."
+    },
+    {
+      "id": "vocab_058",
+      "word": "へそ",
+      "romaji": "heso",
+      "meaning_vi": "cái rốn",
+      "chars": [
+        "へ",
+        "そ"
+      ],
+      "introduces": "へ",
+      "script": "hiragana",
+      "example_sentence": "これ は へそ です。",
+      "example_romaji": "kore wa heso desu.",
+      "example_vi": "Đây là cái rốn."
+    },
+    {
+      "id": "vocab_059",
+      "word": "ほし",
+      "romaji": "hoshi",
+      "meaning_vi": "ngôi sao",
+      "chars": [
+        "ほ",
+        "し"
+      ],
+      "introduces": "ほ",
+      "script": "hiragana",
+      "example_sentence": "よぞら に ほし が ひかる。",
+      "example_romaji": "yozora ni hoshi ga hikaru.",
+      "example_vi": "Ngôi sao lấp lánh trên bầu trời đêm."
+    },
+    {
+      "id": "vocab_060",
+      "word": "ほね",
+      "romaji": "hone",
+      "meaning_vi": "cái xương",
+      "chars": [
+        "ほ",
+        "ね"
+      ],
+      "introduces": "ほ",
+      "script": "hiragana",
+      "example_sentence": "これ は ほね です。",
+      "example_romaji": "kore wa hone desu.",
+      "example_vi": "Đây là cái xương."
+    },
+    {
+      "id": "vocab_061",
+      "word": "まくら",
+      "romaji": "makura",
+      "meaning_vi": "cái gối",
+      "chars": [
+        "ま",
+        "く",
+        "ら"
+      ],
+      "introduces": "ま",
+      "script": "hiragana",
+      "example_sentence": "これ は まくら です。",
+      "example_romaji": "kore wa makura desu.",
+      "example_vi": "Đây là cái gối."
+    },
+    {
+      "id": "vocab_062",
+      "word": "まめ",
+      "romaji": "mame",
+      "meaning_vi": "hạt đậu",
+      "chars": [
+        "ま",
+        "め"
+      ],
+      "introduces": "ま",
+      "script": "hiragana",
+      "example_sentence": "これ は まめ です。",
+      "example_romaji": "kore wa mame desu.",
+      "example_vi": "Đây là hạt đậu."
+    },
+    {
+      "id": "vocab_063",
+      "word": "みみ",
+      "romaji": "mimi",
+      "meaning_vi": "đôi tai",
+      "chars": [
+        "み",
+        "み"
+      ],
+      "introduces": "み",
+      "script": "hiragana",
+      "example_sentence": "うさぎ は みみ が ながい。",
+      "example_romaji": "usagi wa mimi ga nagai.",
+      "example_vi": "Con thỏ có đôi tai dài."
+    },
+    {
+      "id": "vocab_064",
+      "word": "みかん",
+      "romaji": "mikan",
+      "meaning_vi": "quả quýt",
+      "chars": [
+        "み",
+        "か",
+        "ん"
+      ],
+      "introduces": "み",
+      "script": "hiragana",
+      "example_sentence": "ふゆ に みかん を たべる。",
+      "example_romaji": "fuyu ni mikan wo taberu.",
+      "example_vi": "Mùa đông ăn quả quýt."
+    },
+    {
+      "id": "vocab_065",
+      "word": "むし",
+      "romaji": "mushi",
+      "meaning_vi": "côn trùng / sâu bọ",
+      "chars": [
+        "む",
+        "し"
+      ],
+      "introduces": "む",
+      "script": "hiragana",
+      "example_sentence": "これ は むし です。",
+      "example_romaji": "kore wa mushi desu.",
+      "example_vi": "Đây là côn trùng / sâu bọ."
+    },
+    {
+      "id": "vocab_066",
+      "word": "むね",
+      "romaji": "mune",
+      "meaning_vi": "lồng ngực",
+      "chars": [
+        "む",
+        "ね"
+      ],
+      "introduces": "む",
+      "script": "hiragana",
+      "example_sentence": "これ は むね です。",
+      "example_romaji": "kore wa mune desu.",
+      "example_vi": "Đây là lồng ngực."
+    },
+    {
+      "id": "vocab_067",
+      "word": "め",
+      "romaji": "me",
+      "meaning_vi": "đôi mắt",
+      "chars": [
+        "め"
+      ],
+      "introduces": "め",
+      "script": "hiragana",
+      "example_sentence": "め を とじて やすむ。",
+      "example_romaji": "me wo tojite yasumu.",
+      "example_vi": "Nhắm mắt lại và nghỉ ngơi."
+    },
+    {
+      "id": "vocab_068",
+      "word": "めがね",
+      "romaji": "megane",
+      "meaning_vi": "cặp kính mắt",
+      "chars": [
+        "め",
+        "が",
+        "ね"
+      ],
+      "introduces": "め",
+      "script": "hiragana",
+      "example_sentence": "あたらしい めがね を かける。",
+      "example_romaji": "atarashii megane wo kakeru.",
+      "example_vi": "Đeo cặp kính mắt mới."
+    },
+    {
+      "id": "vocab_069",
+      "word": "もも",
+      "romaji": "momo",
+      "meaning_vi": "quả đào",
+      "chars": [
+        "も",
+        "も"
+      ],
+      "introduces": "も",
+      "script": "hiragana",
+      "example_sentence": "あまい もも を たべる。",
+      "example_romaji": "amai momo wo taberu.",
+      "example_vi": "Ăn quả đào ngọt."
+    },
+    {
+      "id": "vocab_070",
+      "word": "くも",
+      "romaji": "kumo",
+      "meaning_vi": "đám mây / con nhện",
+      "chars": [
+        "く",
+        "も"
+      ],
+      "introduces": "も",
+      "script": "hiragana",
+      "example_sentence": "これ は くも です。",
+      "example_romaji": "kore wa kumo desu.",
+      "example_vi": "Đây là đám mây / con nhện."
+    },
+    {
+      "id": "vocab_071",
+      "word": "やま",
+      "romaji": "yama",
+      "meaning_vi": "ngọn núi",
+      "chars": [
+        "や",
+        "ま"
+      ],
+      "introduces": "や",
+      "script": "hiragana",
+      "example_sentence": "たかい やま に のぼる。",
+      "example_romaji": "takai yama ni noboru.",
+      "example_vi": "Leo lên ngọn núi cao."
+    },
+    {
+      "id": "vocab_072",
+      "word": "やさい",
+      "romaji": "yasai",
+      "meaning_vi": "rau củ",
+      "chars": [
+        "や",
+        "さ",
+        "い"
+      ],
+      "introduces": "や",
+      "script": "hiragana",
+      "example_sentence": "これ は やさい です。",
+      "example_romaji": "kore wa yasai desu.",
+      "example_vi": "Đây là rau củ."
+    },
+    {
+      "id": "vocab_073",
+      "word": "ゆき",
+      "romaji": "yuki",
+      "meaning_vi": "tuyết",
+      "chars": [
+        "ゆ",
+        "き"
+      ],
+      "introduces": "ゆ",
+      "script": "hiragana",
+      "example_sentence": "しろい ゆき が ふる。",
+      "example_romaji": "shiroi yuki ga furu.",
+      "example_vi": "Tuyết trắng rơi."
+    },
+    {
+      "id": "vocab_074",
+      "word": "ゆび",
+      "romaji": "yubi",
+      "meaning_vi": "ngón tay",
+      "chars": [
+        "ゆ",
+        "び"
+      ],
+      "introduces": "ゆ",
+      "script": "hiragana",
+      "example_sentence": "これ は ゆび です。",
+      "example_romaji": "kore wa yubi desu.",
+      "example_vi": "Đây là ngón tay."
+    },
+    {
+      "id": "vocab_075",
+      "word": "よる",
+      "romaji": "yoru",
+      "meaning_vi": "ban đêm",
+      "chars": [
+        "よ",
+        "る"
+      ],
+      "introduces": "よ",
+      "script": "hiragana",
+      "example_sentence": "しずか な よる に ねむる。",
+      "example_romaji": "shizuka na yoru ni nemuru.",
+      "example_vi": "Ngủ trong đêm yên tĩnh."
+    },
+    {
+      "id": "vocab_076",
+      "word": "ひよこ",
+      "romaji": "hiyoko",
+      "meaning_vi": "gà con",
+      "chars": [
+        "ひ",
+        "よ",
+        "こ"
+      ],
+      "introduces": "よ",
+      "script": "hiragana",
+      "example_sentence": "これ は ひよこ です。",
+      "example_romaji": "kore wa hiyoko desu.",
+      "example_vi": "Đây là gà con."
+    },
+    {
+      "id": "vocab_077",
+      "word": "さくら",
+      "romaji": "sakura",
+      "meaning_vi": "hoa anh đào",
+      "chars": [
+        "さ",
+        "く",
+        "ら"
+      ],
+      "introduces": "ら",
+      "script": "hiragana",
+      "example_sentence": "はる に さくら が さく。",
+      "example_romaji": "haru ni sakura ga saku.",
+      "example_vi": "Mùa xuân hoa anh đào nở."
+    },
+    {
+      "id": "vocab_078",
+      "word": "とら",
+      "romaji": "tora",
+      "meaning_vi": "con hổ",
+      "chars": [
+        "と",
+        "ら"
+      ],
+      "introduces": "ら",
+      "script": "hiragana",
+      "example_sentence": "これ は とら です。",
+      "example_romaji": "kore wa tora desu.",
+      "example_vi": "Đây là con hổ."
+    },
+    {
+      "id": "vocab_079",
+      "word": "りす",
+      "romaji": "risu",
+      "meaning_vi": "con sóc",
+      "chars": [
+        "り",
+        "す"
+      ],
+      "introduces": "り",
+      "script": "hiragana",
+      "example_sentence": "これ は りす です。",
+      "example_romaji": "kore wa risu desu.",
+      "example_vi": "Đây là con sóc."
+    },
+    {
+      "id": "vocab_080",
+      "word": "りんご",
+      "romaji": "ringo",
+      "meaning_vi": "quả táo",
+      "chars": [
+        "り",
+        "ん",
+        "ご"
+      ],
+      "introduces": "り",
+      "script": "hiragana",
+      "example_sentence": "これ は りんご です。",
+      "example_romaji": "kore wa ringo desu.",
+      "example_vi": "Đây là quả táo."
+    },
+    {
+      "id": "vocab_081",
+      "word": "くるま",
+      "romaji": "kuruma",
+      "meaning_vi": "xe ô tô",
+      "chars": [
+        "く",
+        "る",
+        "ま"
+      ],
+      "introduces": "る",
+      "script": "hiragana",
+      "example_sentence": "くるま に のって でかける。",
+      "example_romaji": "kuruma ni notte dekakeru.",
+      "example_vi": "Lên xe ô tô đi dạo."
+    },
+    {
+      "id": "vocab_082",
+      "word": "かえる",
+      "romaji": "kaeru",
+      "meaning_vi": "con ếch",
+      "chars": [
+        "か",
+        "え",
+        "る"
+      ],
+      "introduces": "る",
+      "script": "hiragana",
+      "example_sentence": "これ は かえる です。",
+      "example_romaji": "kore wa kaeru desu.",
+      "example_vi": "Đây là con ếch."
+    },
+    {
+      "id": "vocab_083",
+      "word": "れもん",
+      "romaji": "remon",
+      "meaning_vi": "quả chanh vàng",
+      "chars": [
+        "れ",
+        "も",
+        "ん"
+      ],
+      "introduces": "れ",
+      "script": "hiragana",
+      "example_sentence": "これ は れもん です。",
+      "example_romaji": "kore wa remon desu.",
+      "example_vi": "Đây là quả chanh vàng."
+    },
+    {
+      "id": "vocab_084",
+      "word": "すみれ",
+      "romaji": "sumire",
+      "meaning_vi": "hoa tím (violet)",
+      "chars": [
+        "す",
+        "み",
+        "れ"
+      ],
+      "introduces": "れ",
+      "script": "hiragana",
+      "example_sentence": "これ は すみれ です。",
+      "example_romaji": "kore wa sumire desu.",
+      "example_vi": "Đây là hoa tím (violet)."
+    },
+    {
+      "id": "vocab_085",
+      "word": "しろ",
+      "romaji": "shiro",
+      "meaning_vi": "màu trắng",
+      "chars": [
+        "し",
+        "ろ"
+      ],
+      "introduces": "ろ",
+      "script": "hiragana",
+      "example_sentence": "これ は しろ です。",
+      "example_romaji": "kore wa shiro desu.",
+      "example_vi": "Đây là màu trắng."
+    },
+    {
+      "id": "vocab_086",
+      "word": "くろ",
+      "romaji": "kuro",
+      "meaning_vi": "màu đen",
+      "chars": [
+        "く",
+        "ろ"
+      ],
+      "introduces": "ろ",
+      "script": "hiragana",
+      "example_sentence": "これ は くろ です。",
+      "example_romaji": "kore wa kuro desu.",
+      "example_vi": "Đây là màu đen."
+    },
+    {
+      "id": "vocab_087",
+      "word": "わに",
+      "romaji": "wani",
+      "meaning_vi": "con cá sấu",
+      "chars": [
+        "わ",
+        "に"
+      ],
+      "introduces": "わ",
+      "script": "hiragana",
+      "example_sentence": "これ は わに です。",
+      "example_romaji": "kore wa wani desu.",
+      "example_vi": "Đây là con cá sấu."
+    },
+    {
+      "id": "vocab_088",
+      "word": "かわ",
+      "romaji": "kawa",
+      "meaning_vi": "dòng sông",
+      "chars": [
+        "か",
+        "わ"
+      ],
+      "introduces": "わ",
+      "script": "hiragana",
+      "example_sentence": "これ は かわ です。",
+      "example_romaji": "kore wa kawa desu.",
+      "example_vi": "Đây là dòng sông."
+    },
+    {
+      "id": "vocab_089",
+      "word": "ほんをよむ",
+      "romaji": "hon wo yomu",
+      "meaning_vi": "đọc sách (trợ từ を)",
+      "chars": [
+        "ほ",
+        "ん",
+        "を",
+        "よ",
+        "む"
+      ],
+      "introduces": "を",
+      "script": "hiragana",
+      "example_sentence": "これ は ほんをよむ です。",
+      "example_romaji": "kore wa hon wo yomu desu.",
+      "example_vi": "Đây là đọc sách (trợ từ を)."
+    },
+    {
+      "id": "vocab_090",
+      "word": "えをかく",
+      "romaji": "e wo kaku",
+      "meaning_vi": "vẽ tranh (trợ từ を)",
+      "chars": [
+        "え",
+        "を",
+        "か",
+        "く"
+      ],
+      "introduces": "を",
+      "script": "hiragana",
+      "example_sentence": "これ は えをかく です。",
+      "example_romaji": "kore wa e wo kaku desu.",
+      "example_vi": "Đây là vẽ tranh (trợ từ を)."
+    },
+    {
+      "id": "vocab_091",
+      "word": "ほん",
+      "romaji": "hon",
+      "meaning_vi": "quyển sách",
+      "chars": [
+        "ほ",
+        "ん"
+      ],
+      "introduces": "ん",
+      "script": "hiragana",
+      "example_sentence": "まいにち ほん を よむ。",
+      "example_romaji": "mainichi hon wo yomu.",
+      "example_vi": "Mỗi ngày đều đọc sách."
+    },
+    {
+      "id": "vocab_092",
+      "word": "きりん",
+      "romaji": "kirin",
+      "meaning_vi": "hươu cao cổ",
+      "chars": [
+        "き",
+        "り",
+        "ん"
+      ],
+      "introduces": "ん",
+      "script": "hiragana",
+      "example_sentence": "これ は きりん です。",
+      "example_romaji": "kore wa kirin desu.",
+      "example_vi": "Đây là hươu cao cổ."
+    },
+    {
+      "id": "vocab_093",
+      "word": "アイス",
+      "romaji": "aisu",
+      "meaning_vi": "kem (ice cream)",
+      "chars": [
+        "ア",
+        "イ",
+        "ス"
+      ],
+      "introduces": "ア",
+      "script": "katakana",
+      "example_sentence": "つめたい アイス を たべる。",
+      "example_romaji": "tsumetai aisu wo taberu.",
+      "example_vi": "Ăn cây kem mát lạnh."
+    },
+    {
+      "id": "vocab_094",
+      "word": "アニメ",
+      "romaji": "anime",
+      "meaning_vi": "phim hoạt hình",
+      "chars": [
+        "ア",
+        "ニ",
+        "メ"
+      ],
+      "introduces": "ア",
+      "script": "katakana",
+      "example_sentence": "これ は アニメ です。",
+      "example_romaji": "kore wa anime desu.",
+      "example_vi": "Đây là phim hoạt hình."
+    },
+    {
+      "id": "vocab_095",
+      "word": "インク",
+      "romaji": "inku",
+      "meaning_vi": "mực viết",
+      "chars": [
+        "イ",
+        "ン",
+        "ク"
+      ],
+      "introduces": "イ",
+      "script": "katakana",
+      "example_sentence": "これ は インク です。",
+      "example_romaji": "kore wa inku desu.",
+      "example_vi": "Đây là mực viết."
+    },
+    {
+      "id": "vocab_096",
+      "word": "イチゴ",
+      "romaji": "ichigo",
+      "meaning_vi": "quả dâu tây",
+      "chars": [
+        "イ",
+        "チ",
+        "ゴ"
+      ],
+      "introduces": "イ",
+      "script": "katakana",
+      "example_sentence": "これ は イチゴ です。",
+      "example_romaji": "kore wa ichigo desu.",
+      "example_vi": "Đây là quả dâu tây."
+    },
+    {
+      "id": "vocab_097",
+      "word": "ウサギ",
+      "romaji": "usagi",
+      "meaning_vi": "con thỏ",
+      "chars": [
+        "ウ",
+        "サ",
+        "ギ"
+      ],
+      "introduces": "ウ",
+      "script": "katakana",
+      "example_sentence": "これ は ウサギ です。",
+      "example_romaji": "kore wa usagi desu.",
+      "example_vi": "Đây là con thỏ."
+    },
+    {
+      "id": "vocab_098",
+      "word": "ウール",
+      "romaji": "uuru",
+      "meaning_vi": "len (wool)",
+      "chars": [
+        "ウ",
+        "ー",
+        "ル"
+      ],
+      "introduces": "ウ",
+      "script": "katakana",
+      "example_sentence": "これ は ウール です。",
+      "example_romaji": "kore wa uuru desu.",
+      "example_vi": "Đây là len (wool)."
+    },
+    {
+      "id": "vocab_099",
+      "word": "エアコン",
+      "romaji": "eakon",
+      "meaning_vi": "máy điều hoà",
+      "chars": [
+        "エ",
+        "ア",
+        "コ",
+        "ン"
+      ],
+      "introduces": "エ",
+      "script": "katakana",
+      "example_sentence": "これ は エアコン です。",
+      "example_romaji": "kore wa eakon desu.",
+      "example_vi": "Đây là máy điều hoà."
+    },
+    {
+      "id": "vocab_100",
+      "word": "エプロン",
+      "romaji": "epuron",
+      "meaning_vi": "tạp dề",
+      "chars": [
+        "エ",
+        "プ",
+        "ロ",
+        "ン"
+      ],
+      "introduces": "エ",
+      "script": "katakana",
+      "example_sentence": "これ は エプロン です。",
+      "example_romaji": "kore wa epuron desu.",
+      "example_vi": "Đây là tạp dề."
+    },
+    {
+      "id": "vocab_101",
+      "word": "オレンジ",
+      "romaji": "orenji",
+      "meaning_vi": "quả cam",
+      "chars": [
+        "オ",
+        "レ",
+        "ン",
+        "ジ"
+      ],
+      "introduces": "オ",
+      "script": "katakana",
+      "example_sentence": "これ は オレンジ です。",
+      "example_romaji": "kore wa orenji desu.",
+      "example_vi": "Đây là quả cam."
+    },
+    {
+      "id": "vocab_102",
+      "word": "タオル",
+      "romaji": "taoru",
+      "meaning_vi": "khăn bông",
+      "chars": [
+        "タ",
+        "オ",
+        "ル"
+      ],
+      "introduces": "オ",
+      "script": "katakana",
+      "example_sentence": "これ は タオル です。",
+      "example_romaji": "kore wa taoru desu.",
+      "example_vi": "Đây là khăn bông."
+    },
+    {
+      "id": "vocab_103",
+      "word": "カメラ",
+      "romaji": "kamera",
+      "meaning_vi": "máy ảnh",
+      "chars": [
+        "カ",
+        "メ",
+        "ラ"
+      ],
+      "introduces": "カ",
+      "script": "katakana",
+      "example_sentence": "カメラ で しゃしん を とる。",
+      "example_romaji": "kamera de shashin wo toru.",
+      "example_vi": "Chụp ảnh bằng máy ảnh."
+    },
+    {
+      "id": "vocab_104",
+      "word": "カレー",
+      "romaji": "karee",
+      "meaning_vi": "món cà ri",
+      "chars": [
+        "カ",
+        "レ",
+        "ー"
+      ],
+      "introduces": "カ",
+      "script": "katakana",
+      "example_sentence": "これ は カレー です。",
+      "example_romaji": "kore wa karee desu.",
+      "example_vi": "Đây là món cà ri."
+    },
+    {
+      "id": "vocab_105",
+      "word": "キウイ",
+      "romaji": "kiui",
+      "meaning_vi": "quả kiwi",
+      "chars": [
+        "キ",
+        "ウ",
+        "イ"
+      ],
+      "introduces": "キ",
+      "script": "katakana",
+      "example_sentence": "これ は キウイ です。",
+      "example_romaji": "kore wa kiui desu.",
+      "example_vi": "Đây là quả kiwi."
+    },
+    {
+      "id": "vocab_106",
+      "word": "スキー",
+      "romaji": "sukii",
+      "meaning_vi": "trượt tuyết",
+      "chars": [
+        "ス",
+        "キ",
+        "ー"
+      ],
+      "introduces": "キ",
+      "script": "katakana",
+      "example_sentence": "これ は スキー です。",
+      "example_romaji": "kore wa sukii desu.",
+      "example_vi": "Đây là trượt tuyết."
+    },
+    {
+      "id": "vocab_107",
+      "word": "クラス",
+      "romaji": "kurasu",
+      "meaning_vi": "lớp học",
+      "chars": [
+        "ク",
+        "ラ",
+        "ス"
+      ],
+      "introduces": "ク",
+      "script": "katakana",
+      "example_sentence": "これ は クラス です。",
+      "example_romaji": "kore wa kurasu desu.",
+      "example_vi": "Đây là lớp học."
+    },
+    {
+      "id": "vocab_108",
+      "word": "マイク",
+      "romaji": "maiku",
+      "meaning_vi": "chiếc micro",
+      "chars": [
+        "マ",
+        "イ",
+        "ク"
+      ],
+      "introduces": "ク",
+      "script": "katakana",
+      "example_sentence": "これ は マイク です。",
+      "example_romaji": "kore wa maiku desu.",
+      "example_vi": "Đây là chiếc micro."
+    },
+    {
+      "id": "vocab_109",
+      "word": "ケーキ",
+      "romaji": "keeki",
+      "meaning_vi": "bánh kem",
+      "chars": [
+        "ケ",
+        "ー",
+        "キ"
+      ],
+      "introduces": "ケ",
+      "script": "katakana",
+      "example_sentence": "たんじょうび に ケーキ を たべる。",
+      "example_romaji": "tanjoubi ni keeki wo taberu.",
+      "example_vi": "Ăn bánh kem vào ngày sinh nhật."
+    },
+    {
+      "id": "vocab_110",
+      "word": "バケツ",
+      "romaji": "baketsu",
+      "meaning_vi": "cái xô",
+      "chars": [
+        "バ",
+        "ケ",
+        "ツ"
+      ],
+      "introduces": "ケ",
+      "script": "katakana",
+      "example_sentence": "これ は バケツ です。",
+      "example_romaji": "kore wa baketsu desu.",
+      "example_vi": "Đây là cái xô."
+    },
+    {
+      "id": "vocab_111",
+      "word": "コーヒー",
+      "romaji": "koohii",
+      "meaning_vi": "cà phê",
+      "chars": [
+        "コ",
+        "ー",
+        "ヒ",
+        "ー"
+      ],
+      "introduces": "コ",
+      "script": "katakana",
+      "example_sentence": "あたたかい コーヒー を のむ。",
+      "example_romaji": "atatakai koohii wo nomu.",
+      "example_vi": "Uống tách cà phê ấm."
+    },
+    {
+      "id": "vocab_112",
+      "word": "コアラ",
+      "romaji": "koara",
+      "meaning_vi": "gấu túi koala",
+      "chars": [
+        "コ",
+        "ア",
+        "ラ"
+      ],
+      "introduces": "コ",
+      "script": "katakana",
+      "example_sentence": "これ は コアラ です。",
+      "example_romaji": "kore wa koara desu.",
+      "example_vi": "Đây là gấu túi koala."
+    },
+    {
+      "id": "vocab_113",
+      "word": "サラダ",
+      "romaji": "sarada",
+      "meaning_vi": "món salad",
+      "chars": [
+        "サ",
+        "ラ",
+        "ダ"
+      ],
+      "introduces": "サ",
+      "script": "katakana",
+      "example_sentence": "これ は サラダ です。",
+      "example_romaji": "kore wa sarada desu.",
+      "example_vi": "Đây là món salad."
+    },
+    {
+      "id": "vocab_114",
+      "word": "サッカー",
+      "romaji": "sakkaa",
+      "meaning_vi": "bóng đá",
+      "chars": [
+        "サ",
+        "ッ",
+        "カ",
+        "ー"
+      ],
+      "introduces": "サ",
+      "script": "katakana",
+      "example_sentence": "これ は サッカー です。",
+      "example_romaji": "kore wa sakkaa desu.",
+      "example_vi": "Đây là bóng đá."
+    },
+    {
+      "id": "vocab_115",
+      "word": "シャツ",
+      "romaji": "shatsu",
+      "meaning_vi": "áo sơ mi",
+      "chars": [
+        "シ",
+        "ャ",
+        "ツ"
+      ],
+      "introduces": "シ",
+      "script": "katakana",
+      "example_sentence": "これ は シャツ です。",
+      "example_romaji": "kore wa shatsu desu.",
+      "example_vi": "Đây là áo sơ mi."
+    },
+    {
+      "id": "vocab_116",
+      "word": "タクシー",
+      "romaji": "takushii",
+      "meaning_vi": "xe taxi",
+      "chars": [
+        "タ",
+        "ク",
+        "シ",
+        "ー"
+      ],
+      "introduces": "シ",
+      "script": "katakana",
+      "example_sentence": "これ は タクシー です。",
+      "example_romaji": "kore wa takushii desu.",
+      "example_vi": "Đây là xe taxi."
+    },
+    {
+      "id": "vocab_117",
+      "word": "スプーン",
+      "romaji": "supuun",
+      "meaning_vi": "cái thìa (muỗng)",
+      "chars": [
+        "ス",
+        "プ",
+        "ー",
+        "ン"
+      ],
+      "introduces": "ス",
+      "script": "katakana",
+      "example_sentence": "これ は スプーン です。",
+      "example_romaji": "kore wa supuun desu.",
+      "example_vi": "Đây là cái thìa (muỗng)."
+    },
+    {
+      "id": "vocab_118",
+      "word": "バス",
+      "romaji": "basu",
+      "meaning_vi": "xe buýt",
+      "chars": [
+        "バ",
+        "ス"
+      ],
+      "introduces": "ス",
+      "script": "katakana",
+      "example_sentence": "これ は バス です。",
+      "example_romaji": "kore wa basu desu.",
+      "example_vi": "Đây là xe buýt."
+    },
+    {
+      "id": "vocab_119",
+      "word": "セーター",
+      "romaji": "seetaa",
+      "meaning_vi": "áo len",
+      "chars": [
+        "セ",
+        "ー",
+        "タ",
+        "ー"
+      ],
+      "introduces": "セ",
+      "script": "katakana",
+      "example_sentence": "これ は セーター です。",
+      "example_romaji": "kore wa seetaa desu.",
+      "example_vi": "Đây là áo len."
+    },
+    {
+      "id": "vocab_120",
+      "word": "セット",
+      "romaji": "setto",
+      "meaning_vi": "bộ (set)",
+      "chars": [
+        "セ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "セ",
+      "script": "katakana",
+      "example_sentence": "これ は セット です。",
+      "example_romaji": "kore wa setto desu.",
+      "example_vi": "Đây là bộ (set)."
+    },
+    {
+      "id": "vocab_121",
+      "word": "ソファ",
+      "romaji": "sofa",
+      "meaning_vi": "ghế sofa",
+      "chars": [
+        "ソ",
+        "フ",
+        "ァ"
+      ],
+      "introduces": "ソ",
+      "script": "katakana",
+      "example_sentence": "これ は ソファ です。",
+      "example_romaji": "kore wa sofa desu.",
+      "example_vi": "Đây là ghế sofa."
+    },
+    {
+      "id": "vocab_122",
+      "word": "ソース",
+      "romaji": "soosu",
+      "meaning_vi": "nước sốt",
+      "chars": [
+        "ソ",
+        "ー",
+        "ス"
+      ],
+      "introduces": "ソ",
+      "script": "katakana",
+      "example_sentence": "これ は ソース です。",
+      "example_romaji": "kore wa soosu desu.",
+      "example_vi": "Đây là nước sốt."
+    },
+    {
+      "id": "vocab_123",
+      "word": "タイヤ",
+      "romaji": "taiya",
+      "meaning_vi": "lốp xe",
+      "chars": [
+        "タ",
+        "イ",
+        "ヤ"
+      ],
+      "introduces": "タ",
+      "script": "katakana",
+      "example_sentence": "これ は タイヤ です。",
+      "example_romaji": "kore wa taiya desu.",
+      "example_vi": "Đây là lốp xe."
+    },
+    {
+      "id": "vocab_124",
+      "word": "ギター",
+      "romaji": "gitaa",
+      "meaning_vi": "đàn ghi-ta",
+      "chars": [
+        "ギ",
+        "タ",
+        "ー"
+      ],
+      "introduces": "タ",
+      "script": "katakana",
+      "example_sentence": "これ は ギター です。",
+      "example_romaji": "kore wa gitaa desu.",
+      "example_vi": "Đây là đàn ghi-ta."
+    },
+    {
+      "id": "vocab_125",
+      "word": "チーズ",
+      "romaji": "chiizu",
+      "meaning_vi": "phô mai",
+      "chars": [
+        "チ",
+        "ー",
+        "ズ"
+      ],
+      "introduces": "チ",
+      "script": "katakana",
+      "example_sentence": "これ は チーズ です。",
+      "example_romaji": "kore wa chiizu desu.",
+      "example_vi": "Đây là phô mai."
+    },
+    {
+      "id": "vocab_126",
+      "word": "チキン",
+      "romaji": "chikin",
+      "meaning_vi": "thịt gà",
+      "chars": [
+        "チ",
+        "キ",
+        "ン"
+      ],
+      "introduces": "チ",
+      "script": "katakana",
+      "example_sentence": "これ は チキン です。",
+      "example_romaji": "kore wa chikin desu.",
+      "example_vi": "Đây là thịt gà."
+    },
+    {
+      "id": "vocab_127",
+      "word": "ツアー",
+      "romaji": "tsuaa",
+      "meaning_vi": "chuyến du lịch (tour)",
+      "chars": [
+        "ツ",
+        "ア",
+        "ー"
+      ],
+      "introduces": "ツ",
+      "script": "katakana",
+      "example_sentence": "これ は ツアー です。",
+      "example_romaji": "kore wa tsuaa desu.",
+      "example_vi": "Đây là chuyến du lịch (tour)."
+    },
+    {
+      "id": "vocab_128",
+      "word": "スーツ",
+      "romaji": "suutsu",
+      "meaning_vi": "bộ đồ vest",
+      "chars": [
+        "ス",
+        "ー",
+        "ツ"
+      ],
+      "introduces": "ツ",
+      "script": "katakana",
+      "example_sentence": "これ は スーツ です。",
+      "example_romaji": "kore wa suutsu desu.",
+      "example_vi": "Đây là bộ đồ vest."
+    },
+    {
+      "id": "vocab_129",
+      "word": "テレビ",
+      "romaji": "terebi",
+      "meaning_vi": "ti vi",
+      "chars": [
+        "テ",
+        "レ",
+        "ビ"
+      ],
+      "introduces": "テ",
+      "script": "katakana",
+      "example_sentence": "かぞく と テレビ を みる。",
+      "example_romaji": "kazoku to terebi wo miru.",
+      "example_vi": "Xem ti vi cùng gia đình."
+    },
+    {
+      "id": "vocab_130",
+      "word": "テント",
+      "romaji": "tento",
+      "meaning_vi": "cái lều",
+      "chars": [
+        "テ",
+        "ン",
+        "ト"
+      ],
+      "introduces": "テ",
+      "script": "katakana",
+      "example_sentence": "これ は テント です。",
+      "example_romaji": "kore wa tento desu.",
+      "example_vi": "Đây là cái lều."
+    },
+    {
+      "id": "vocab_131",
+      "word": "トマト",
+      "romaji": "tomato",
+      "meaning_vi": "quả cà chua",
+      "chars": [
+        "ト",
+        "マ",
+        "ト"
+      ],
+      "introduces": "ト",
+      "script": "katakana",
+      "example_sentence": "これ は トマト です。",
+      "example_romaji": "kore wa tomato desu.",
+      "example_vi": "Đây là quả cà chua."
+    },
+    {
+      "id": "vocab_132",
+      "word": "ノート",
+      "romaji": "nooto",
+      "meaning_vi": "quyển vở",
+      "chars": [
+        "ノ",
+        "ー",
+        "ト"
+      ],
+      "introduces": "ト",
+      "script": "katakana",
+      "example_sentence": "これ は ノート です。",
+      "example_romaji": "kore wa nooto desu.",
+      "example_vi": "Đây là quyển vở."
+    },
+    {
+      "id": "vocab_133",
+      "word": "ナイフ",
+      "romaji": "naifu",
+      "meaning_vi": "con dao",
+      "chars": [
+        "ナ",
+        "イ",
+        "フ"
+      ],
+      "introduces": "ナ",
+      "script": "katakana",
+      "example_sentence": "これ は ナイフ です。",
+      "example_romaji": "kore wa naifu desu.",
+      "example_vi": "Đây là con dao."
+    },
+    {
+      "id": "vocab_134",
+      "word": "バナナ",
+      "romaji": "banana",
+      "meaning_vi": "quả chuối",
+      "chars": [
+        "バ",
+        "ナ",
+        "ナ"
+      ],
+      "introduces": "ナ",
+      "script": "katakana",
+      "example_sentence": "これ は バナナ です。",
+      "example_romaji": "kore wa banana desu.",
+      "example_vi": "Đây là quả chuối."
+    },
+    {
+      "id": "vocab_135",
+      "word": "テニス",
+      "romaji": "tenisu",
+      "meaning_vi": "môn quần vợt",
+      "chars": [
+        "テ",
+        "ニ",
+        "ス"
+      ],
+      "introduces": "ニ",
+      "script": "katakana",
+      "example_sentence": "これ は テニス です。",
+      "example_romaji": "kore wa tenisu desu.",
+      "example_vi": "Đây là môn quần vợt."
+    },
+    {
+      "id": "vocab_136",
+      "word": "メニュー",
+      "romaji": "menyuu",
+      "meaning_vi": "thực đơn",
+      "chars": [
+        "メ",
+        "ニ",
+        "ュ",
+        "ー"
+      ],
+      "introduces": "ニ",
+      "script": "katakana",
+      "example_sentence": "これ は メニュー です。",
+      "example_romaji": "kore wa menyuu desu.",
+      "example_vi": "Đây là thực đơn."
+    },
+    {
+      "id": "vocab_137",
+      "word": "カヌー",
+      "romaji": "kanuu",
+      "meaning_vi": "thuyền ca-nô",
+      "chars": [
+        "カ",
+        "ヌ",
+        "ー"
+      ],
+      "introduces": "ヌ",
+      "script": "katakana",
+      "example_sentence": "これ は カヌー です。",
+      "example_romaji": "kore wa kanuu desu.",
+      "example_vi": "Đây là thuyền ca-nô."
+    },
+    {
+      "id": "vocab_138",
+      "word": "ヌードル",
+      "romaji": "nuudoru",
+      "meaning_vi": "mì sợi (noodle)",
+      "chars": [
+        "ヌ",
+        "ー",
+        "ド",
+        "ル"
+      ],
+      "introduces": "ヌ",
+      "script": "katakana",
+      "example_sentence": "これ は ヌードル です。",
+      "example_romaji": "kore wa nuudoru desu.",
+      "example_vi": "Đây là mì sợi (noodle)."
+    },
+    {
+      "id": "vocab_139",
+      "word": "ネクタイ",
+      "romaji": "nekutai",
+      "meaning_vi": "cà vạt",
+      "chars": [
+        "ネ",
+        "ク",
+        "タ",
+        "イ"
+      ],
+      "introduces": "ネ",
+      "script": "katakana",
+      "example_sentence": "これ は ネクタイ です。",
+      "example_romaji": "kore wa nekutai desu.",
+      "example_vi": "Đây là cà vạt."
+    },
+    {
+      "id": "vocab_140",
+      "word": "ネット",
+      "romaji": "netto",
+      "meaning_vi": "tấm lưới / mạng",
+      "chars": [
+        "ネ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ネ",
+      "script": "katakana",
+      "example_sentence": "これ は ネット です。",
+      "example_romaji": "kore wa netto desu.",
+      "example_vi": "Đây là tấm lưới / mạng."
+    },
+    {
+      "id": "vocab_141",
+      "word": "ピアノ",
+      "romaji": "piano",
+      "meaning_vi": "đàn dương cầm",
+      "chars": [
+        "ピ",
+        "ア",
+        "ノ"
+      ],
+      "introduces": "ノ",
+      "script": "katakana",
+      "example_sentence": "これ は ピアノ です。",
+      "example_romaji": "kore wa piano desu.",
+      "example_vi": "Đây là đàn dương cầm."
+    },
+    {
+      "id": "vocab_142",
+      "word": "ノック",
+      "romaji": "nokku",
+      "meaning_vi": "tiếng gõ cửa",
+      "chars": [
+        "ノ",
+        "ッ",
+        "ク"
+      ],
+      "introduces": "ノ",
+      "script": "katakana",
+      "example_sentence": "これ は ノック です。",
+      "example_romaji": "kore wa nokku desu.",
+      "example_vi": "Đây là tiếng gõ cửa."
+    },
+    {
+      "id": "vocab_143",
+      "word": "ハム",
+      "romaji": "hamu",
+      "meaning_vi": "thịt nguội (ham)",
+      "chars": [
+        "ハ",
+        "ム"
+      ],
+      "introduces": "ハ",
+      "script": "katakana",
+      "example_sentence": "これ は ハム です。",
+      "example_romaji": "kore wa hamu desu.",
+      "example_vi": "Đây là thịt nguội (ham)."
+    },
+    {
+      "id": "vocab_144",
+      "word": "ハンカチ",
+      "romaji": "hankachi",
+      "meaning_vi": "khăn tay",
+      "chars": [
+        "ハ",
+        "ン",
+        "カ",
+        "チ"
+      ],
+      "introduces": "ハ",
+      "script": "katakana",
+      "example_sentence": "これ は ハンカチ です。",
+      "example_romaji": "kore wa hankachi desu.",
+      "example_vi": "Đây là khăn tay."
+    },
+    {
+      "id": "vocab_145",
+      "word": "ヒーロー",
+      "romaji": "hiiroo",
+      "meaning_vi": "anh hùng",
+      "chars": [
+        "ヒ",
+        "ー",
+        "ロ",
+        "ー"
+      ],
+      "introduces": "ヒ",
+      "script": "katakana",
+      "example_sentence": "これ は ヒーロー です。",
+      "example_romaji": "kore wa hiiroo desu.",
+      "example_vi": "Đây là anh hùng."
+    },
+    {
+      "id": "vocab_146",
+      "word": "ヒント",
+      "romaji": "hinto",
+      "meaning_vi": "gợi ý (hint)",
+      "chars": [
+        "ヒ",
+        "ン",
+        "ト"
+      ],
+      "introduces": "ヒ",
+      "script": "katakana",
+      "example_sentence": "これ は ヒント です。",
+      "example_romaji": "kore wa hinto desu.",
+      "example_vi": "Đây là gợi ý (hint)."
+    },
+    {
+      "id": "vocab_147",
+      "word": "フォーク",
+      "romaji": "fooku",
+      "meaning_vi": "cái nĩa",
+      "chars": [
+        "フ",
+        "ォ",
+        "ー",
+        "ク"
+      ],
+      "introduces": "フ",
+      "script": "katakana",
+      "example_sentence": "これ は フォーク です。",
+      "example_romaji": "kore wa fooku desu.",
+      "example_vi": "Đây là cái nĩa."
+    },
+    {
+      "id": "vocab_148",
+      "word": "フルーツ",
+      "romaji": "furuutsu",
+      "meaning_vi": "trái cây",
+      "chars": [
+        "フ",
+        "ル",
+        "ー",
+        "ツ"
+      ],
+      "introduces": "フ",
+      "script": "katakana",
+      "example_sentence": "これ は フルーツ です。",
+      "example_romaji": "kore wa furuutsu desu.",
+      "example_vi": "Đây là trái cây."
+    },
+    {
+      "id": "vocab_149",
+      "word": "ヘルメット",
+      "romaji": "herumetto",
+      "meaning_vi": "mũ bảo hiểm",
+      "chars": [
+        "ヘ",
+        "ル",
+        "メ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ヘ",
+      "script": "katakana",
+      "example_sentence": "これ は ヘルメット です。",
+      "example_romaji": "kore wa herumetto desu.",
+      "example_vi": "Đây là mũ bảo hiểm."
+    },
+    {
+      "id": "vocab_150",
+      "word": "ヘリ",
+      "romaji": "heri",
+      "meaning_vi": "trực thăng (viết tắt)",
+      "chars": [
+        "ヘ",
+        "リ"
+      ],
+      "introduces": "ヘ",
+      "script": "katakana",
+      "example_sentence": "これ は ヘリ です。",
+      "example_romaji": "kore wa heri desu.",
+      "example_vi": "Đây là trực thăng (viết tắt)."
+    },
+    {
+      "id": "vocab_151",
+      "word": "ホテル",
+      "romaji": "hoteru",
+      "meaning_vi": "khách sạn",
+      "chars": [
+        "ホ",
+        "テ",
+        "ル"
+      ],
+      "introduces": "ホ",
+      "script": "katakana",
+      "example_sentence": "これ は ホテル です。",
+      "example_romaji": "kore wa hoteru desu.",
+      "example_vi": "Đây là khách sạn."
+    },
+    {
+      "id": "vocab_152",
+      "word": "ホース",
+      "romaji": "hoosu",
+      "meaning_vi": "vòi nước",
+      "chars": [
+        "ホ",
+        "ー",
+        "ス"
+      ],
+      "introduces": "ホ",
+      "script": "katakana",
+      "example_sentence": "これ は ホース です。",
+      "example_romaji": "kore wa hoosu desu.",
+      "example_vi": "Đây là vòi nước."
+    },
+    {
+      "id": "vocab_153",
+      "word": "マスク",
+      "romaji": "masuku",
+      "meaning_vi": "khẩu trang",
+      "chars": [
+        "マ",
+        "ス",
+        "ク"
+      ],
+      "introduces": "マ",
+      "script": "katakana",
+      "example_sentence": "これ は マスク です。",
+      "example_romaji": "kore wa masuku desu.",
+      "example_vi": "Đây là khẩu trang."
+    },
+    {
+      "id": "vocab_154",
+      "word": "マッチ",
+      "romaji": "macchi",
+      "meaning_vi": "que diêm",
+      "chars": [
+        "マ",
+        "ッ",
+        "チ"
+      ],
+      "introduces": "マ",
+      "script": "katakana",
+      "example_sentence": "これ は マッチ です。",
+      "example_romaji": "kore wa macchi desu.",
+      "example_vi": "Đây là que diêm."
+    },
+    {
+      "id": "vocab_155",
+      "word": "ミルク",
+      "romaji": "miruku",
+      "meaning_vi": "sữa",
+      "chars": [
+        "ミ",
+        "ル",
+        "ク"
+      ],
+      "introduces": "ミ",
+      "script": "katakana",
+      "example_sentence": "これ は ミルク です。",
+      "example_romaji": "kore wa miruku desu.",
+      "example_vi": "Đây là sữa."
+    },
+    {
+      "id": "vocab_156",
+      "word": "ミシン",
+      "romaji": "mishin",
+      "meaning_vi": "máy khâu",
+      "chars": [
+        "ミ",
+        "シ",
+        "ン"
+      ],
+      "introduces": "ミ",
+      "script": "katakana",
+      "example_sentence": "これ は ミシン です。",
+      "example_romaji": "kore wa mishin desu.",
+      "example_vi": "Đây là máy khâu."
+    },
+    {
+      "id": "vocab_157",
+      "word": "ガム",
+      "romaji": "gamu",
+      "meaning_vi": "kẹo cao su",
+      "chars": [
+        "ガ",
+        "ム"
+      ],
+      "introduces": "ム",
+      "script": "katakana",
+      "example_sentence": "これ は ガム です。",
+      "example_romaji": "kore wa gamu desu.",
+      "example_vi": "Đây là kẹo cao su."
+    },
+    {
+      "id": "vocab_158",
+      "word": "チーム",
+      "romaji": "chiimu",
+      "meaning_vi": "đội / nhóm",
+      "chars": [
+        "チ",
+        "ー",
+        "ム"
+      ],
+      "introduces": "ム",
+      "script": "katakana",
+      "example_sentence": "これ は チーム です。",
+      "example_romaji": "kore wa chiimu desu.",
+      "example_vi": "Đây là đội / nhóm."
+    },
+    {
+      "id": "vocab_159",
+      "word": "メロン",
+      "romaji": "meron",
+      "meaning_vi": "dưa lưới",
+      "chars": [
+        "メ",
+        "ロ",
+        "ン"
+      ],
+      "introduces": "メ",
+      "script": "katakana",
+      "example_sentence": "これ は メロン です。",
+      "example_romaji": "kore wa meron desu.",
+      "example_vi": "Đây là dưa lưới."
+    },
+    {
+      "id": "vocab_160",
+      "word": "メモ",
+      "romaji": "memo",
+      "meaning_vi": "ghi chú",
+      "chars": [
+        "メ",
+        "モ"
+      ],
+      "introduces": "メ",
+      "script": "katakana",
+      "example_sentence": "これ は メモ です。",
+      "example_romaji": "kore wa memo desu.",
+      "example_vi": "Đây là ghi chú."
+    },
+    {
+      "id": "vocab_161",
+      "word": "モデル",
+      "romaji": "moderu",
+      "meaning_vi": "mô hình / người mẫu",
+      "chars": [
+        "モ",
+        "デ",
+        "ル"
+      ],
+      "introduces": "モ",
+      "script": "katakana",
+      "example_sentence": "これ は モデル です。",
+      "example_romaji": "kore wa moderu desu.",
+      "example_vi": "Đây là mô hình / người mẫu."
+    },
+    {
+      "id": "vocab_162",
+      "word": "モニター",
+      "romaji": "monitaa",
+      "meaning_vi": "màn hình",
+      "chars": [
+        "モ",
+        "ニ",
+        "タ",
+        "ー"
+      ],
+      "introduces": "モ",
+      "script": "katakana",
+      "example_sentence": "これ は モニター です。",
+      "example_romaji": "kore wa monitaa desu.",
+      "example_vi": "Đây là màn hình."
+    },
+    {
+      "id": "vocab_163",
+      "word": "ヤギ",
+      "romaji": "yagi",
+      "meaning_vi": "con dê",
+      "chars": [
+        "ヤ",
+        "ギ"
+      ],
+      "introduces": "ヤ",
+      "script": "katakana",
+      "example_sentence": "これ は ヤギ です。",
+      "example_romaji": "kore wa yagi desu.",
+      "example_vi": "Đây là con dê."
+    },
+    {
+      "id": "vocab_164",
+      "word": "ダイヤ",
+      "romaji": "daiya",
+      "meaning_vi": "kim cương",
+      "chars": [
+        "ダ",
+        "イ",
+        "ヤ"
+      ],
+      "introduces": "ヤ",
+      "script": "katakana",
+      "example_sentence": "これ は ダイヤ です。",
+      "example_romaji": "kore wa daiya desu.",
+      "example_vi": "Đây là kim cương."
+    },
+    {
+      "id": "vocab_165",
+      "word": "ユニフォーム",
+      "romaji": "yunifoomu",
+      "meaning_vi": "đồng phục",
+      "chars": [
+        "ユ",
+        "ニ",
+        "フ",
+        "ォ",
+        "ー",
+        "ム"
+      ],
+      "introduces": "ユ",
+      "script": "katakana",
+      "example_sentence": "これ は ユニフォーム です。",
+      "example_romaji": "kore wa yunifoomu desu.",
+      "example_vi": "Đây là đồng phục."
+    },
+    {
+      "id": "vocab_166",
+      "word": "ユーモア",
+      "romaji": "yuumoa",
+      "meaning_vi": "sự hài hước",
+      "chars": [
+        "ユ",
+        "ー",
+        "モ",
+        "ア"
+      ],
+      "introduces": "ユ",
+      "script": "katakana",
+      "example_sentence": "これ は ユーモア です。",
+      "example_romaji": "kore wa yuumoa desu.",
+      "example_vi": "Đây là sự hài hước."
+    },
+    {
+      "id": "vocab_167",
+      "word": "ヨット",
+      "romaji": "yotto",
+      "meaning_vi": "thuyền buồm",
+      "chars": [
+        "ヨ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ヨ",
+      "script": "katakana",
+      "example_sentence": "これ は ヨット です。",
+      "example_romaji": "kore wa yotto desu.",
+      "example_vi": "Đây là thuyền buồm."
+    },
+    {
+      "id": "vocab_168",
+      "word": "クレヨン",
+      "romaji": "kureyon",
+      "meaning_vi": "bút sáp màu",
+      "chars": [
+        "ク",
+        "レ",
+        "ヨ",
+        "ン"
+      ],
+      "introduces": "ヨ",
+      "script": "katakana",
+      "example_sentence": "これ は クレヨン です。",
+      "example_romaji": "kore wa kureyon desu.",
+      "example_vi": "Đây là bút sáp màu."
+    },
+    {
+      "id": "vocab_169",
+      "word": "ラジオ",
+      "romaji": "rajio",
+      "meaning_vi": "đài radio",
+      "chars": [
+        "ラ",
+        "ジ",
+        "オ"
+      ],
+      "introduces": "ラ",
+      "script": "katakana",
+      "example_sentence": "これ は ラジオ です。",
+      "example_romaji": "kore wa rajio desu.",
+      "example_vi": "Đây là đài radio."
+    },
+    {
+      "id": "vocab_170",
+      "word": "ラーメン",
+      "romaji": "raamen",
+      "meaning_vi": "mì ramen",
+      "chars": [
+        "ラ",
+        "ー",
+        "メ",
+        "ン"
+      ],
+      "introduces": "ラ",
+      "script": "katakana",
+      "example_sentence": "これ は ラーメン です。",
+      "example_romaji": "kore wa raamen desu.",
+      "example_vi": "Đây là mì ramen."
+    },
+    {
+      "id": "vocab_171",
+      "word": "リボン",
+      "romaji": "ribon",
+      "meaning_vi": "dải ruy-băng",
+      "chars": [
+        "リ",
+        "ボ",
+        "ン"
+      ],
+      "introduces": "リ",
+      "script": "katakana",
+      "example_sentence": "これ は リボン です。",
+      "example_romaji": "kore wa ribon desu.",
+      "example_vi": "Đây là dải ruy-băng."
+    },
+    {
+      "id": "vocab_172",
+      "word": "スリッパ",
+      "romaji": "surippa",
+      "meaning_vi": "dép đi trong nhà",
+      "chars": [
+        "ス",
+        "リ",
+        "ッ",
+        "パ"
+      ],
+      "introduces": "リ",
+      "script": "katakana",
+      "example_sentence": "これ は スリッパ です。",
+      "example_romaji": "kore wa surippa desu.",
+      "example_vi": "Đây là dép đi trong nhà."
+    },
+    {
+      "id": "vocab_173",
+      "word": "ルール",
+      "romaji": "ruuru",
+      "meaning_vi": "quy tắc / luật",
+      "chars": [
+        "ル",
+        "ー",
+        "ル"
+      ],
+      "introduces": "ル",
+      "script": "katakana",
+      "example_sentence": "これ は ルール です。",
+      "example_romaji": "kore wa ruuru desu.",
+      "example_vi": "Đây là quy tắc / luật."
+    },
+    {
+      "id": "vocab_174",
+      "word": "ボール",
+      "romaji": "booru",
+      "meaning_vi": "quả bóng",
+      "chars": [
+        "ボ",
+        "ー",
+        "ル"
+      ],
+      "introduces": "ル",
+      "script": "katakana",
+      "example_sentence": "これ は ボール です。",
+      "example_romaji": "kore wa booru desu.",
+      "example_vi": "Đây là quả bóng."
+    },
+    {
+      "id": "vocab_175",
+      "word": "レモン",
+      "romaji": "remon",
+      "meaning_vi": "quả chanh vàng",
+      "chars": [
+        "レ",
+        "モ",
+        "ン"
+      ],
+      "introduces": "レ",
+      "script": "katakana",
+      "example_sentence": "これ は レモン です。",
+      "example_romaji": "kore wa remon desu.",
+      "example_vi": "Đây là quả chanh vàng."
+    },
+    {
+      "id": "vocab_176",
+      "word": "トイレ",
+      "romaji": "toire",
+      "meaning_vi": "nhà vệ sinh",
+      "chars": [
+        "ト",
+        "イ",
+        "レ"
+      ],
+      "introduces": "レ",
+      "script": "katakana",
+      "example_sentence": "これ は トイレ です。",
+      "example_romaji": "kore wa toire desu.",
+      "example_vi": "Đây là nhà vệ sinh."
+    },
+    {
+      "id": "vocab_177",
+      "word": "ロボット",
+      "romaji": "robotto",
+      "meaning_vi": "người máy (robot)",
+      "chars": [
+        "ロ",
+        "ボ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ロ",
+      "script": "katakana",
+      "example_sentence": "これ は ロボット です。",
+      "example_romaji": "kore wa robotto desu.",
+      "example_vi": "Đây là người máy (robot)."
+    },
+    {
+      "id": "vocab_178",
+      "word": "キロ",
+      "romaji": "kiro",
+      "meaning_vi": "ki-lô (kg / km)",
+      "chars": [
+        "キ",
+        "ロ"
+      ],
+      "introduces": "ロ",
+      "script": "katakana",
+      "example_sentence": "これ は キロ です。",
+      "example_romaji": "kore wa kiro desu.",
+      "example_vi": "Đây là ki-lô (kg / km)."
+    },
+    {
+      "id": "vocab_179",
+      "word": "ワイン",
+      "romaji": "wain",
+      "meaning_vi": "rượu vang",
+      "chars": [
+        "ワ",
+        "イ",
+        "ン"
+      ],
+      "introduces": "ワ",
+      "script": "katakana",
+      "example_sentence": "これ は ワイン です。",
+      "example_romaji": "kore wa wain desu.",
+      "example_vi": "Đây là rượu vang."
+    },
+    {
+      "id": "vocab_180",
+      "word": "タワー",
+      "romaji": "tawaa",
+      "meaning_vi": "ngọn tháp",
+      "chars": [
+        "タ",
+        "ワ",
+        "ー"
+      ],
+      "introduces": "ワ",
+      "script": "katakana",
+      "example_sentence": "これ は タワー です。",
+      "example_romaji": "kore wa tawaa desu.",
+      "example_vi": "Đây là ngọn tháp."
+    },
+    {
+      "id": "vocab_181",
+      "word": "ヲタク",
+      "romaji": "wotaku",
+      "meaning_vi": "người đam mê (otaku)",
+      "chars": [
+        "ヲ",
+        "タ",
+        "ク"
+      ],
+      "introduces": "ヲ",
+      "script": "katakana",
+      "example_sentence": "これ は ヲタク です。",
+      "example_romaji": "kore wa wotaku desu.",
+      "example_vi": "Đây là người đam mê (otaku)."
+    },
+    {
+      "id": "vocab_182",
+      "word": "ビデオヲミル",
+      "romaji": "bideo wo miru",
+      "meaning_vi": "xem video (trợ từ ヲ)",
+      "chars": [
+        "ビ",
+        "デ",
+        "オ",
+        "ヲ",
+        "ミ",
+        "ル"
+      ],
+      "introduces": "ヲ",
+      "script": "katakana",
+      "example_sentence": "これ は ビデオヲミル です。",
+      "example_romaji": "kore wa bideo wo miru desu.",
+      "example_vi": "Đây là xem video (trợ từ ヲ)."
+    },
+    {
+      "id": "vocab_183",
+      "word": "パン",
+      "romaji": "pan",
+      "meaning_vi": "bánh mì",
+      "chars": [
+        "パ",
+        "ン"
+      ],
+      "introduces": "ン",
+      "script": "katakana",
+      "example_sentence": "あさごはん に パン を たべる。",
+      "example_romaji": "asagohan ni pan wo taberu.",
+      "example_vi": "Ăn bánh mì vào bữa sáng."
+    },
+    {
+      "id": "vocab_184",
+      "word": "ライオン",
+      "romaji": "raion",
+      "meaning_vi": "sư tử",
+      "chars": [
+        "ラ",
+        "イ",
+        "オ",
+        "ン"
+      ],
+      "introduces": "ン",
+      "script": "katakana",
+      "example_sentence": "これ は ライオン です。",
+      "example_romaji": "kore wa raion desu.",
+      "example_vi": "Đây là sư tử."
+    },
+    {
+      "id": "vocab_185",
+      "word": "がっこう",
+      "romaji": "gakkou",
+      "meaning_vi": "trường học",
+      "chars": [
+        "が",
+        "っ",
+        "こ",
+        "う"
+      ],
+      "introduces": "が",
+      "script": "hiragana",
+      "example_sentence": "これ は がっこう です。",
+      "example_romaji": "kore wa gakkou desu.",
+      "example_vi": "Đây là trường học."
+    },
+    {
+      "id": "vocab_186",
+      "word": "めがね",
+      "romaji": "megane",
+      "meaning_vi": "kính mắt",
+      "chars": [
+        "め",
+        "が",
+        "ね"
+      ],
+      "introduces": "が",
+      "script": "hiragana",
+      "example_sentence": "あたらしい めがね を かける。",
+      "example_romaji": "atarashii megane wo kakeru.",
+      "example_vi": "Đeo cặp kính mắt mới."
+    },
+    {
+      "id": "vocab_187",
+      "word": "かぎ",
+      "romaji": "kagi",
+      "meaning_vi": "chìa khoá",
+      "chars": [
+        "か",
+        "ぎ"
+      ],
+      "introduces": "ぎ",
+      "script": "hiragana",
+      "example_sentence": "これ は かぎ です。",
+      "example_romaji": "kore wa kagi desu.",
+      "example_vi": "Đây là chìa khoá."
+    },
+    {
+      "id": "vocab_188",
+      "word": "うさぎ",
+      "romaji": "usagi",
+      "meaning_vi": "con thỏ",
+      "chars": [
+        "う",
+        "さ",
+        "ぎ"
+      ],
+      "introduces": "ぎ",
+      "script": "hiragana",
+      "example_sentence": "これ は うさぎ です。",
+      "example_romaji": "kore wa usagi desu.",
+      "example_vi": "Đây là con thỏ."
+    },
+    {
+      "id": "vocab_189",
+      "word": "かぐ",
+      "romaji": "kagu",
+      "meaning_vi": "đồ nội thất",
+      "chars": [
+        "か",
+        "ぐ"
+      ],
+      "introduces": "ぐ",
+      "script": "hiragana",
+      "example_sentence": "これ は かぐ です。",
+      "example_romaji": "kore wa kagu desu.",
+      "example_vi": "Đây là đồ nội thất."
+    },
+    {
+      "id": "vocab_190",
+      "word": "どんぐり",
+      "romaji": "donguri",
+      "meaning_vi": "quả sồi",
+      "chars": [
+        "ど",
+        "ん",
+        "ぐ",
+        "り"
+      ],
+      "introduces": "ぐ",
+      "script": "hiragana",
+      "example_sentence": "これ は どんぐり です。",
+      "example_romaji": "kore wa donguri desu.",
+      "example_vi": "Đây là quả sồi."
+    },
+    {
+      "id": "vocab_191",
+      "word": "ひげ",
+      "romaji": "hige",
+      "meaning_vi": "râu",
+      "chars": [
+        "ひ",
+        "げ"
+      ],
+      "introduces": "げ",
+      "script": "hiragana",
+      "example_sentence": "これ は ひげ です。",
+      "example_romaji": "kore wa hige desu.",
+      "example_vi": "Đây là râu."
+    },
+    {
+      "id": "vocab_192",
+      "word": "かげ",
+      "romaji": "kage",
+      "meaning_vi": "cái bóng",
+      "chars": [
+        "か",
+        "げ"
+      ],
+      "introduces": "げ",
+      "script": "hiragana",
+      "example_sentence": "これ は かげ です。",
+      "example_romaji": "kore wa kage desu.",
+      "example_vi": "Đây là cái bóng."
+    },
+    {
+      "id": "vocab_193",
+      "word": "りんご",
+      "romaji": "ringo",
+      "meaning_vi": "quả táo",
+      "chars": [
+        "り",
+        "ん",
+        "ご"
+      ],
+      "introduces": "ご",
+      "script": "hiragana",
+      "example_sentence": "これ は りんご です。",
+      "example_romaji": "kore wa ringo desu.",
+      "example_vi": "Đây là quả táo."
+    },
+    {
+      "id": "vocab_194",
+      "word": "ごはん",
+      "romaji": "gohan",
+      "meaning_vi": "cơm",
+      "chars": [
+        "ご",
+        "は",
+        "ん"
+      ],
+      "introduces": "ご",
+      "script": "hiragana",
+      "example_sentence": "これ は ごはん です。",
+      "example_romaji": "kore wa gohan desu.",
+      "example_vi": "Đây là cơm."
+    },
+    {
+      "id": "vocab_195",
+      "word": "ひざ",
+      "romaji": "hiza",
+      "meaning_vi": "đầu gối",
+      "chars": [
+        "ひ",
+        "ざ"
+      ],
+      "introduces": "ざ",
+      "script": "hiragana",
+      "example_sentence": "これ は ひざ です。",
+      "example_romaji": "kore wa hiza desu.",
+      "example_vi": "Đây là đầu gối."
+    },
+    {
+      "id": "vocab_196",
+      "word": "ざぶとん",
+      "romaji": "zabuton",
+      "meaning_vi": "đệm ngồi",
+      "chars": [
+        "ざ",
+        "ぶ",
+        "と",
+        "ん"
+      ],
+      "introduces": "ざ",
+      "script": "hiragana",
+      "example_sentence": "これ は ざぶとん です。",
+      "example_romaji": "kore wa zabuton desu.",
+      "example_vi": "Đây là đệm ngồi."
+    },
+    {
+      "id": "vocab_197",
+      "word": "にじ",
+      "romaji": "niji",
+      "meaning_vi": "cầu vồng",
+      "chars": [
+        "に",
+        "じ"
+      ],
+      "introduces": "じ",
+      "script": "hiragana",
+      "example_sentence": "これ は にじ です。",
+      "example_romaji": "kore wa niji desu.",
+      "example_vi": "Đây là cầu vồng."
+    },
+    {
+      "id": "vocab_198",
+      "word": "くじら",
+      "romaji": "kujira",
+      "meaning_vi": "cá voi",
+      "chars": [
+        "く",
+        "じ",
+        "ら"
+      ],
+      "introduces": "じ",
+      "script": "hiragana",
+      "example_sentence": "これ は くじら です。",
+      "example_romaji": "kore wa kujira desu.",
+      "example_vi": "Đây là cá voi."
+    },
+    {
+      "id": "vocab_199",
+      "word": "みず",
+      "romaji": "mizu",
+      "meaning_vi": "nước",
+      "chars": [
+        "み",
+        "ず"
+      ],
+      "introduces": "ず",
+      "script": "hiragana",
+      "example_sentence": "これ は みず です。",
+      "example_romaji": "kore wa mizu desu.",
+      "example_vi": "Đây là nước."
+    },
+    {
+      "id": "vocab_200",
+      "word": "すずめ",
+      "romaji": "suzume",
+      "meaning_vi": "chim sẻ",
+      "chars": [
+        "す",
+        "ず",
+        "め"
+      ],
+      "introduces": "ず",
+      "script": "hiragana",
+      "example_sentence": "これ は すずめ です。",
+      "example_romaji": "kore wa suzume desu.",
+      "example_vi": "Đây là chim sẻ."
+    },
+    {
+      "id": "vocab_201",
+      "word": "かぜ",
+      "romaji": "kaze",
+      "meaning_vi": "cơn gió / cảm lạnh",
+      "chars": [
+        "か",
+        "ぜ"
+      ],
+      "introduces": "ぜ",
+      "script": "hiragana",
+      "example_sentence": "これ は かぜ です。",
+      "example_romaji": "kore wa kaze desu.",
+      "example_vi": "Đây là cơn gió / cảm lạnh."
+    },
+    {
+      "id": "vocab_202",
+      "word": "ぜんぶ",
+      "romaji": "zenbu",
+      "meaning_vi": "tất cả",
+      "chars": [
+        "ぜ",
+        "ん",
+        "ぶ"
+      ],
+      "introduces": "ぜ",
+      "script": "hiragana",
+      "example_sentence": "これ は ぜんぶ です。",
+      "example_romaji": "kore wa zenbu desu.",
+      "example_vi": "Đây là tất cả."
+    },
+    {
+      "id": "vocab_203",
+      "word": "ぞう",
+      "romaji": "zou",
+      "meaning_vi": "con voi",
+      "chars": [
+        "ぞ",
+        "う"
+      ],
+      "introduces": "ぞ",
+      "script": "hiragana",
+      "example_sentence": "これ は ぞう です。",
+      "example_romaji": "kore wa zou desu.",
+      "example_vi": "Đây là con voi."
+    },
+    {
+      "id": "vocab_204",
+      "word": "かぞく",
+      "romaji": "kazoku",
+      "meaning_vi": "gia đình",
+      "chars": [
+        "か",
+        "ぞ",
+        "く"
+      ],
+      "introduces": "ぞ",
+      "script": "hiragana",
+      "example_sentence": "これ は かぞく です。",
+      "example_romaji": "kore wa kazoku desu.",
+      "example_vi": "Đây là gia đình."
+    },
+    {
+      "id": "vocab_205",
+      "word": "えだ",
+      "romaji": "eda",
+      "meaning_vi": "cành cây",
+      "chars": [
+        "え",
+        "だ"
+      ],
+      "introduces": "だ",
+      "script": "hiragana",
+      "example_sentence": "これ は えだ です。",
+      "example_romaji": "kore wa eda desu.",
+      "example_vi": "Đây là cành cây."
+    },
+    {
+      "id": "vocab_206",
+      "word": "なみだ",
+      "romaji": "namida",
+      "meaning_vi": "nước mắt",
+      "chars": [
+        "な",
+        "み",
+        "だ"
+      ],
+      "introduces": "だ",
+      "script": "hiragana",
+      "example_sentence": "これ は なみだ です。",
+      "example_romaji": "kore wa namida desu.",
+      "example_vi": "Đây là nước mắt."
+    },
+    {
+      "id": "vocab_207",
+      "word": "はなぢ",
+      "romaji": "hanaji",
+      "meaning_vi": "chảy máu cam",
+      "chars": [
+        "は",
+        "な",
+        "ぢ"
+      ],
+      "introduces": "ぢ",
+      "script": "hiragana",
+      "example_sentence": "これ は はなぢ です。",
+      "example_romaji": "kore wa hanaji desu.",
+      "example_vi": "Đây là chảy máu cam."
+    },
+    {
+      "id": "vocab_208",
+      "word": "ちぢむ",
+      "romaji": "chijimu",
+      "meaning_vi": "co lại",
+      "chars": [
+        "ち",
+        "ぢ",
+        "む"
+      ],
+      "introduces": "ぢ",
+      "script": "hiragana",
+      "example_sentence": "これ は ちぢむ です。",
+      "example_romaji": "kore wa chijimu desu.",
+      "example_vi": "Đây là co lại."
+    },
+    {
+      "id": "vocab_209",
+      "word": "つづく",
+      "romaji": "tsuzuku",
+      "meaning_vi": "tiếp tục",
+      "chars": [
+        "つ",
+        "づ",
+        "く"
+      ],
+      "introduces": "づ",
+      "script": "hiragana",
+      "example_sentence": "これ は つづく です。",
+      "example_romaji": "kore wa tsuzuku desu.",
+      "example_vi": "Đây là tiếp tục."
+    },
+    {
+      "id": "vocab_210",
+      "word": "みかづき",
+      "romaji": "mikazuki",
+      "meaning_vi": "trăng lưỡi liềm",
+      "chars": [
+        "み",
+        "か",
+        "づ",
+        "き"
+      ],
+      "introduces": "づ",
+      "script": "hiragana",
+      "example_sentence": "これ は みかづき です。",
+      "example_romaji": "kore wa mikazuki desu.",
+      "example_vi": "Đây là trăng lưỡi liềm."
+    },
+    {
+      "id": "vocab_211",
+      "word": "でんわ",
+      "romaji": "denwa",
+      "meaning_vi": "điện thoại",
+      "chars": [
+        "で",
+        "ん",
+        "わ"
+      ],
+      "introduces": "で",
+      "script": "hiragana",
+      "example_sentence": "これ は でんわ です。",
+      "example_romaji": "kore wa denwa desu.",
+      "example_vi": "Đây là điện thoại."
+    },
+    {
+      "id": "vocab_212",
+      "word": "うで",
+      "romaji": "ude",
+      "meaning_vi": "cánh tay",
+      "chars": [
+        "う",
+        "で"
+      ],
+      "introduces": "で",
+      "script": "hiragana",
+      "example_sentence": "これ は うで です。",
+      "example_romaji": "kore wa ude desu.",
+      "example_vi": "Đây là cánh tay."
+    },
+    {
+      "id": "vocab_213",
+      "word": "まど",
+      "romaji": "mado",
+      "meaning_vi": "cửa sổ",
+      "chars": [
+        "ま",
+        "ど"
+      ],
+      "introduces": "ど",
+      "script": "hiragana",
+      "example_sentence": "これ は まど です。",
+      "example_romaji": "kore wa mado desu.",
+      "example_vi": "Đây là cửa sổ."
+    },
+    {
+      "id": "vocab_214",
+      "word": "ぶどう",
+      "romaji": "budou",
+      "meaning_vi": "quả nho",
+      "chars": [
+        "ぶ",
+        "ど",
+        "う"
+      ],
+      "introduces": "ど",
+      "script": "hiragana",
+      "example_sentence": "これ は ぶどう です。",
+      "example_romaji": "kore wa budou desu.",
+      "example_vi": "Đây là quả nho."
+    },
+    {
+      "id": "vocab_215",
+      "word": "かばん",
+      "romaji": "kaban",
+      "meaning_vi": "cặp sách",
+      "chars": [
+        "か",
+        "ば",
+        "ん"
+      ],
+      "introduces": "ば",
+      "script": "hiragana",
+      "example_sentence": "これ は かばん です。",
+      "example_romaji": "kore wa kaban desu.",
+      "example_vi": "Đây là cặp sách."
+    },
+    {
+      "id": "vocab_216",
+      "word": "つばめ",
+      "romaji": "tsubame",
+      "meaning_vi": "chim én",
+      "chars": [
+        "つ",
+        "ば",
+        "め"
+      ],
+      "introduces": "ば",
+      "script": "hiragana",
+      "example_sentence": "これ は つばめ です。",
+      "example_romaji": "kore wa tsubame desu.",
+      "example_vi": "Đây là chim én."
+    },
+    {
+      "id": "vocab_217",
+      "word": "えび",
+      "romaji": "ebi",
+      "meaning_vi": "con tôm",
+      "chars": [
+        "え",
+        "び"
+      ],
+      "introduces": "び",
+      "script": "hiragana",
+      "example_sentence": "おいしい えび を たべる。",
+      "example_romaji": "oishii ebi wo taberu.",
+      "example_vi": "Ăn món tôm ngon."
+    },
+    {
+      "id": "vocab_218",
+      "word": "ゆび",
+      "romaji": "yubi",
+      "meaning_vi": "ngón tay",
+      "chars": [
+        "ゆ",
+        "び"
+      ],
+      "introduces": "び",
+      "script": "hiragana",
+      "example_sentence": "これ は ゆび です。",
+      "example_romaji": "kore wa yubi desu.",
+      "example_vi": "Đây là ngón tay."
+    },
+    {
+      "id": "vocab_219",
+      "word": "ぶた",
+      "romaji": "buta",
+      "meaning_vi": "con lợn (heo)",
+      "chars": [
+        "ぶ",
+        "た"
+      ],
+      "introduces": "ぶ",
+      "script": "hiragana",
+      "example_sentence": "これ は ぶた です。",
+      "example_romaji": "kore wa buta desu.",
+      "example_vi": "Đây là con lợn (heo)."
+    },
+    {
+      "id": "vocab_220",
+      "word": "ぶどう",
+      "romaji": "budou",
+      "meaning_vi": "quả nho",
+      "chars": [
+        "ぶ",
+        "ど",
+        "う"
+      ],
+      "introduces": "ぶ",
+      "script": "hiragana",
+      "example_sentence": "これ は ぶどう です。",
+      "example_romaji": "kore wa budou desu.",
+      "example_vi": "Đây là quả nho."
+    },
+    {
+      "id": "vocab_221",
+      "word": "かべ",
+      "romaji": "kabe",
+      "meaning_vi": "bức tường",
+      "chars": [
+        "か",
+        "べ"
+      ],
+      "introduces": "べ",
+      "script": "hiragana",
+      "example_sentence": "これ は かべ です。",
+      "example_romaji": "kore wa kabe desu.",
+      "example_vi": "Đây là bức tường."
+    },
+    {
+      "id": "vocab_222",
+      "word": "なべ",
+      "romaji": "nabe",
+      "meaning_vi": "cái nồi",
+      "chars": [
+        "な",
+        "べ"
+      ],
+      "introduces": "べ",
+      "script": "hiragana",
+      "example_sentence": "これ は なべ です。",
+      "example_romaji": "kore wa nabe desu.",
+      "example_vi": "Đây là cái nồi."
+    },
+    {
+      "id": "vocab_223",
+      "word": "ぼうし",
+      "romaji": "boushi",
+      "meaning_vi": "cái mũ",
+      "chars": [
+        "ぼ",
+        "う",
+        "し"
+      ],
+      "introduces": "ぼ",
+      "script": "hiragana",
+      "example_sentence": "これ は ぼうし です。",
+      "example_romaji": "kore wa boushi desu.",
+      "example_vi": "Đây là cái mũ."
+    },
+    {
+      "id": "vocab_224",
+      "word": "とんぼ",
+      "romaji": "tonbo",
+      "meaning_vi": "chuồn chuồn",
+      "chars": [
+        "と",
+        "ん",
+        "ぼ"
+      ],
+      "introduces": "ぼ",
+      "script": "hiragana",
+      "example_sentence": "これ は とんぼ です。",
+      "example_romaji": "kore wa tonbo desu.",
+      "example_vi": "Đây là chuồn chuồn."
+    },
+    {
+      "id": "vocab_225",
+      "word": "かっぱ",
+      "romaji": "kappa",
+      "meaning_vi": "áo mưa",
+      "chars": [
+        "か",
+        "っ",
+        "ぱ"
+      ],
+      "introduces": "ぱ",
+      "script": "hiragana",
+      "example_sentence": "これ は かっぱ です。",
+      "example_romaji": "kore wa kappa desu.",
+      "example_vi": "Đây là áo mưa."
+    },
+    {
+      "id": "vocab_226",
+      "word": "らっぱ",
+      "romaji": "rappa",
+      "meaning_vi": "cái kèn",
+      "chars": [
+        "ら",
+        "っ",
+        "ぱ"
+      ],
+      "introduces": "ぱ",
+      "script": "hiragana",
+      "example_sentence": "これ は らっぱ です。",
+      "example_romaji": "kore wa rappa desu.",
+      "example_vi": "Đây là cái kèn."
+    },
+    {
+      "id": "vocab_227",
+      "word": "えんぴつ",
+      "romaji": "enpitsu",
+      "meaning_vi": "bút chì",
+      "chars": [
+        "え",
+        "ん",
+        "ぴ",
+        "つ"
+      ],
+      "introduces": "ぴ",
+      "script": "hiragana",
+      "example_sentence": "これ は えんぴつ です。",
+      "example_romaji": "kore wa enpitsu desu.",
+      "example_vi": "Đây là bút chì."
+    },
+    {
+      "id": "vocab_228",
+      "word": "ぴかぴか",
+      "romaji": "pikapika",
+      "meaning_vi": "lấp lánh",
+      "chars": [
+        "ぴ",
+        "か",
+        "ぴ",
+        "か"
+      ],
+      "introduces": "ぴ",
+      "script": "hiragana",
+      "example_sentence": "これ は ぴかぴか です。",
+      "example_romaji": "kore wa pikapika desu.",
+      "example_vi": "Đây là lấp lánh."
+    },
+    {
+      "id": "vocab_229",
+      "word": "てんぷら",
+      "romaji": "tenpura",
+      "meaning_vi": "món tempura",
+      "chars": [
+        "て",
+        "ん",
+        "ぷ",
+        "ら"
+      ],
+      "introduces": "ぷ",
+      "script": "hiragana",
+      "example_sentence": "これ は てんぷら です。",
+      "example_romaji": "kore wa tenpura desu.",
+      "example_vi": "Đây là món tempura."
+    },
+    {
+      "id": "vocab_230",
+      "word": "きっぷ",
+      "romaji": "kippu",
+      "meaning_vi": "vé tàu",
+      "chars": [
+        "き",
+        "っ",
+        "ぷ"
+      ],
+      "introduces": "ぷ",
+      "script": "hiragana",
+      "example_sentence": "これ は きっぷ です。",
+      "example_romaji": "kore wa kippu desu.",
+      "example_vi": "Đây là vé tàu."
+    },
+    {
+      "id": "vocab_231",
+      "word": "ほっぺ",
+      "romaji": "hoppe",
+      "meaning_vi": "má (khuôn mặt)",
+      "chars": [
+        "ほ",
+        "っ",
+        "ぺ"
+      ],
+      "introduces": "ぺ",
+      "script": "hiragana",
+      "example_sentence": "これ は ほっぺ です。",
+      "example_romaji": "kore wa hoppe desu.",
+      "example_vi": "Đây là má (khuôn mặt)."
+    },
+    {
+      "id": "vocab_232",
+      "word": "ぺこぺこ",
+      "romaji": "pekopeko",
+      "meaning_vi": "đói cồn cào",
+      "chars": [
+        "ぺ",
+        "こ",
+        "ぺ",
+        "こ"
+      ],
+      "introduces": "ぺ",
+      "script": "hiragana",
+      "example_sentence": "これ は ぺこぺこ です。",
+      "example_romaji": "kore wa pekopeko desu.",
+      "example_vi": "Đây là đói cồn cào."
+    },
+    {
+      "id": "vocab_233",
+      "word": "しっぽ",
+      "romaji": "shippo",
+      "meaning_vi": "cái đuôi",
+      "chars": [
+        "し",
+        "っ",
+        "ぽ"
+      ],
+      "introduces": "ぽ",
+      "script": "hiragana",
+      "example_sentence": "これ は しっぽ です。",
+      "example_romaji": "kore wa shippo desu.",
+      "example_vi": "Đây là cái đuôi."
+    },
+    {
+      "id": "vocab_234",
+      "word": "さんぽ",
+      "romaji": "sanpo",
+      "meaning_vi": "đi dạo",
+      "chars": [
+        "さ",
+        "ん",
+        "ぽ"
+      ],
+      "introduces": "ぽ",
+      "script": "hiragana",
+      "example_sentence": "これ は さんぽ です。",
+      "example_romaji": "kore wa sanpo desu.",
+      "example_vi": "Đây là đi dạo."
+    },
+    {
+      "id": "vocab_235",
+      "word": "ガラス",
+      "romaji": "garasu",
+      "meaning_vi": "kính / thuỷ tinh",
+      "chars": [
+        "ガ",
+        "ラ",
+        "ス"
+      ],
+      "introduces": "ガ",
+      "script": "katakana",
+      "example_sentence": "これ は ガラス です。",
+      "example_romaji": "kore wa garasu desu.",
+      "example_vi": "Đây là kính / thuỷ tinh."
+    },
+    {
+      "id": "vocab_236",
+      "word": "ガム",
+      "romaji": "gamu",
+      "meaning_vi": "kẹo cao su",
+      "chars": [
+        "ガ",
+        "ム"
+      ],
+      "introduces": "ガ",
+      "script": "katakana",
+      "example_sentence": "これ は ガム です。",
+      "example_romaji": "kore wa gamu desu.",
+      "example_vi": "Đây là kẹo cao su."
+    },
+    {
+      "id": "vocab_237",
+      "word": "ギター",
+      "romaji": "gitaa",
+      "meaning_vi": "đàn ghi-ta",
+      "chars": [
+        "ギ",
+        "タ",
+        "ー"
+      ],
+      "introduces": "ギ",
+      "script": "katakana",
+      "example_sentence": "これ は ギター です。",
+      "example_romaji": "kore wa gitaa desu.",
+      "example_vi": "Đây là đàn ghi-ta."
+    },
+    {
+      "id": "vocab_238",
+      "word": "カギ",
+      "romaji": "kagi",
+      "meaning_vi": "chìa khoá",
+      "chars": [
+        "カ",
+        "ギ"
+      ],
+      "introduces": "ギ",
+      "script": "katakana",
+      "example_sentence": "これ は カギ です。",
+      "example_romaji": "kore wa kagi desu.",
+      "example_vi": "Đây là chìa khoá."
+    },
+    {
+      "id": "vocab_239",
+      "word": "グラス",
+      "romaji": "gurasu",
+      "meaning_vi": "cốc thuỷ tinh",
+      "chars": [
+        "グ",
+        "ラ",
+        "ス"
+      ],
+      "introduces": "グ",
+      "script": "katakana",
+      "example_sentence": "これ は グラス です。",
+      "example_romaji": "kore wa gurasu desu.",
+      "example_vi": "Đây là cốc thuỷ tinh."
+    },
+    {
+      "id": "vocab_240",
+      "word": "グループ",
+      "romaji": "guruupu",
+      "meaning_vi": "nhóm",
+      "chars": [
+        "グ",
+        "ル",
+        "ー",
+        "プ"
+      ],
+      "introduces": "グ",
+      "script": "katakana",
+      "example_sentence": "これ は グループ です。",
+      "example_romaji": "kore wa guruupu desu.",
+      "example_vi": "Đây là nhóm."
+    },
+    {
+      "id": "vocab_241",
+      "word": "ゲーム",
+      "romaji": "geemu",
+      "meaning_vi": "trò chơi",
+      "chars": [
+        "ゲ",
+        "ー",
+        "ム"
+      ],
+      "introduces": "ゲ",
+      "script": "katakana",
+      "example_sentence": "これ は ゲーム です。",
+      "example_romaji": "kore wa geemu desu.",
+      "example_vi": "Đây là trò chơi."
+    },
+    {
+      "id": "vocab_242",
+      "word": "ゲスト",
+      "romaji": "gesuto",
+      "meaning_vi": "khách mời",
+      "chars": [
+        "ゲ",
+        "ス",
+        "ト"
+      ],
+      "introduces": "ゲ",
+      "script": "katakana",
+      "example_sentence": "これ は ゲスト です。",
+      "example_romaji": "kore wa gesuto desu.",
+      "example_vi": "Đây là khách mời."
+    },
+    {
+      "id": "vocab_243",
+      "word": "ゴリラ",
+      "romaji": "gorira",
+      "meaning_vi": "khỉ đột",
+      "chars": [
+        "ゴ",
+        "リ",
+        "ラ"
+      ],
+      "introduces": "ゴ",
+      "script": "katakana",
+      "example_sentence": "これ は ゴリラ です。",
+      "example_romaji": "kore wa gorira desu.",
+      "example_vi": "Đây là khỉ đột."
+    },
+    {
+      "id": "vocab_244",
+      "word": "イチゴ",
+      "romaji": "ichigo",
+      "meaning_vi": "dâu tây",
+      "chars": [
+        "イ",
+        "チ",
+        "ゴ"
+      ],
+      "introduces": "ゴ",
+      "script": "katakana",
+      "example_sentence": "これ は イチゴ です。",
+      "example_romaji": "kore wa ichigo desu.",
+      "example_vi": "Đây là dâu tây."
+    },
+    {
+      "id": "vocab_245",
+      "word": "ピザ",
+      "romaji": "piza",
+      "meaning_vi": "bánh pizza",
+      "chars": [
+        "ピ",
+        "ザ"
+      ],
+      "introduces": "ザ",
+      "script": "katakana",
+      "example_sentence": "これ は ピザ です。",
+      "example_romaji": "kore wa piza desu.",
+      "example_vi": "Đây là bánh pizza."
+    },
+    {
+      "id": "vocab_246",
+      "word": "デザート",
+      "romaji": "dezaato",
+      "meaning_vi": "món tráng miệng",
+      "chars": [
+        "デ",
+        "ザ",
+        "ー",
+        "ト"
+      ],
+      "introduces": "ザ",
+      "script": "katakana",
+      "example_sentence": "これ は デザート です。",
+      "example_romaji": "kore wa dezaato desu.",
+      "example_vi": "Đây là món tráng miệng."
+    },
+    {
+      "id": "vocab_247",
+      "word": "ジュース",
+      "romaji": "juusu",
+      "meaning_vi": "nước trái cây",
+      "chars": [
+        "ジ",
+        "ュ",
+        "ー",
+        "ス"
+      ],
+      "introduces": "ジ",
+      "script": "katakana",
+      "example_sentence": "これ は ジュース です。",
+      "example_romaji": "kore wa juusu desu.",
+      "example_vi": "Đây là nước trái cây."
+    },
+    {
+      "id": "vocab_248",
+      "word": "ページ",
+      "romaji": "peeji",
+      "meaning_vi": "trang sách",
+      "chars": [
+        "ペ",
+        "ー",
+        "ジ"
+      ],
+      "introduces": "ジ",
+      "script": "katakana",
+      "example_sentence": "これ は ページ です。",
+      "example_romaji": "kore wa peeji desu.",
+      "example_vi": "Đây là trang sách."
+    },
+    {
+      "id": "vocab_249",
+      "word": "ズボン",
+      "romaji": "zubon",
+      "meaning_vi": "quần dài",
+      "chars": [
+        "ズ",
+        "ボ",
+        "ン"
+      ],
+      "introduces": "ズ",
+      "script": "katakana",
+      "example_sentence": "これ は ズボン です。",
+      "example_romaji": "kore wa zubon desu.",
+      "example_vi": "Đây là quần dài."
+    },
+    {
+      "id": "vocab_250",
+      "word": "チーズ",
+      "romaji": "chiizu",
+      "meaning_vi": "phô mai",
+      "chars": [
+        "チ",
+        "ー",
+        "ズ"
+      ],
+      "introduces": "ズ",
+      "script": "katakana",
+      "example_sentence": "これ は チーズ です。",
+      "example_romaji": "kore wa chiizu desu.",
+      "example_vi": "Đây là phô mai."
+    },
+    {
+      "id": "vocab_251",
+      "word": "ゼリー",
+      "romaji": "zerii",
+      "meaning_vi": "thạch rau câu",
+      "chars": [
+        "ゼ",
+        "リ",
+        "ー"
+      ],
+      "introduces": "ゼ",
+      "script": "katakana",
+      "example_sentence": "これ は ゼリー です。",
+      "example_romaji": "kore wa zerii desu.",
+      "example_vi": "Đây là thạch rau câu."
+    },
+    {
+      "id": "vocab_252",
+      "word": "ゼロ",
+      "romaji": "zero",
+      "meaning_vi": "số không (0)",
+      "chars": [
+        "ゼ",
+        "ロ"
+      ],
+      "introduces": "ゼ",
+      "script": "katakana",
+      "example_sentence": "これ は ゼロ です。",
+      "example_romaji": "kore wa zero desu.",
+      "example_vi": "Đây là số không (0)."
+    },
+    {
+      "id": "vocab_253",
+      "word": "ゾーン",
+      "romaji": "zoon",
+      "meaning_vi": "khu vực",
+      "chars": [
+        "ゾ",
+        "ー",
+        "ン"
+      ],
+      "introduces": "ゾ",
+      "script": "katakana",
+      "example_sentence": "これ は ゾーン です。",
+      "example_romaji": "kore wa zoon desu.",
+      "example_vi": "Đây là khu vực."
+    },
+    {
+      "id": "vocab_254",
+      "word": "ナゾ",
+      "romaji": "nazo",
+      "meaning_vi": "câu đố",
+      "chars": [
+        "ナ",
+        "ゾ"
+      ],
+      "introduces": "ゾ",
+      "script": "katakana",
+      "example_sentence": "これ は ナゾ です。",
+      "example_romaji": "kore wa nazo desu.",
+      "example_vi": "Đây là câu đố."
+    },
+    {
+      "id": "vocab_255",
+      "word": "ダンス",
+      "romaji": "dansu",
+      "meaning_vi": "nhảy múa",
+      "chars": [
+        "ダ",
+        "ン",
+        "ス"
+      ],
+      "introduces": "ダ",
+      "script": "katakana",
+      "example_sentence": "これ は ダンス です。",
+      "example_romaji": "kore wa dansu desu.",
+      "example_vi": "Đây là nhảy múa."
+    },
+    {
+      "id": "vocab_256",
+      "word": "パンダ",
+      "romaji": "panda",
+      "meaning_vi": "gấu trúc",
+      "chars": [
+        "パ",
+        "ン",
+        "ダ"
+      ],
+      "introduces": "ダ",
+      "script": "katakana",
+      "example_sentence": "これ は パンダ です。",
+      "example_romaji": "kore wa panda desu.",
+      "example_vi": "Đây là gấu trúc."
+    },
+    {
+      "id": "vocab_257",
+      "word": "ヂーゼル",
+      "romaji": "jiizeru",
+      "meaning_vi": "động cơ diesel",
+      "chars": [
+        "ヂ",
+        "ー",
+        "ゼ",
+        "ル"
+      ],
+      "introduces": "ヂ",
+      "script": "katakana",
+      "example_sentence": "これ は ヂーゼル です。",
+      "example_romaji": "kore wa jiizeru desu.",
+      "example_vi": "Đây là động cơ diesel."
+    },
+    {
+      "id": "vocab_258",
+      "word": "ハナヂ",
+      "romaji": "hanaji",
+      "meaning_vi": "máu cam",
+      "chars": [
+        "ハ",
+        "ナ",
+        "ヂ"
+      ],
+      "introduces": "ヂ",
+      "script": "katakana",
+      "example_sentence": "これ は ハナヂ です。",
+      "example_romaji": "kore wa hanaji desu.",
+      "example_vi": "Đây là máu cam."
+    },
+    {
+      "id": "vocab_259",
+      "word": "ツヅキ",
+      "romaji": "tsuzuki",
+      "meaning_vi": "phần tiếp theo",
+      "chars": [
+        "ツ",
+        "ヅ",
+        "キ"
+      ],
+      "introduces": "ヅ",
+      "script": "katakana",
+      "example_sentence": "これ は ツヅキ です。",
+      "example_romaji": "kore wa tsuzuki desu.",
+      "example_vi": "Đây là phần tiếp theo."
+    },
+    {
+      "id": "vocab_260",
+      "word": "ミカヅキ",
+      "romaji": "mikazuki",
+      "meaning_vi": "trăng lưỡi liềm",
+      "chars": [
+        "ミ",
+        "カ",
+        "ヅ",
+        "キ"
+      ],
+      "introduces": "ヅ",
+      "script": "katakana",
+      "example_sentence": "これ は ミカヅキ です。",
+      "example_romaji": "kore wa mikazuki desu.",
+      "example_vi": "Đây là trăng lưỡi liềm."
+    },
+    {
+      "id": "vocab_261",
+      "word": "デスク",
+      "romaji": "desuku",
+      "meaning_vi": "bàn làm việc",
+      "chars": [
+        "デ",
+        "ス",
+        "ク"
+      ],
+      "introduces": "デ",
+      "script": "katakana",
+      "example_sentence": "これ は デスク です。",
+      "example_romaji": "kore wa desuku desu.",
+      "example_vi": "Đây là bàn làm việc."
+    },
+    {
+      "id": "vocab_262",
+      "word": "ビデオ",
+      "romaji": "bideo",
+      "meaning_vi": "video",
+      "chars": [
+        "ビ",
+        "デ",
+        "オ"
+      ],
+      "introduces": "デ",
+      "script": "katakana",
+      "example_sentence": "これ は ビデオ です。",
+      "example_romaji": "kore wa bideo desu.",
+      "example_vi": "Đây là video."
+    },
+    {
+      "id": "vocab_263",
+      "word": "ドア",
+      "romaji": "doa",
+      "meaning_vi": "cánh cửa",
+      "chars": [
+        "ド",
+        "ア"
+      ],
+      "introduces": "ド",
+      "script": "katakana",
+      "example_sentence": "これ は ドア です。",
+      "example_romaji": "kore wa doa desu.",
+      "example_vi": "Đây là cánh cửa."
+    },
+    {
+      "id": "vocab_264",
+      "word": "ベッド",
+      "romaji": "beddo",
+      "meaning_vi": "cái giường",
+      "chars": [
+        "ベ",
+        "ッ",
+        "ド"
+      ],
+      "introduces": "ド",
+      "script": "katakana",
+      "example_sentence": "これ は ベッド です。",
+      "example_romaji": "kore wa beddo desu.",
+      "example_vi": "Đây là cái giường."
+    },
+    {
+      "id": "vocab_265",
+      "word": "バス",
+      "romaji": "basu",
+      "meaning_vi": "xe buýt",
+      "chars": [
+        "バ",
+        "ス"
+      ],
+      "introduces": "バ",
+      "script": "katakana",
+      "example_sentence": "これ は バス です。",
+      "example_romaji": "kore wa basu desu.",
+      "example_vi": "Đây là xe buýt."
+    },
+    {
+      "id": "vocab_266",
+      "word": "バナナ",
+      "romaji": "banana",
+      "meaning_vi": "quả chuối",
+      "chars": [
+        "バ",
+        "ナ",
+        "ナ"
+      ],
+      "introduces": "バ",
+      "script": "katakana",
+      "example_sentence": "これ は バナナ です。",
+      "example_romaji": "kore wa banana desu.",
+      "example_vi": "Đây là quả chuối."
+    },
+    {
+      "id": "vocab_267",
+      "word": "テレビ",
+      "romaji": "terebi",
+      "meaning_vi": "ti vi",
+      "chars": [
+        "テ",
+        "レ",
+        "ビ"
+      ],
+      "introduces": "ビ",
+      "script": "katakana",
+      "example_sentence": "かぞく と テレビ を みる。",
+      "example_romaji": "kazoku to terebi wo miru.",
+      "example_vi": "Xem ti vi cùng gia đình."
+    },
+    {
+      "id": "vocab_268",
+      "word": "ビル",
+      "romaji": "biru",
+      "meaning_vi": "toà nhà",
+      "chars": [
+        "ビ",
+        "ル"
+      ],
+      "introduces": "ビ",
+      "script": "katakana",
+      "example_sentence": "これ は ビル です。",
+      "example_romaji": "kore wa biru desu.",
+      "example_vi": "Đây là toà nhà."
+    },
+    {
+      "id": "vocab_269",
+      "word": "ブラシ",
+      "romaji": "burashi",
+      "meaning_vi": "bàn chải",
+      "chars": [
+        "ブ",
+        "ラ",
+        "シ"
+      ],
+      "introduces": "ブ",
+      "script": "katakana",
+      "example_sentence": "これ は ブラシ です。",
+      "example_romaji": "kore wa burashi desu.",
+      "example_vi": "Đây là bàn chải."
+    },
+    {
+      "id": "vocab_270",
+      "word": "テーブル",
+      "romaji": "teeburu",
+      "meaning_vi": "cái bàn",
+      "chars": [
+        "テ",
+        "ー",
+        "ブ",
+        "ル"
+      ],
+      "introduces": "ブ",
+      "script": "katakana",
+      "example_sentence": "これ は テーブル です。",
+      "example_romaji": "kore wa teeburu desu.",
+      "example_vi": "Đây là cái bàn."
+    },
+    {
+      "id": "vocab_271",
+      "word": "ベッド",
+      "romaji": "beddo",
+      "meaning_vi": "cái giường",
+      "chars": [
+        "ベ",
+        "ッ",
+        "ド"
+      ],
+      "introduces": "ベ",
+      "script": "katakana",
+      "example_sentence": "これ は ベッド です。",
+      "example_romaji": "kore wa beddo desu.",
+      "example_vi": "Đây là cái giường."
+    },
+    {
+      "id": "vocab_272",
+      "word": "ベル",
+      "romaji": "beru",
+      "meaning_vi": "cái chuông",
+      "chars": [
+        "ベ",
+        "ル"
+      ],
+      "introduces": "ベ",
+      "script": "katakana",
+      "example_sentence": "これ は ベル です。",
+      "example_romaji": "kore wa beru desu.",
+      "example_vi": "Đây là cái chuông."
+    },
+    {
+      "id": "vocab_273",
+      "word": "ボール",
+      "romaji": "booru",
+      "meaning_vi": "quả bóng",
+      "chars": [
+        "ボ",
+        "ー",
+        "ル"
+      ],
+      "introduces": "ボ",
+      "script": "katakana",
+      "example_sentence": "これ は ボール です。",
+      "example_romaji": "kore wa booru desu.",
+      "example_vi": "Đây là quả bóng."
+    },
+    {
+      "id": "vocab_274",
+      "word": "ボタン",
+      "romaji": "botan",
+      "meaning_vi": "cúc áo",
+      "chars": [
+        "ボ",
+        "タ",
+        "ン"
+      ],
+      "introduces": "ボ",
+      "script": "katakana",
+      "example_sentence": "これ は ボタン です。",
+      "example_romaji": "kore wa botan desu.",
+      "example_vi": "Đây là cúc áo."
+    },
+    {
+      "id": "vocab_275",
+      "word": "パン",
+      "romaji": "pan",
+      "meaning_vi": "bánh mì",
+      "chars": [
+        "パ",
+        "ン"
+      ],
+      "introduces": "パ",
+      "script": "katakana",
+      "example_sentence": "あさごはん に パン を たべる。",
+      "example_romaji": "asagohan ni pan wo taberu.",
+      "example_vi": "Ăn bánh mì vào bữa sáng."
+    },
+    {
+      "id": "vocab_276",
+      "word": "パパ",
+      "romaji": "papa",
+      "meaning_vi": "bố / ba",
+      "chars": [
+        "パ",
+        "パ"
+      ],
+      "introduces": "パ",
+      "script": "katakana",
+      "example_sentence": "これ は パパ です。",
+      "example_romaji": "kore wa papa desu.",
+      "example_vi": "Đây là bố / ba."
+    },
+    {
+      "id": "vocab_277",
+      "word": "ピアノ",
+      "romaji": "piano",
+      "meaning_vi": "đàn dương cầm",
+      "chars": [
+        "ピ",
+        "ア",
+        "ノ"
+      ],
+      "introduces": "ピ",
+      "script": "katakana",
+      "example_sentence": "これ は ピアノ です。",
+      "example_romaji": "kore wa piano desu.",
+      "example_vi": "Đây là đàn dương cầm."
+    },
+    {
+      "id": "vocab_278",
+      "word": "ピンク",
+      "romaji": "pinku",
+      "meaning_vi": "màu hồng",
+      "chars": [
+        "ピ",
+        "ン",
+        "ク"
+      ],
+      "introduces": "ピ",
+      "script": "katakana",
+      "example_sentence": "これ は ピンク です。",
+      "example_romaji": "kore wa pinku desu.",
+      "example_vi": "Đây là màu hồng."
+    },
+    {
+      "id": "vocab_279",
+      "word": "プール",
+      "romaji": "puuru",
+      "meaning_vi": "hồ bơi",
+      "chars": [
+        "プ",
+        "ー",
+        "ル"
+      ],
+      "introduces": "プ",
+      "script": "katakana",
+      "example_sentence": "これ は プール です。",
+      "example_romaji": "kore wa puuru desu.",
+      "example_vi": "Đây là hồ bơi."
+    },
+    {
+      "id": "vocab_280",
+      "word": "コップ",
+      "romaji": "koppu",
+      "meaning_vi": "cái cốc",
+      "chars": [
+        "コ",
+        "ッ",
+        "プ"
+      ],
+      "introduces": "プ",
+      "script": "katakana",
+      "example_sentence": "これ は コップ です。",
+      "example_romaji": "kore wa koppu desu.",
+      "example_vi": "Đây là cái cốc."
+    },
+    {
+      "id": "vocab_281",
+      "word": "ペン",
+      "romaji": "pen",
+      "meaning_vi": "cây bút",
+      "chars": [
+        "ペ",
+        "ン"
+      ],
+      "introduces": "ペ",
+      "script": "katakana",
+      "example_sentence": "これ は ペン です。",
+      "example_romaji": "kore wa pen desu.",
+      "example_vi": "Đây là cây bút."
+    },
+    {
+      "id": "vocab_282",
+      "word": "ペット",
+      "romaji": "petto",
+      "meaning_vi": "thú cưng",
+      "chars": [
+        "ペ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ペ",
+      "script": "katakana",
+      "example_sentence": "これ は ペット です。",
+      "example_romaji": "kore wa petto desu.",
+      "example_vi": "Đây là thú cưng."
+    },
+    {
+      "id": "vocab_283",
+      "word": "ポスト",
+      "romaji": "posuto",
+      "meaning_vi": "hòm thư",
+      "chars": [
+        "ポ",
+        "ス",
+        "ト"
+      ],
+      "introduces": "ポ",
+      "script": "katakana",
+      "example_sentence": "これ は ポスト です。",
+      "example_romaji": "kore wa posuto desu.",
+      "example_vi": "Đây là hòm thư."
+    },
+    {
+      "id": "vocab_284",
+      "word": "ポケット",
+      "romaji": "poketto",
+      "meaning_vi": "túi áo",
+      "chars": [
+        "ポ",
+        "ケ",
+        "ッ",
+        "ト"
+      ],
+      "introduces": "ポ",
+      "script": "katakana",
+      "example_sentence": "これ は ポケット です。",
+      "example_romaji": "kore wa poketto desu.",
+      "example_vi": "Đây là túi áo."
+    },
+    {
+      "id": "vocab_285",
+      "word": "しゃしん",
+      "romaji": "shashin",
+      "meaning_vi": "bức ảnh",
+      "chars": [
+        "し",
+        "ゃ",
+        "し",
+        "ん"
+      ],
+      "introduces": "ゃ",
+      "script": "hiragana",
+      "example_sentence": "これ は しゃしん です。",
+      "example_romaji": "kore wa shashin desu.",
+      "example_vi": "Đây là bức ảnh."
+    },
+    {
+      "id": "vocab_286",
+      "word": "おちゃ",
+      "romaji": "ocha",
+      "meaning_vi": "trà xanh",
+      "chars": [
+        "お",
+        "ち",
+        "ゃ"
+      ],
+      "introduces": "ゃ",
+      "script": "hiragana",
+      "example_sentence": "これ は おちゃ です。",
+      "example_romaji": "kore wa ocha desu.",
+      "example_vi": "Đây là trà xanh."
+    },
+    {
+      "id": "vocab_287",
+      "word": "きゅうり",
+      "romaji": "kyuuri",
+      "meaning_vi": "dưa chuột",
+      "chars": [
+        "き",
+        "ゅ",
+        "う",
+        "り"
+      ],
+      "introduces": "ゅ",
+      "script": "hiragana",
+      "example_sentence": "これ は きゅうり です。",
+      "example_romaji": "kore wa kyuuri desu.",
+      "example_vi": "Đây là dưa chuột."
+    },
+    {
+      "id": "vocab_288",
+      "word": "しゅくだい",
+      "romaji": "shukudai",
+      "meaning_vi": "bài tập về nhà",
+      "chars": [
+        "し",
+        "ゅ",
+        "く",
+        "だ",
+        "い"
+      ],
+      "introduces": "ゅ",
+      "script": "hiragana",
+      "example_sentence": "これ は しゅくだい です。",
+      "example_romaji": "kore wa shukudai desu.",
+      "example_vi": "Đây là bài tập về nhà."
+    },
+    {
+      "id": "vocab_289",
+      "word": "きょう",
+      "romaji": "kyou",
+      "meaning_vi": "hôm nay",
+      "chars": [
+        "き",
+        "ょ",
+        "う"
+      ],
+      "introduces": "ょ",
+      "script": "hiragana",
+      "example_sentence": "これ は きょう です。",
+      "example_romaji": "kore wa kyou desu.",
+      "example_vi": "Đây là hôm nay."
+    },
+    {
+      "id": "vocab_290",
+      "word": "としょかん",
+      "romaji": "toshokan",
+      "meaning_vi": "thư viện",
+      "chars": [
+        "と",
+        "し",
+        "ょ",
+        "か",
+        "ん"
+      ],
+      "introduces": "ょ",
+      "script": "hiragana",
+      "example_sentence": "これ は としょかん です。",
+      "example_romaji": "kore wa toshokan desu.",
+      "example_vi": "Đây là thư viện."
+    },
+    {
+      "id": "vocab_291",
+      "word": "きって",
+      "romaji": "kitte",
+      "meaning_vi": "con tem",
+      "chars": [
+        "き",
+        "っ",
+        "て"
+      ],
+      "introduces": "っ",
+      "script": "hiragana",
+      "example_sentence": "これ は きって です。",
+      "example_romaji": "kore wa kitte desu.",
+      "example_vi": "Đây là con tem."
+    },
+    {
+      "id": "vocab_292",
+      "word": "ねっこ",
+      "romaji": "nekko",
+      "meaning_vi": "rễ cây",
+      "chars": [
+        "ね",
+        "っ",
+        "こ"
+      ],
+      "introduces": "っ",
+      "script": "hiragana",
+      "example_sentence": "これ は ねっこ です。",
+      "example_romaji": "kore wa nekko desu.",
+      "example_vi": "Đây là rễ cây."
+    },
+    {
+      "id": "vocab_293",
+      "word": "シャツ",
+      "romaji": "shatsu",
+      "meaning_vi": "áo sơ mi",
+      "chars": [
+        "シ",
+        "ャ",
+        "ツ"
+      ],
+      "introduces": "ャ",
+      "script": "katakana",
+      "example_sentence": "これ は シャツ です。",
+      "example_romaji": "kore wa shatsu desu.",
+      "example_vi": "Đây là áo sơ mi."
+    },
+    {
+      "id": "vocab_294",
+      "word": "キャンプ",
+      "romaji": "kyanpu",
+      "meaning_vi": "cắm trại",
+      "chars": [
+        "キ",
+        "ャ",
+        "ン",
+        "プ"
+      ],
+      "introduces": "ャ",
+      "script": "katakana",
+      "example_sentence": "これ は キャンプ です。",
+      "example_romaji": "kore wa kyanpu desu.",
+      "example_vi": "Đây là cắm trại."
+    },
+    {
+      "id": "vocab_295",
+      "word": "ジュース",
+      "romaji": "juusu",
+      "meaning_vi": "nước ép",
+      "chars": [
+        "ジ",
+        "ュ",
+        "ー",
+        "ス"
+      ],
+      "introduces": "ュ",
+      "script": "katakana",
+      "example_sentence": "これ は ジュース です。",
+      "example_romaji": "kore wa juusu desu.",
+      "example_vi": "Đây là nước ép."
+    },
+    {
+      "id": "vocab_296",
+      "word": "メニュー",
+      "romaji": "menyuu",
+      "meaning_vi": "thực đơn",
+      "chars": [
+        "メ",
+        "ニ",
+        "ュ",
+        "ー"
+      ],
+      "introduces": "ュ",
+      "script": "katakana",
+      "example_sentence": "これ は メニュー です。",
+      "example_romaji": "kore wa menyuu desu.",
+      "example_vi": "Đây là thực đơn."
+    },
+    {
+      "id": "vocab_297",
+      "word": "チョコ",
+      "romaji": "choko",
+      "meaning_vi": "sô-cô-la",
+      "chars": [
+        "チ",
+        "ョ",
+        "コ"
+      ],
+      "introduces": "ョ",
+      "script": "katakana",
+      "example_sentence": "これ は チョコ です。",
+      "example_romaji": "kore wa choko desu.",
+      "example_vi": "Đây là sô-cô-la."
+    },
+    {
+      "id": "vocab_298",
+      "word": "ショップ",
+      "romaji": "shoppu",
+      "meaning_vi": "cửa hàng",
+      "chars": [
+        "シ",
+        "ョ",
+        "ッ",
+        "プ"
+      ],
+      "introduces": "ョ",
+      "script": "katakana",
+      "example_sentence": "これ は ショップ です。",
+      "example_romaji": "kore wa shoppu desu.",
+      "example_vi": "Đây là cửa hàng."
+    },
+    {
+      "id": "vocab_299",
+      "word": "コップ",
+      "romaji": "koppu",
+      "meaning_vi": "cái cốc",
+      "chars": [
+        "コ",
+        "ッ",
+        "プ"
+      ],
+      "introduces": "ッ",
+      "script": "katakana",
+      "example_sentence": "これ は コップ です。",
+      "example_romaji": "kore wa koppu desu.",
+      "example_vi": "Đây là cái cốc."
+    },
+    {
+      "id": "vocab_300",
+      "word": "ベッド",
+      "romaji": "beddo",
+      "meaning_vi": "cái giường",
+      "chars": [
+        "ベ",
+        "ッ",
+        "ド"
+      ],
+      "introduces": "ッ",
+      "script": "katakana",
+      "example_sentence": "これ は ベッド です。",
+      "example_romaji": "kore wa beddo desu.",
+      "example_vi": "Đây là cái giường."
+    },
+    {
+      "id": "vocab_301",
+      "word": "ケーキ",
+      "romaji": "keeki",
+      "meaning_vi": "bánh kem",
+      "chars": [
+        "ケ",
+        "ー",
+        "キ"
+      ],
+      "introduces": "ー",
+      "script": "katakana",
+      "example_sentence": "たんじょうび に ケーキ を たべる。",
+      "example_romaji": "tanjoubi ni keeki wo taberu.",
+      "example_vi": "Ăn bánh kem vào ngày sinh nhật."
+    },
+    {
+      "id": "vocab_302",
+      "word": "コーヒー",
+      "romaji": "koohii",
+      "meaning_vi": "cà phê",
+      "chars": [
+        "コ",
+        "ー",
+        "ヒ",
+        "ー"
+      ],
+      "introduces": "ー",
+      "script": "katakana",
+      "example_sentence": "あたたかい コーヒー を のむ。",
+      "example_romaji": "atatakai koohii wo nomu.",
+      "example_vi": "Uống tách cà phê ấm."
+    }
+  ]
+}

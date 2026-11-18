@@ -359,7 +359,17 @@ private fun ConfusablePairsView(
                         "Đáp án là ${current.target.char} (${current.target.romaji}). ${current.group.tipVi}"
                     },
                     isError = !isAnsCorrect,
-                    seed = quizIndex * 23 + (selectedChar?.hashCode() ?: 0)
+                    seed = quizIndex * 23 + (selectedChar?.hashCode() ?: 0),
+                    onContinueAction = if (!isAnsCorrect) {
+                        {
+                            if (quizIndex < quizQuestions.lastIndex) {
+                                quizIndex++
+                                selectedChar = null
+                            } else {
+                                quizDone = true
+                            }
+                        }
+                    } else null
                 )
             }
 

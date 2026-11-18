@@ -262,7 +262,17 @@ fun CountersDrillScreen(
                 AnimatedMemeFeedbackBanner(
                     message = "Đáp án: ${current.target.kanji} = ${current.target.kana} (${current.target.romaji})",
                     isError = !isAnsCorrect,
-                    seed = quizIndex * 19 + (chosenKana?.hashCode() ?: 0)
+                    seed = quizIndex * 19 + (chosenKana?.hashCode() ?: 0),
+                    onContinueAction = if (!isAnsCorrect) {
+                        {
+                            if (quizIndex < quizItems.lastIndex) {
+                                quizIndex++
+                                chosenKana = null
+                            } else {
+                                quizFinished = true
+                            }
+                        }
+                    } else null
                 )
             }
 

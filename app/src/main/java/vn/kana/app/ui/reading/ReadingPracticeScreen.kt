@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import vn.kana.app.domain.N5ReadingCatalog
 import vn.kana.app.domain.N5ReadingPassage
 import vn.kana.app.domain.N5SentenceBuilderItem
+import vn.kana.app.ui.components.AnimatedMemeFeedbackBanner
 
 private enum class ReadingTab(val label: String) {
     PASSAGES("Đọc hiểu"),
@@ -462,6 +463,12 @@ private fun PassageDetailView(
                 }
 
                 if (chosen != null) {
+                    val isQErr = chosen != question.correctIndex
+                    AnimatedMemeFeedbackBanner(
+                        message = question.explanationVi,
+                        isError = isQErr,
+                        seed = passage.number * 31 + qIdx * 7 + chosen
+                    )
                     Text(
                         text = question.explanationVi,
                         style = MaterialTheme.typography.bodySmall,
@@ -768,6 +775,11 @@ private fun SentenceBuilderView(
             }
         } else {
             val isCorrect = checkedResult == true
+            AnimatedMemeFeedbackBanner(
+                message = "${item.fullSentenceJa}\n${item.explanationVi}",
+                isError = !isCorrect,
+                seed = currentIndex * 29 + (if (isCorrect) 1 else 2)
+            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

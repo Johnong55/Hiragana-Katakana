@@ -8,9 +8,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,7 +20,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,8 +31,12 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import kotlinx.coroutines.delay
 import vn.kana.app.R
 
 data class MemeReaction(
@@ -52,10 +60,10 @@ object MemeReactionCatalog {
     )
 
     val errorReactions: List<MemeReaction> = listOf(
-        MemeReaction(R.drawable.meme_cat_surprised, "HẢ?! VIẾT GÌ LẠ VẬY BRO?!"),
+        MemeReaction(R.drawable.meme_cat_surprised, "HẢ?! GÌ LẠ VẬY BRO?!"),
         MemeReaction(R.drawable.meme_cat_grumpy, "CỐ TỎ RA ỔN NHƯNG SAI RỒI..."),
         MemeReaction(R.drawable.meme_cat_angry, "NÓNG MÁU À NHA! NHÌN KỸ LẠI NÈ!"),
-        MemeReaction(R.drawable.meme_cat_reading, "ĐEO KÍNH VÀO SOI LẠI TỪNG NÉT NÈ!"),
+        MemeReaction(R.drawable.meme_cat_reading, "ĐEO KÍNH VÀO SOI LẠI NÈ!"),
         MemeReaction(R.drawable.meme_cat_surprised, "ỦA ALO?! LỘN TIỆM RỒI BẠN ƠI!"),
         MemeReaction(R.drawable.meme_cat_grumpy, "KHÓC MỘT DÒNG SÔNG, THỬ LẠI NHA!"),
         MemeReaction(R.drawable.meme_cat_reading, "SENSEI SOI THẤY SAI RỒI ĐÓ NHA!"),
@@ -90,22 +98,27 @@ fun MemeBadge(
     )
 }
 
+/**
+ * Thẻ Pop-up Meme Đúng/Sai chuẩn hoá đồng bộ cho TOÀN BỘ loại câu hỏi (Viết nét & Chọn đáp án).
+ */
 @Composable
-fun AnimatedMemeFeedbackBanner(
+fun MemeReactionPopupBox(
     message: String,
     isError: Boolean,
     seed: Int = message.hashCode(),
+    actionLabel: String? = null,
+    onActionClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val reaction = remember(seed, isError) {
         if (isError) MemeReactionCatalog.pickError(seed) else MemeReactionCatalog.pickPraise(seed)
     }
-    val scaleAnim = remember(seed, isError) { Animatable(0.75f) }
+    val scaleAnim = remember(seed, isError) { Animatable(0.45f) }
     val tiltAnim = remember(seed, isError) { Animatable(0f) }
 
     LaunchedEffect(seed, isError) {
         scaleAnim.animateTo(
-            targetValue = 1f,
+            targetValue = 1.0f,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioMediumBouncy,
                 stiffness = Spring.StiffnessMediumLow
@@ -114,50 +127,139 @@ fun AnimatedMemeFeedbackBanner(
     }
     LaunchedEffect(seed, isError) {
         val angles = if (isError) {
-            listOf(-14f, 14f, -10f, 10f, -5f, 5f, 0f)
+            listOf(-16f, 16f, -11f, 11f, -5f, 5f, 0f)
         } else {
-            listOf(-10f, 10f, -6f, 6f, 0f)
+            listOf(-12f, 12f, -8f, 8f, -4f, 4f, 0f)
         }
         for (a in angles) {
             tiltAnim.animateTo(a, animationSpec = tween(durationMillis = 55))
         }
     }
 
-    val accentColor = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+    val containerBg = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+    val contentCol = if (isError) MaterialTheme.colorScheme.onError else MaterialTheme.colorScheme.onPrimary
 
-    Row(
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
-            .fillMaxWidth()
             .scale(scaleAnim.value)
-            .border(2.dp, accentColor)
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(horizontal = 10.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .background(containerBg)
+            .border(2.dp, MaterialTheme.colorScheme.onBackground)
+            .padding(horizontal = 22.dp, vertical = 16.dp)
     ) {
         Image(
             painter = painterResource(id = reaction.resId),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(46.dp)
+                .size(76.dp)
                 .graphicsLayer { rotationZ = tiltAnim.value }
                 .clip(CircleShape)
-                .border(2.dp, accentColor, CircleShape)
+                .border(2.dp, contentCol, CircleShape)
         )
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            Text(
-                text = reaction.headlineVi,
-                style = MaterialTheme.typography.labelLarge,
-                color = accentColor
-            )
+        Text(
+            text = reaction.headlineVi,
+            style = MaterialTheme.typography.titleLarge,
+            color = contentCol,
+            textAlign = TextAlign.Center
+        )
+        if (message.isNotBlank()) {
             Text(
                 text = message,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground
+                style = MaterialTheme.typography.bodyMedium,
+                color = contentCol,
+                textAlign = TextAlign.Center
+            )
+        }
+        if (actionLabel != null && onActionClick != null) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                    .clickable { onActionClick() }
+                    .padding(vertical = 8.dp, horizontal = 12.dp)
+            ) {
+                Text(
+                    text = actionLabel,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Pop-up Meme nổi chính giữa màn hình cho mọi câu hỏi trắc nghiệm / chọn đáp án
+ * (đồng bộ 100% giao diện với Pop-up trên ô viết nét).
+ */
+@Composable
+fun AnimatedMemeFeedbackBanner(
+    message: String,
+    isError: Boolean,
+    seed: Int = message.hashCode(),
+    onContinueAction: (() -> Unit)? = null,
+    autoDismissErrorMs: Long? = null,
+    autoDismissSuccessMs: Long = 1300L,
+    modifier: Modifier = Modifier
+) {
+    var dismissed by remember(seed, isError, message) { mutableStateOf(false) }
+
+    if (autoDismissErrorMs != null && isError) {
+        LaunchedEffect(seed, isError, message) {
+            delay(autoDismissErrorMs)
+            dismissed = true
+        }
+    } else if (!isError && onContinueAction == null) {
+        LaunchedEffect(seed, isError, message) {
+            delay(autoDismissSuccessMs)
+            dismissed = true
+        }
+    }
+
+    if (dismissed) return
+
+    Dialog(
+        onDismissRequest = {
+            if (onContinueAction != null) {
+                onContinueAction()
+            } else {
+                dismissed = true
+            }
+        },
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 28.dp)
+                .clickable {
+                    if (onContinueAction != null) {
+                        onContinueAction()
+                    } else {
+                        dismissed = true
+                    }
+                }
+        ) {
+            MemeReactionPopupBox(
+                message = message,
+                isError = isError,
+                seed = seed,
+                actionLabel = if (isError) {
+                    if (onContinueAction != null) "Tiếp theo →" else "Đã hiểu"
+                } else null,
+                onActionClick = {
+                    if (onContinueAction != null) {
+                        onContinueAction()
+                    } else {
+                        dismissed = true
+                    }
+                }
             )
         }
     }

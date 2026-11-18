@@ -260,13 +260,33 @@ fun ReviewScreen(
             }
         }
 
-        // Phản hồi meme khen / báo sai sống động
-        uiState.feedbackMessage?.let { msg ->
+        // Khi ở chế độ chọn đáp án: Bật Pop-up Meme nổi đồng bộ y hệt như khi viết nét
+        if (uiState.currentDrillStyle != ReviewDrillStyle.WRITE && uiState.selectedChoiceIndex != null) {
+            val isChoiceErr = uiState.selectedChoiceIndex != uiState.currentCorrectChoiceIndex
+            val correctText = uiState.currentChoiceOptions.getOrNull(uiState.currentCorrectChoiceIndex).orEmpty()
             AnimatedMemeFeedbackBanner(
-                message = msg,
-                isError = uiState.isFeedbackError,
-                seed = uiState.currentIndex + uiState.shakeTrigger * 17
+                message = if (isChoiceErr) "Đáp án đúng là: $correctText" else "Đáp án: $correctText",
+                isError = isChoiceErr,
+                seed = uiState.currentIndex * 17 + (uiState.selectedChoiceIndex ?: 0),
+                onContinueAction = if (isChoiceErr) viewModel::continueAfterWrongChoice else null
             )
+        } else if (uiState.currentDrillStyle == ReviewDrillStyle.WRITE) {
+            uiState.feedbackMessage?.let { msg ->
+                val col = if (uiState.isFeedbackError) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.onBackground
+                }
+                Text(
+                    text = msg,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = col,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(1.dp, col)
+                        .padding(horizontal = 10.dp, vertical = 5.dp)
+                )
+            }
         }
 
         if (uiState.currentDrillStyle != ReviewDrillStyle.WRITE) {
