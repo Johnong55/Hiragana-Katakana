@@ -156,72 +156,85 @@ class ReviewViewModel(
                     .forEach { learnedCharsSet.add(it.char) }
             }
 
-            val dueCardsCount = srsCards.count { it.dueAtEpochMs <= now }
-
-            // Sắp xếp các chữ đã học theo mức độ ưu tiên ôn tập:
-            // 1. Thẻ đã đến hạn (dueAtEpochMs <= now)
-            // 2. Chữ hay sai nhiều (lapses * 2 + errorCount giảm dần)
-            // 3. Điểm lần cuối thấp (lastScore tăng dần)
-            val candidateTemplates = learnedCharsSet
-                .mapNotNull { templatesByChar[it] }
+            val dueSrsCards = srsCards
+                .filter { it.dueAtEpochMs <= now }
                 .sortedWith(
-                    compareByDescending<KanaStrokeTemplate> { tmpl ->
-                        val card = srsById["CHAR_${tmpl.char}"]
-                        card == null || card.dueAtEpochMs <= now
-                    }.thenByDescending { tmpl ->
-                        val card = srsById["CHAR_${tmpl.char}"]
-                        val prog = progressByChar[tmpl.char]
-                        (card?.lapses ?: 0) * 2 + (prog?.errorCount ?: 0)
-                    }.thenBy { tmpl ->
-                        val card = srsById["CHAR_${tmpl.char}"]
-                        val prog = progressByChar[tmpl.char]
-                        card?.lastScore ?: prog?.lastScore ?: 75
-                    }
+                    compareByDescending<vn.kana.app.data.local.SrsCardEntity> { it.lapses }
+                        .thenBy { it.lastScore }
                 )
+            val dueCardsCount = dueSrsCards.size
+            val wordsByKey = allWords.associateBy { it.id.ifBlank { it.word } }
+            val wordsByWord = allWords.associateBy { it.word }
 
-            val selectedChars = candidateTemplates.take(6)
             val questions = ArrayList<QuizQuestion>()
 
-            for ((idx, tmpl) in selectedChars.withIndex()) {
-                val prog = progressByChar[tmpl.char]
-                val card = srsById["CHAR_${tmpl.char}"]
-                val isFrequentlyMissed = (prog?.errorCount ?: 0) > 0 ||
-                    (card?.lapses ?: 0) > 0 ||
-                    (prog?.lastScore ?: 80) < 75
-
-                // 1. Câu hỏi chữ đơn (xen kẽ dạng a: nhìn Romaji và dạng b: nghe phát âm)
-                val singleType = if (idx % 2 == 0) {
-                    QuizQuestionType.ROMAJI_TO_KANA
-                } else {
-                    QuizQuestionType.LISTEN_TO_KANA
-                }
-                questions.add(QuizQuestion(type = singleType, targetTemplate = tmpl))
-
-                // 2. Câu hỏi từ vựng chứa chữ đó (trộn chữ đơn + từ chứa chữ đó)
-                val wordsContainingChar = allWords.filter {
-                    it.script == tmpl.script && (it.introduces == tmpl.char || it.chars.contains(tmpl.char))
-                }
-                val chosenWord = wordsContainingChar.firstOrNull { w ->
-                    w.chars.all { c -> learnedCharsSet.contains(c) }
-                } ?: wordsContainingChar.firstOrNull()
-
-                if (chosenWord != null) {
-                    val wordType = if (idx % 2 == 0) {
-                        QuizQuestionType.MEANING_ROMAJI_TO_WORD
-                    } else {
-                        QuizQuestionType.LISTEN_TO_WORD
+            if (dueSrsCards.isNotEmpty()) {
+                // Tạo đúng 1 câu hỏi cho mỗi thẻ SRS đang đến hạn (ví dụ: 30 thẻ đến hạn -> đúng 30 câu hỏi)
+                for ((idx, card) in dueSrsCards.withIndex()) {
+                    if (card.cardType == "WORD") {
+                        val w = wordsByKey[card.targetKey] ?: wordsByWord[card.targetKey]
+                        if (w != null) {
+                            val wordType = if (idx % 2 == 0) {
+                                QuizQuestionType.MEANING_ROMAJI_TO_WORD
+                            } else {
+                                QuizQuestionType.LISTEN_TO_WORD
+                            }
+                            questions.add(QuizQuestion(type = wordType, targetWord = w))
+                            continue
+                        }
                     }
-                    questions.add(QuizQuestion(type = wordType, targetWord = chosenWord))
+                    val tmpl = templatesByChar[card.targetKey]
+                    if (tmpl != null) {
+                        val singleType = if (idx % 2 == 0) {
+                            QuizQuestionType.ROMAJI_TO_KANA
+                        } else {
+                            QuizQuestionType.LISTEN_TO_KANA
+                        }
+                        questions.add(QuizQuestion(type = singleType, targetTemplate = tmpl))
+                    }
                 }
+            }
 
-                // 3. Nếu là chữ hay sai -> xuất hiện thêm 1 lần nữa ở dạng đề ngược lại!
-                if (isFrequentlyMissed) {
-                    val extraSingleType = if (singleType == QuizQuestionType.ROMAJI_TO_KANA) {
-                        QuizQuestionType.LISTEN_TO_KANA
-                    } else {
+            // Nếu không có thẻ nào đến hạn (0 ôn) nhưng người dùng vẫn vào Ôn tập tự do -> tạo gói 6 chữ đã học
+            if (questions.isEmpty()) {
+                val candidateTemplates = learnedCharsSet
+                    .mapNotNull { templatesByChar[it] }
+                    .sortedWith(
+                        compareByDescending<KanaStrokeTemplate> { tmpl ->
+                            val card = srsById["CHAR_${tmpl.char}"]
+                            val prog = progressByChar[tmpl.char]
+                            (card?.lapses ?: 0) * 2 + (prog?.errorCount ?: 0)
+                        }.thenBy { tmpl ->
+                            val card = srsById["CHAR_${tmpl.char}"]
+                            val prog = progressByChar[tmpl.char]
+                            card?.lastScore ?: prog?.lastScore ?: 75
+                        }
+                    )
+
+                val selectedChars = candidateTemplates.take(6)
+                for ((idx, tmpl) in selectedChars.withIndex()) {
+                    val singleType = if (idx % 2 == 0) {
                         QuizQuestionType.ROMAJI_TO_KANA
+                    } else {
+                        QuizQuestionType.LISTEN_TO_KANA
                     }
-                    questions.add(QuizQuestion(type = extraSingleType, targetTemplate = tmpl))
+                    questions.add(QuizQuestion(type = singleType, targetTemplate = tmpl))
+
+                    val wordsContainingChar = allWords.filter {
+                        it.script == tmpl.script && (it.introduces == tmpl.char || it.chars.contains(tmpl.char))
+                    }
+                    val chosenWord = wordsContainingChar.firstOrNull { w ->
+                        w.chars.all { c -> learnedCharsSet.contains(c) }
+                    } ?: wordsContainingChar.firstOrNull()
+
+                    if (chosenWord != null) {
+                        val wordType = if (idx % 2 == 0) {
+                            QuizQuestionType.MEANING_ROMAJI_TO_WORD
+                        } else {
+                            QuizQuestionType.LISTEN_TO_WORD
+                        }
+                        questions.add(QuizQuestion(type = wordType, targetWord = chosenWord))
+                    }
                 }
             }
 
