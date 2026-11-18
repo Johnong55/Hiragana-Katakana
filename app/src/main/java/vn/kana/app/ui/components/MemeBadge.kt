@@ -113,27 +113,13 @@ fun MemeReactionPopupBox(
     val reaction = remember(seed, isError) {
         if (isError) MemeReactionCatalog.pickError(seed) else MemeReactionCatalog.pickPraise(seed)
     }
-    val scaleAnim = remember(seed, isError) { Animatable(0.45f) }
-    val tiltAnim = remember(seed, isError) { Animatable(0f) }
+    val scaleAnim = remember(seed, isError) { Animatable(0.93f) }
 
     LaunchedEffect(seed, isError) {
         scaleAnim.animateTo(
             targetValue = 1.0f,
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessMediumLow
-            )
+            animationSpec = tween(durationMillis = 140)
         )
-    }
-    LaunchedEffect(seed, isError) {
-        val angles = if (isError) {
-            listOf(-16f, 16f, -11f, 11f, -5f, 5f, 0f)
-        } else {
-            listOf(-12f, 12f, -8f, 8f, -4f, 4f, 0f)
-        }
-        for (a in angles) {
-            tiltAnim.animateTo(a, animationSpec = tween(durationMillis = 55))
-        }
     }
 
     val containerBg = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
@@ -153,8 +139,7 @@ fun MemeReactionPopupBox(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(76.dp)
-                .graphicsLayer { rotationZ = tiltAnim.value }
+                .size(72.dp)
                 .clip(CircleShape)
                 .border(2.dp, contentCol, CircleShape)
         )

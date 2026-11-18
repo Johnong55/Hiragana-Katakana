@@ -993,11 +993,8 @@ private fun SCurveInfographicRoadMap(
             val nodeY = (yr * heightPx) - with(density) { (nodeSizeDp / 2).toPx() }
             val isSelected = stage.stageNumber == selectedStageNumber
             val nodeScale by animateFloatAsState(
-                targetValue = if (isSelected) 1.14f else 1.0f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessMediumLow
-                ),
+                targetValue = if (isSelected) 1.05f else 1.0f,
+                animationSpec = tween(durationMillis = 140),
                 label = "station_bounce_${stage.stageNumber}"
             )
 

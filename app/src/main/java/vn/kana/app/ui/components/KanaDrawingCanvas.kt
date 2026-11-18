@@ -109,31 +109,15 @@ fun KanaDrawingCanvas(
 
     val shakeOffset = remember { Animatable(0f) }
     var showErrorStamp by remember { mutableStateOf(false) }
-    val errorScaleAnim = remember { Animatable(0.4f) }
-    val errorTiltAnim = remember { Animatable(0f) }
 
     LaunchedEffect(shakeTrigger) {
         if (shakeTrigger > 0) {
             showErrorStamp = true
-            errorScaleAnim.snapTo(0.45f)
-            errorScaleAnim.animateTo(
-                targetValue = 1.0f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessMedium
-                )
-            )
-        }
-    }
-    LaunchedEffect(shakeTrigger) {
-        if (shakeTrigger > 0) {
-            val offsets = listOf(-22f, 22f, -15f, 15f, -8f, 8f, 0f)
-            val tilts = listOf(-16f, 16f, -11f, 11f, -5f, 5f, 0f)
-            for (i in offsets.indices) {
-                shakeOffset.animateTo(offsets[i], animationSpec = tween(durationMillis = 42))
-                errorTiltAnim.animateTo(tilts[i], animationSpec = tween(durationMillis = 42))
+            val offsets = listOf(-8f, 8f, -4f, 4f, 0f)
+            for (target in offsets) {
+                shakeOffset.animateTo(target, animationSpec = tween(durationMillis = 36))
             }
-            delay(650L)
+            delay(750L)
             showErrorStamp = false
         }
     }

@@ -146,9 +146,8 @@ class MainActivity : ComponentActivity() {
                             AnimatedContent(
                                 targetState = destination,
                                 transitionSpec = {
-                                    (fadeIn(animationSpec = tween(220)) +
-                                        slideInVertically(animationSpec = tween(220)) { it / 32 })
-                                        .togetherWith(fadeOut(animationSpec = tween(150)))
+                                    fadeIn(animationSpec = tween(140))
+                                        .togetherWith(fadeOut(animationSpec = tween(100)))
                                 },
                                 label = "screen_transition"
                             ) { activeDestination ->
