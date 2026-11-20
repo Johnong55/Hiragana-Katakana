@@ -139,6 +139,7 @@ fun N5RoadmapScreen(
     onOpenCountersDrill: () -> Unit = {},
     onOpenOmikujiAndStamps: () -> Unit = {},
     onOpenProgressStats: () -> Unit = {},
+    onOpenMenu: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -550,162 +551,34 @@ fun N5RoadmapScreen(
     }
 
     val completedStagesCount = stages.count { it.isCompleted }
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val drawerScope = rememberCoroutineScope()
 
-    BackHandler(enabled = drawerState.isOpen) {
-        drawerScope.launch { drawerState.close() }
-    }
-
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet(
-                drawerShape = RoundedCornerShape(0.dp),
-                drawerContainerColor = MaterialTheme.colorScheme.background,
-                modifier = Modifier.width(296.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.meme_shiba),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clip(CircleShape)
-                                    .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
-                            )
-                            Column {
-                                Text(
-                                    text = "LUYỆN TẬP JLPT N5",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.onBackground
-                                )
-                                Text(
-                                    text = "${uiState.settings.streakDays} ngày • ${uiState.totalLearnedCount} chữ",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                        Text(
-                            text = "✕",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier
-                                .border(1.dp, MaterialTheme.colorScheme.outline)
-                                .clickable { drawerScope.launch { drawerState.close() } }
-                                .padding(horizontal = 10.dp, vertical = 6.dp)
-                        )
-                    }
-
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outline)
-
-                    data class DrawerMenuEntry(
-                        val iconRes: Int,
-                        val title: String,
-                        val subtitle: String,
-                        val action: () -> Unit
-                    )
-
-                    val drawerItems = listOf(
-                        DrawerMenuEntry(R.drawable.meme_omikuji_king, "Rút quẻ Omikuji & Sổ dấu", "Bói quẻ đền mèo & đóng dấu đỏ Hanko", onOpenOmikujiAndStamps),
-                        DrawerMenuEntry(R.drawable.meme_capybara, "Đọc hiểu & Ghép câu", "8 bài đọc có Kana/dịch & 10 câu ★", onOpenReadingPractice),
-                        DrawerMenuEntry(R.drawable.meme_cat_surprised, "Thi thử JLPT N5", "Đề 24 câu (15 phút) đủ 3 phần", onOpenMockTest),
-                        DrawerMenuEntry(R.drawable.meme_duck, "Số đếm, Giờ & Trợ số từ", "Biến âm 〜時, 〜分, 〜日, 〜本", onOpenCountersDrill),
-                        DrawerMenuEntry(R.drawable.meme_red_panda, "Thẻ nhanh & Chữ dễ nhầm", "Flashcard vuốt & phân biệt シ/ツ", onOpenFlashcardsAndConfusables),
-                        DrawerMenuEntry(R.drawable.meme_hamster, "Từ điển Offline", "Tra nhanh chữ, Kanji, từ vựng, ngữ pháp", onOpenDictionary),
-                        DrawerMenuEntry(R.drawable.meme_shiba, "Luyện nghe phản xạ", "Nghe TTS & chọn đáp án nhanh", onOpenListeningQuiz),
-                        DrawerMenuEntry(R.drawable.meme_capybara, "Tạp chí Tips N5", "40 mẹo nhớ chữ & văn hoá Nhật", onOpenTipsMagazine),
-                        DrawerMenuEntry(R.drawable.meme_cat_surprised, "Tiến độ & Chữ hay sai", "Thống kê chi tiết & luyện chữ yếu", onOpenProgressStats)
-                    )
-
-                    drawerItems.forEach { item ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .border(1.dp, MaterialTheme.colorScheme.outline)
-                                .background(MaterialTheme.colorScheme.surface)
-                                .clickable {
-                                    drawerScope.launch { drawerState.close() }
-                                    item.action()
-                                }
-                                .padding(horizontal = 10.dp, vertical = 10.dp),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                painter = painterResource(id = item.iconRes),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .size(38.dp)
-                                    .clip(CircleShape)
-                                    .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
-                            )
-                            Column(
-                                modifier = Modifier.weight(1f),
-                                verticalArrangement = Arrangement.spacedBy(2.dp)
-                            ) {
-                                Text(
-                                    text = item.title,
-                                    style = MaterialTheme.typography.titleSmall,
-                                    color = MaterialTheme.colorScheme.onBackground
-                                )
-                                Text(
-                                    text = item.subtitle,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 16.dp, vertical = 6.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = 16.dp, vertical = 6.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
+        // 1. Header Lộ trình N5 với nút menu trượt bên trái toàn cục
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            // 1. Header Lộ trình N5 với nút 3 chấm/menu bên trái
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            Box(
+                modifier = Modifier
+                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .clickable { onOpenMenu() }
+                    .padding(horizontal = 11.dp, vertical = 6.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier
-                        .border(1.dp, MaterialTheme.colorScheme.outline)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .clickable { drawerScope.launch { drawerState.open() } }
-                        .padding(horizontal = 11.dp, vertical = 6.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "⋮☰",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
+                Text(
+                    text = "⋮☰",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
                 Text(
                     text = "LỘ TRÌNH JLPT N5",
                     style = MaterialTheme.typography.titleMedium,
@@ -831,7 +704,6 @@ fun N5RoadmapScreen(
                 }
             }
         )
-        }
     }
 }
 

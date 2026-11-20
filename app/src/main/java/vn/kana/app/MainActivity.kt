@@ -12,10 +12,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,21 +25,36 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import vn.kana.app.data.ThemeMode
 import vn.kana.app.domain.DailyTipsCatalog
@@ -120,8 +137,14 @@ class MainActivity : ComponentActivity() {
                 var lessonInitialFocusChar by rememberSaveable { mutableStateOf<String?>(null) }
                 var referenceInitialChar by rememberSaveable { mutableStateOf<String?>(null) }
                 var sessionCounter by rememberSaveable { mutableIntStateOf(0) }
+                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                val drawerScope = rememberCoroutineScope()
 
-                BackHandler(enabled = destination != AppDestination.ROADMAP_N5) {
+                BackHandler(enabled = drawerState.isOpen) {
+                    drawerScope.launch { drawerState.close() }
+                }
+
+                BackHandler(enabled = !drawerState.isOpen && destination != AppDestination.ROADMAP_N5) {
                     destination = when (destination) {
                         AppDestination.DEBUG_RECOGNIZER,
                         AppDestination.LICENSES -> AppDestination.SETTINGS
@@ -129,11 +152,145 @@ class MainActivity : ComponentActivity() {
                         AppDestination.REFERENCE_TABLE,
                         AppDestination.TIPS_MAGAZINE,
                         AppDestination.LISTENING_QUIZ,
+                        AppDestination.READING_PRACTICE,
+                        AppDestination.MOCK_TEST,
+                        AppDestination.FLASHCARDS_CONFUSABLES,
+                        AppDestination.DICTIONARY,
+                        AppDestination.COUNTERS_DRILL,
+                        AppDestination.OMIKUJI_AND_STAMPS,
                         AppDestination.PROGRESS_STATS -> returnTab
                         else -> AppDestination.ROADMAP_N5
                     }
                 }
 
+                fun openFromDrawer(target: AppDestination) {
+                    returnTab = destination.takeIf { it.isMainTab } ?: AppDestination.ROADMAP_N5
+                    drawerScope.launch { drawerState.close() }
+                    destination = target
+                }
+
+                ModalNavigationDrawer(
+                    drawerState = drawerState,
+                    gesturesEnabled = destination.isMainTab,
+                    drawerContent = {
+                        ModalDrawerSheet(
+                            drawerShape = RoundedCornerShape(0.dp),
+                            drawerContainerColor = MaterialTheme.colorScheme.background,
+                            modifier = Modifier
+                                .width(296.dp)
+                                .safeDrawingPadding()
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState())
+                                    .padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.meme_shiba),
+                                            contentDescription = null,
+                                            contentScale = ContentScale.Crop,
+                                            modifier = Modifier
+                                                .size(40.dp)
+                                                .clip(CircleShape)
+                                                .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
+                                        )
+                                        Column {
+                                            Text(
+                                                text = "LUYỆN TẬP JLPT N5",
+                                                style = MaterialTheme.typography.titleMedium,
+                                                color = MaterialTheme.colorScheme.onBackground
+                                            )
+                                            Text(
+                                                text = "${mapState.settings.streakDays} ngày • ${mapState.totalLearnedCount} chữ",
+                                                style = MaterialTheme.typography.labelMedium,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                    }
+                                    Text(
+                                        text = "✕",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                        modifier = Modifier
+                                            .border(1.dp, MaterialTheme.colorScheme.outline)
+                                            .clickable { drawerScope.launch { drawerState.close() } }
+                                            .padding(horizontal = 10.dp, vertical = 6.dp)
+                                    )
+                                }
+
+                                HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+
+                                data class GlobalDrawerItem(
+                                    val iconRes: Int,
+                                    val title: String,
+                                    val subtitle: String,
+                                    val target: AppDestination
+                                )
+
+                                val items = listOf(
+                                    GlobalDrawerItem(R.drawable.meme_omikuji_king, "Rút quẻ Omikuji & Sổ dấu", "Bói quẻ đền mèo & đóng dấu đỏ Hanko", AppDestination.OMIKUJI_AND_STAMPS),
+                                    GlobalDrawerItem(R.drawable.meme_capybara, "Đọc hiểu & Ghép câu", "8 bài đọc có Kana/dịch & 10 câu ★", AppDestination.READING_PRACTICE),
+                                    GlobalDrawerItem(R.drawable.meme_cat_surprised, "Thi thử JLPT N5", "Đề 24 câu (15 phút) đủ 3 phần", AppDestination.MOCK_TEST),
+                                    GlobalDrawerItem(R.drawable.meme_duck, "Số đếm, Giờ & Trợ số từ", "Biến âm 〜時, 〜分, 〜日, 〜本", AppDestination.COUNTERS_DRILL),
+                                    GlobalDrawerItem(R.drawable.meme_red_panda, "Thẻ nhanh & Chữ dễ nhầm", "Flashcard vuốt & phân biệt シ/ツ", AppDestination.FLASHCARDS_CONFUSABLES),
+                                    GlobalDrawerItem(R.drawable.meme_hamster, "Từ điển Offline", "Tra nhanh chữ, Kanji, từ vựng, ngữ pháp", AppDestination.DICTIONARY),
+                                    GlobalDrawerItem(R.drawable.meme_shiba, "Luyện nghe phản xạ", "Nghe TTS & chọn đáp án nhanh", AppDestination.LISTENING_QUIZ),
+                                    GlobalDrawerItem(R.drawable.meme_capybara, "Tạp chí Tips N5", "40 mẹo nhớ chữ & văn hoá Nhật", AppDestination.TIPS_MAGAZINE),
+                                    GlobalDrawerItem(R.drawable.meme_cat_surprised, "Tiến độ & Chữ hay sai", "Thống kê chi tiết & luyện chữ yếu", AppDestination.PROGRESS_STATS)
+                                )
+
+                                items.forEach { item ->
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .border(1.dp, MaterialTheme.colorScheme.outline)
+                                            .background(MaterialTheme.colorScheme.surface)
+                                            .clickable { openFromDrawer(item.target) }
+                                            .padding(horizontal = 10.dp, vertical = 10.dp),
+                                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = item.iconRes),
+                                            contentDescription = null,
+                                            contentScale = ContentScale.Crop,
+                                            modifier = Modifier
+                                                .size(38.dp)
+                                                .clip(CircleShape)
+                                                .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape)
+                                        )
+                                        Column(
+                                            modifier = Modifier.weight(1f),
+                                            verticalArrangement = Arrangement.spacedBy(2.dp)
+                                        ) {
+                                            Text(
+                                                text = item.title,
+                                                style = MaterialTheme.typography.titleSmall,
+                                                color = MaterialTheme.colorScheme.onBackground
+                                            )
+                                            Text(
+                                                text = item.subtitle,
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ) {
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
@@ -256,6 +413,9 @@ class MainActivity : ComponentActivity() {
                                         onOpenProgressStats = {
                                             returnTab = AppDestination.ROADMAP_N5
                                             destination = AppDestination.PROGRESS_STATS
+                                        },
+                                        onOpenMenu = {
+                                            drawerScope.launch { drawerState.open() }
                                         }
                                     )
                                 }
@@ -526,6 +686,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             MainBottomNavigationBar(
                                 currentDestination = destination,
+                                onOpenMenu = { drawerScope.launch { drawerState.open() } },
                                 onSelectTab = { tab ->
                                     if (tab == AppDestination.REVIEW) {
                                         sessionCounter++
@@ -535,6 +696,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
+                }
                 }
 
                 val todayEpochDay = LocalDate.now().toEpochDay()
@@ -561,6 +723,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainBottomNavigationBar(
     currentDestination: AppDestination,
+    onOpenMenu: () -> Unit,
     onSelectTab: (AppDestination) -> Unit
 ) {
     val mainTabs = listOf(
@@ -578,6 +741,21 @@ private fun MainBottomNavigationBar(
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
         ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .border(0.5.dp, MaterialTheme.colorScheme.outline)
+                    .clickable { onOpenMenu() }
+                    .padding(vertical = 13.dp, horizontal = 12.dp)
+            ) {
+                Text(
+                    text = "⋮☰",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    maxLines = 1
+                )
+            }
             for (tab in mainTabs) {
                 val selected = currentDestination == tab
                 Box(
