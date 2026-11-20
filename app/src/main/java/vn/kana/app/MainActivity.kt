@@ -16,11 +16,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -50,6 +52,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -676,9 +679,38 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                             }
+
+                            // Vùng nhận cử chỉ vuốt từ cạnh trái sang phải ở mọi tab chính để mở nhanh Menu trượt bên trái
+                            if (destination.isMainTab && drawerState.isClosed) {
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.CenterStart)
+                                        .fillMaxHeight()
+                                        .width(28.dp)
+                                        .pointerInput(destination) {
+                                            var totalDrag = 0f
+                                            var triggered = false
+                                            detectHorizontalDragGestures(
+                                                onDragStart = {
+                                                    totalDrag = 0f
+                                                    triggered = false
+                                                },
+                                                onHorizontalDrag = { _, dragAmount ->
+                                                    if (dragAmount > 0f) {
+                                                        totalDrag += dragAmount
+                                                        if (!triggered && totalDrag > 24f) {
+                                                            triggered = true
+                                                            drawerScope.launch { drawerState.open() }
+                                                        }
+                                                    }
+                                                }
+                                            )
+                                        }
+                                )
+                            }
                         }
 
-                        // Thanh điều hướng 4 Tab cố định dưới đáy màn hình (trượt mượt mà)
+                        // Thanh điều hướng 5 Tab cố định dưới đáy màn hình (gọn gàng, không có nút thừa)
                         AnimatedVisibility(
                             visible = destination.isMainTab,
                             enter = slideInVertically(animationSpec = tween(220)) { it } + fadeIn(tween(200)),
@@ -686,7 +718,6 @@ class MainActivity : ComponentActivity() {
                         ) {
                             MainBottomNavigationBar(
                                 currentDestination = destination,
-                                onOpenMenu = { drawerScope.launch { drawerState.open() } },
                                 onSelectTab = { tab ->
                                     if (tab == AppDestination.REVIEW) {
                                         sessionCounter++
@@ -723,7 +754,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainBottomNavigationBar(
     currentDestination: AppDestination,
-    onOpenMenu: () -> Unit,
     onSelectTab: (AppDestination) -> Unit
 ) {
     val mainTabs = listOf(
@@ -741,21 +771,6 @@ private fun MainBottomNavigationBar(
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .border(0.5.dp, MaterialTheme.colorScheme.outline)
-                    .clickable { onOpenMenu() }
-                    .padding(vertical = 13.dp, horizontal = 12.dp)
-            ) {
-                Text(
-                    text = "⋮☰",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    maxLines = 1
-                )
-            }
             for (tab in mainTabs) {
                 val selected = currentDestination == tab
                 Box(
