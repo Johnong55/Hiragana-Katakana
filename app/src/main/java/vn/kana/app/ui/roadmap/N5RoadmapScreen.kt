@@ -291,11 +291,14 @@ fun N5RoadmapScreen(
         )
     }
 
-    var selectedStage by remember(stages) {
-        mutableStateOf(
-            stages.firstOrNull { it.isUnlocked && !it.isCompleted } ?: stages.first()
-        )
+    var selectedStageNumber by remember { mutableStateOf<Int?>(null) }
+    val selectedStage = remember(stages, selectedStageNumber) {
+        stages.firstOrNull { it.stageNumber == selectedStageNumber }
+            ?: stages.firstOrNull { it.isUnlocked && !it.isCompleted }
+            ?: stages.first()
     }
+    // Giữ nguyên vị trí cuộn của bản đồ lộ trình khi mở overlay bài học rồi bấm Back quay lại
+    val roadmapScrollState = rememberScrollState()
     var overlayMode by remember { mutableStateOf<RoadmapOverlayMode>(RoadmapOverlayMode.None) }
 
     BackHandler(enabled = overlayMode != RoadmapOverlayMode.None) {
@@ -581,7 +584,7 @@ fun N5RoadmapScreen(
                     viewModel.markRoadmapStagePassed(mode.stage.stageNumber, charsInStage)
                     val nextStage = stages.firstOrNull { it.stageNumber == mode.stage.stageNumber + 1 }
                     overlayMode = if (nextStage != null) {
-                        selectedStage = nextStage
+                        selectedStageNumber = nextStage.stageNumber
                         RoadmapOverlayMode.UnlockCelebration(
                             unlockedStageNumber = nextStage.stageNumber,
                             unlockedStageTitle = nextStage.titleVi
@@ -726,7 +729,7 @@ fun N5RoadmapScreen(
                 .weight(1f)
                 .fillMaxWidth()
                 .border(1.dp, MaterialTheme.colorScheme.outline)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(roadmapScrollState)
         ) {
             SCurveInfographicRoadMap(
                 stages = stages,
@@ -735,7 +738,7 @@ fun N5RoadmapScreen(
                     if (selectedStage.stageNumber == st.stageNumber) {
                         openStageSubLessons(st)
                     } else {
-                        selectedStage = st
+                        selectedStageNumber = st.stageNumber
                     }
                 }
             )
