@@ -59,6 +59,7 @@ import vn.kana.app.ui.reference.KanaReferenceScreen
 import vn.kana.app.ui.review.ReviewScreen
 import vn.kana.app.ui.review.ReviewViewModel
 import vn.kana.app.ui.roadmap.N5RoadmapScreen
+import vn.kana.app.ui.shrine.OmikujiAndStampsScreen
 import vn.kana.app.ui.stats.ProgressStatsScreen
 import vn.kana.app.ui.tips.DailyTipMagazinePopup
 import vn.kana.app.ui.tips.TipsMagazineScreen
@@ -80,6 +81,7 @@ private enum class AppDestination(val isMainTab: Boolean, val tabLabelVi: String
     FLASHCARDS_CONFUSABLES(isMainTab = false),
     DICTIONARY(isMainTab = false),
     COUNTERS_DRILL(isMainTab = false),
+    OMIKUJI_AND_STAMPS(isMainTab = false),
     PROGRESS_STATS(isMainTab = false),
     DEBUG_RECOGNIZER(isMainTab = false),
     LICENSES(isMainTab = false)
@@ -246,6 +248,10 @@ class MainActivity : ComponentActivity() {
                                         onOpenCountersDrill = {
                                             returnTab = AppDestination.ROADMAP_N5
                                             destination = AppDestination.COUNTERS_DRILL
+                                        },
+                                        onOpenOmikujiAndStamps = {
+                                            returnTab = AppDestination.ROADMAP_N5
+                                            destination = AppDestination.OMIKUJI_AND_STAMPS
                                         },
                                         onOpenProgressStats = {
                                             returnTab = AppDestination.ROADMAP_N5
@@ -476,6 +482,15 @@ class MainActivity : ComponentActivity() {
                                         autoAdvanceDelayMs = mapState.settings.autoAdvanceDelayMs,
                                         onSpeak = { text, romaji -> mapViewModel.speak(text, romaji) },
                                         onRecordStudyActivity = { mapViewModel.recordStudyActivityToday() },
+                                        onBack = { destination = returnTab }
+                                    )
+                                }
+
+                                AppDestination.OMIKUJI_AND_STAMPS -> {
+                                    OmikujiAndStampsScreen(
+                                        uiState = mapState,
+                                        onSpeak = { text -> mapViewModel.speak(text, null) },
+                                        onRecordOmikujiDraw = { mapViewModel.recordOmikujiDraw() },
                                         onBack = { destination = returnTab }
                                     )
                                 }

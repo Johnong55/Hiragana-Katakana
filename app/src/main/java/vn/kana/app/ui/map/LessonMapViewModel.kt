@@ -380,6 +380,12 @@ class LessonMapViewModel(
         }
     }
 
+    fun recordOmikujiDraw() {
+        viewModelScope.launch {
+            settingsRepository.recordOmikujiDraw()
+        }
+    }
+
     fun clearAllProgress() {
         viewModelScope.launch {
             kanaDao.clearLessonProgress()

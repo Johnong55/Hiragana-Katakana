@@ -41,7 +41,8 @@ data class UserSettings(
     val mockTestAttemptCount: Int = 0,
     val reminderEnabled: Boolean = false,
     val reminderHour: Int = 20,
-    val reminderMinute: Int = 0
+    val reminderMinute: Int = 0,
+    val omikujiDrawCount: Int = 0
 )
 
 /**
@@ -65,6 +66,7 @@ class UserSettingsRepository(
         val REMINDER_ENABLED = booleanPreferencesKey("reminder_enabled")
         val REMINDER_HOUR = intPreferencesKey("reminder_hour")
         val REMINDER_MINUTE = intPreferencesKey("reminder_minute")
+        val OMIKUJI_DRAW_COUNT = intPreferencesKey("omikuji_draw_count")
     }
 
     val settingsFlow: Flow<UserSettings> = appContext.dataStore.data.map { prefs ->
@@ -99,7 +101,8 @@ class UserSettingsRepository(
             mockTestAttemptCount = prefs[Keys.MOCK_TEST_ATTEMPT_COUNT] ?: 0,
             reminderEnabled = prefs[Keys.REMINDER_ENABLED] ?: false,
             reminderHour = prefs[Keys.REMINDER_HOUR] ?: 20,
-            reminderMinute = prefs[Keys.REMINDER_MINUTE] ?: 0
+            reminderMinute = prefs[Keys.REMINDER_MINUTE] ?: 0,
+            omikujiDrawCount = prefs[Keys.OMIKUJI_DRAW_COUNT] ?: 0
         )
     }
 
@@ -178,6 +181,13 @@ class UserSettingsRepository(
             prefs[Keys.REMINDER_ENABLED] = enabled
             prefs[Keys.REMINDER_HOUR] = hour
             prefs[Keys.REMINDER_MINUTE] = minute
+        }
+    }
+
+    suspend fun recordOmikujiDraw() {
+        appContext.dataStore.edit { prefs ->
+            val current = prefs[Keys.OMIKUJI_DRAW_COUNT] ?: 0
+            prefs[Keys.OMIKUJI_DRAW_COUNT] = current + 1
         }
     }
 

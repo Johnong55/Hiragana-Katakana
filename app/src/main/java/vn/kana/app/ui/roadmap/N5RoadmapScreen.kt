@@ -137,6 +137,7 @@ fun N5RoadmapScreen(
     onOpenFlashcardsAndConfusables: () -> Unit = {},
     onOpenDictionary: () -> Unit = {},
     onOpenCountersDrill: () -> Unit = {},
+    onOpenOmikujiAndStamps: () -> Unit = {},
     onOpenProgressStats: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -623,6 +624,7 @@ fun N5RoadmapScreen(
                     )
 
                     val drawerItems = listOf(
+                        DrawerMenuEntry(R.drawable.meme_omikuji_king, "Rút quẻ Omikuji & Sổ dấu", "Bói quẻ đền mèo & đóng dấu đỏ Hanko", onOpenOmikujiAndStamps),
                         DrawerMenuEntry(R.drawable.meme_capybara, "Đọc hiểu & Ghép câu", "8 bài đọc có Kana/dịch & 10 câu ★", onOpenReadingPractice),
                         DrawerMenuEntry(R.drawable.meme_cat_surprised, "Thi thử JLPT N5", "Đề 24 câu (15 phút) đủ 3 phần", onOpenMockTest),
                         DrawerMenuEntry(R.drawable.meme_duck, "Số đếm, Giờ & Trợ số từ", "Biến âm 〜時, 〜分, 〜日, 〜本", onOpenCountersDrill),
