@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -109,9 +110,11 @@ fun KanaDrawingCanvas(
 
     val shakeOffset = remember { Animatable(0f) }
     var showErrorStamp by remember { mutableStateOf(false) }
+    var lastHandledShakeTrigger by remember { mutableIntStateOf(shakeTrigger) }
 
     LaunchedEffect(shakeTrigger) {
-        if (shakeTrigger > 0) {
+        if (shakeTrigger > lastHandledShakeTrigger) {
+            lastHandledShakeTrigger = shakeTrigger
             showErrorStamp = true
             val offsets = listOf(-8f, 8f, -4f, 4f, 0f)
             for (target in offsets) {
@@ -119,6 +122,8 @@ fun KanaDrawingCanvas(
             }
             delay(750L)
             showErrorStamp = false
+        } else {
+            lastHandledShakeTrigger = shakeTrigger
         }
     }
 
