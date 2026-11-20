@@ -77,6 +77,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import vn.kana.app.data.ThemeMode
+import vn.kana.app.domain.KanaVocabWord
 import vn.kana.app.domain.MasteryLevel
 import vn.kana.app.domain.N5GrammarCatalog
 import vn.kana.app.domain.N5GrammarPoint
@@ -101,6 +102,7 @@ import kotlin.math.roundToInt
 private sealed interface RoadmapOverlayMode {
     data object None : RoadmapOverlayMode
     data class StageAlphabetBoard(val stage: RoadmapStageNode) : RoadmapOverlayMode
+    data class VocabLessonList(val stage: RoadmapStageNode) : RoadmapOverlayMode
     data class GrammarLessonList(val stage: RoadmapStageNode, val points: List<N5GrammarPoint>) : RoadmapOverlayMode
     data class GrammarLesson(val stage: RoadmapStageNode, val points: List<N5GrammarPoint>, val initialIndex: Int = 0) : RoadmapOverlayMode
     data class StageCheckpointTest(
@@ -470,6 +472,33 @@ fun N5RoadmapScreen(
             return
         }
 
+        is RoadmapOverlayMode.VocabLessonList -> {
+            val allWords = remember(uiState.wordsByChar) {
+                uiState.wordsByChar.values.flatten().distinctBy { it.word }
+            }
+            N5VocabLessonListView(
+                stage = mode.stage,
+                allWords = allWords,
+                byChar = byChar,
+                onSpeak = { text, romaji -> viewModel.speak(text, romaji) },
+                onPracticeWordChar = { tmpl ->
+                    onPracticeCharacter(tmpl.row, tmpl.script, tmpl.char)
+                },
+                onStartBypassTest = {
+                    val qs = buildCheckpointQuestions(mode.stage)
+                    if (qs.isNotEmpty()) {
+                        overlayMode = RoadmapOverlayMode.StageCheckpointTest(
+                            stage = mode.stage,
+                            questions = qs
+                        )
+                    }
+                },
+                onBack = { overlayMode = RoadmapOverlayMode.None },
+                modifier = modifier
+            )
+            return
+        }
+
         is RoadmapOverlayMode.GrammarLessonList -> {
             N5GrammarLessonListView(
                 stage = mode.stage,
@@ -662,17 +691,6 @@ fun N5RoadmapScreen(
             }
 
         fun openStageSubLessons(st: RoadmapStageNode) {
-            if (!st.isUnlocked) {
-                // Nếu chặng đang khoá -> vào bài Kiểm tra Bypass để mở khoá ngay
-                val qs = buildCheckpointQuestions(st)
-                if (qs.isNotEmpty()) {
-                    overlayMode = RoadmapOverlayMode.StageCheckpointTest(
-                        stage = st,
-                        questions = qs
-                    )
-                }
-                return
-            }
             when (st.type) {
                 RoadmapStageType.HIRAGANA_BASIC,
                 RoadmapStageType.KATAKANA_BASIC,
@@ -683,7 +701,7 @@ fun N5RoadmapScreen(
                 }
 
                 RoadmapStageType.N5_VOCAB_SENTENCES -> {
-                    onOpenTabWithFilter(CurriculumTab.HIRAGANA_BASIC)
+                    overlayMode = RoadmapOverlayMode.VocabLessonList(st)
                 }
 
                 RoadmapStageType.N5_GRAMMAR_1 -> {
@@ -977,10 +995,10 @@ private fun SCurveInfographicRoadMap(
                         Text(
                             text = when {
                                 isSelected && stage.isUnlocked -> "Chạm lần nữa để mở bài học →"
-                                isSelected && !stage.isUnlocked -> "Chạm lần nữa để Kiểm tra Bypass →"
+                                isSelected && !stage.isUnlocked -> "Chạm lần nữa để xem bài & Bypass →"
                                 stage.isCompleted -> "Đã hoàn thành ✓"
                                 stage.isUnlocked -> "Đang mở (${stage.completedItems}/${stage.totalItems})"
-                                else -> "Đang khoá • Chạm 2 lần để Bypass"
+                                else -> "Đang khoá • Xem bài & Bypass"
                             },
                             style = MaterialTheme.typography.labelMedium,
                             color = if (isSelected) MaterialTheme.colorScheme.onPrimary
@@ -1105,6 +1123,212 @@ private fun SelectedStageActionCard(
     }
 }
 
+@Composable
+private fun LockedStageBypassBanner(
+    stage: RoadmapStageNode,
+    onStartBypassTest: () -> Unit
+) {
+    if (stage.isUnlocked) return
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .border(1.dp, MaterialTheme.colorScheme.onBackground)
+            .padding(horizontal = 10.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        MemeBadge(resId = R.drawable.meme_cat_grumpy, size = 28.dp)
+        Text(
+            text = "Chặng đang khoá — Xem trước bài học hoặc làm bài Bypass để mở khoá ngay.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.weight(1f)
+        )
+        RoadmapActionBtn(
+            text = "Bypass →",
+            filled = true,
+            onClick = onStartBypassTest
+        )
+    }
+}
+
+/**
+ * Màn hình Danh sách các bài học Từ vựng & Câu N5 (Chặng 04):
+ * Chia toàn bộ từ vựng thành từng bài nhỏ (15 từ/bài) để học rõ ràng trước khi luyện viết hoặc Bypass.
+ */
+@Composable
+private fun N5VocabLessonListView(
+    stage: RoadmapStageNode,
+    allWords: List<KanaVocabWord>,
+    byChar: Map<String, KanaStrokeTemplate>,
+    onSpeak: (String, String?) -> Unit,
+    onPracticeWordChar: (KanaStrokeTemplate) -> Unit,
+    onStartBypassTest: () -> Unit,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val lessons = remember(allWords) { allWords.chunked(15) }
+    var selectedLessonIndex by remember(stage.stageNumber) { mutableStateOf<Int?>(null) }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            RoadmapActionBtn(
+                text = if (selectedLessonIndex != null) "← Danh sách bài" else "← Lộ trình N5",
+                filled = false,
+                onClick = {
+                    if (selectedLessonIndex != null) selectedLessonIndex = null else onBack()
+                }
+            )
+            Text(
+                text = "CHẶNG ${stage.numberFormatted}: ${stage.titleVi.uppercase()}",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
+        LockedStageBypassBanner(stage = stage, onStartBypassTest = onStartBypassTest)
+
+        val activeIdx = selectedLessonIndex
+        if (activeIdx == null) {
+            Text(
+                text = "Chọn từng bài từ vựng bên dưới (${lessons.size} bài • ${allWords.size} từ & câu mẫu):",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                lessons.forEachIndexed { idx, chunk ->
+                    val previewWords = chunk.take(4).joinToString(" • ") { "${it.word} (${it.meaningVi})" }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, MaterialTheme.colorScheme.outline)
+                            .background(MaterialTheme.colorScheme.surface)
+                            .clickable { selectedLessonIndex = idx }
+                            .padding(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Bài ${idx + 1}: ${chunk.size} từ vựng & câu mẫu",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Text(
+                                text = "Mở bài →",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier
+                                    .background(MaterialTheme.colorScheme.primary)
+                                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                            )
+                        }
+                        Text(
+                            text = previewWords,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+        } else {
+            val wordsInLesson = lessons.getOrNull(activeIdx).orEmpty()
+            Text(
+                text = "Bài ${activeIdx + 1} (${wordsInLesson.size} từ) — Chạm vào từ để nghe phát âm, bấm Luyện viết để tập chữ trọng tâm:",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                wordsInLesson.forEach { w ->
+                    val keyTmpl = byChar[w.introduces]
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, MaterialTheme.colorScheme.outline)
+                            .background(MaterialTheme.colorScheme.surface)
+                            .clickable { onSpeak(w.word, w.romaji) }
+                            .padding(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "${w.word}  (${w.romaji})",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                Text(
+                                    text = w.meaningVi,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            if (keyTmpl != null) {
+                                RoadmapActionBtn(
+                                    text = "✎ '${keyTmpl.char}'",
+                                    filled = false,
+                                    onClick = { onPracticeWordChar(keyTmpl) }
+                                )
+                            }
+                        }
+                        if (w.exampleSentence.isNotBlank()) {
+                            Text(
+                                text = "Ví dụ: ${w.exampleSentence} — ${w.exampleVi}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.clickable { onSpeak(w.exampleSentence, w.exampleRomaji) }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        RoadmapActionBtn(
+            text = if (stage.isCompleted) "Kiểm tra lại Chặng ${stage.numberFormatted}"
+            else "Kiểm tra Bypass / Mở khoá chặng →",
+            filled = true,
+            onClick = onStartBypassTest,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
 /**
  * Màn hình Danh sách các bài học Ngữ pháp trong Chặng 05 / Chặng 07:
  * Hiển thị rõ từng điểm ngữ pháp, cấu trúc và ví dụ để người học chọn bài muốn học (hoặc bấm Bypass).
@@ -1140,6 +1364,8 @@ private fun N5GrammarLessonListView(
                 overflow = TextOverflow.Ellipsis
             )
         }
+
+        LockedStageBypassBanner(stage = stage, onStartBypassTest = onStartBypassTest)
 
         Text(
             text = "Chọn từng điểm ngữ pháp bên dưới để học chi tiết & luyện điền trợ từ:",
@@ -1758,6 +1984,8 @@ private fun StageAlphabetBoardView(
                 overflow = TextOverflow.Ellipsis
             )
         }
+
+        LockedStageBypassBanner(stage = stage, onStartBypassTest = onStartCheckpointTest)
 
         // Chú thích 4 mức độ xám
         Row(
