@@ -101,7 +101,8 @@ import kotlin.math.roundToInt
 private sealed interface RoadmapOverlayMode {
     data object None : RoadmapOverlayMode
     data class StageAlphabetBoard(val stage: RoadmapStageNode) : RoadmapOverlayMode
-    data class GrammarLesson(val stageNumber: Int, val points: List<N5GrammarPoint>) : RoadmapOverlayMode
+    data class GrammarLessonList(val stage: RoadmapStageNode, val points: List<N5GrammarPoint>) : RoadmapOverlayMode
+    data class GrammarLesson(val stage: RoadmapStageNode, val points: List<N5GrammarPoint>, val initialIndex: Int = 0) : RoadmapOverlayMode
     data class StageCheckpointTest(
         val stage: RoadmapStageNode,
         val questions: List<CheckpointQuestion>
@@ -469,17 +470,45 @@ fun N5RoadmapScreen(
             return
         }
 
+        is RoadmapOverlayMode.GrammarLessonList -> {
+            N5GrammarLessonListView(
+                stage = mode.stage,
+                points = mode.points,
+                onSpeak = { text -> viewModel.speak(text, null) },
+                onSelectPoint = { idx ->
+                    overlayMode = RoadmapOverlayMode.GrammarLesson(
+                        stage = mode.stage,
+                        points = mode.points,
+                        initialIndex = idx
+                    )
+                },
+                onStartBypassTest = {
+                    val qs = buildCheckpointQuestions(mode.stage)
+                    if (qs.isNotEmpty()) {
+                        overlayMode = RoadmapOverlayMode.StageCheckpointTest(
+                            stage = mode.stage,
+                            questions = qs
+                        )
+                    }
+                },
+                onBack = { overlayMode = RoadmapOverlayMode.None },
+                modifier = modifier
+            )
+            return
+        }
+
         is RoadmapOverlayMode.GrammarLesson -> {
             N5GrammarInteractiveLessonView(
-                stageNumber = mode.stageNumber,
+                stageNumber = mode.stage.stageNumber,
                 points = mode.points,
+                initialIndex = mode.initialIndex,
                 byChar = byChar,
                 recognizer = recognizer,
                 strictnessLevel = uiState.settings.strictnessLevel,
                 onSpeak = { text -> viewModel.speak(text, null) },
                 onCompleteAllGrammar = {
-                    viewModel.markRoadmapStagePassed(mode.stageNumber)
-                    val nextStage = stages.firstOrNull { it.stageNumber == mode.stageNumber + 1 }
+                    viewModel.markRoadmapStagePassed(mode.stage.stageNumber)
+                    val nextStage = stages.firstOrNull { it.stageNumber == mode.stage.stageNumber + 1 }
                     overlayMode = if (nextStage != null) {
                         RoadmapOverlayMode.UnlockCelebration(
                             unlockedStageNumber = nextStage.stageNumber,
@@ -489,7 +518,12 @@ fun N5RoadmapScreen(
                         RoadmapOverlayMode.None
                     }
                 },
-                onBack = { overlayMode = RoadmapOverlayMode.None },
+                onBack = {
+                    overlayMode = RoadmapOverlayMode.GrammarLessonList(
+                        stage = mode.stage,
+                        points = mode.points
+                    )
+                },
                 localView = localView,
                 modifier = modifier
             )
@@ -627,7 +661,48 @@ fun N5RoadmapScreen(
                 )
             }
 
-        // 2. Bản đồ Con đường Uốn lượn Chữ S (S-Curve Winding Road Map 01 -> 08)
+        fun openStageSubLessons(st: RoadmapStageNode) {
+            if (!st.isUnlocked) {
+                // Nếu chặng đang khoá -> vào bài Kiểm tra Bypass để mở khoá ngay
+                val qs = buildCheckpointQuestions(st)
+                if (qs.isNotEmpty()) {
+                    overlayMode = RoadmapOverlayMode.StageCheckpointTest(
+                        stage = st,
+                        questions = qs
+                    )
+                }
+                return
+            }
+            when (st.type) {
+                RoadmapStageType.HIRAGANA_BASIC,
+                RoadmapStageType.KATAKANA_BASIC,
+                RoadmapStageType.DAKUTEN_AND_YOON,
+                RoadmapStageType.N5_KANJI_1,
+                RoadmapStageType.N5_KANJI_2_FINAL -> {
+                    overlayMode = RoadmapOverlayMode.StageAlphabetBoard(st)
+                }
+
+                RoadmapStageType.N5_VOCAB_SENTENCES -> {
+                    onOpenTabWithFilter(CurriculumTab.HIRAGANA_BASIC)
+                }
+
+                RoadmapStageType.N5_GRAMMAR_1 -> {
+                    overlayMode = RoadmapOverlayMode.GrammarLessonList(
+                        stage = st,
+                        points = N5GrammarCatalog.stage5Points
+                    )
+                }
+
+                RoadmapStageType.N5_GRAMMAR_2 -> {
+                    overlayMode = RoadmapOverlayMode.GrammarLessonList(
+                        stage = st,
+                        points = N5GrammarCatalog.stage7Points
+                    )
+                }
+            }
+        }
+
+        // 2. Bản đồ Con đường Uốn lượn Chữ S toàn màn hình (Chạm 1 lần để chọn, chạm lần 2 / double-click để mở bài học nhỏ)
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -638,72 +713,15 @@ fun N5RoadmapScreen(
             SCurveInfographicRoadMap(
                 stages = stages,
                 selectedStageNumber = selectedStage.stageNumber,
-                onSelectStage = { st -> selectedStage = st }
+                onSelectStage = { st ->
+                    if (selectedStage.stageNumber == st.stageNumber) {
+                        openStageSubLessons(st)
+                    } else {
+                        selectedStage = st
+                    }
+                }
             )
         }
-
-        // 3. Bảng điều khiển Trạm đang chọn (gọn gàng dưới đáy)
-        val cur = stages.firstOrNull { it.stageNumber == selectedStage.stageNumber } ?: selectedStage
-        SelectedStageActionCard(
-            stage = cur,
-            onEnterStageStudy = {
-                when (cur.type) {
-                    RoadmapStageType.HIRAGANA_BASIC -> {
-                        // Bấm Step 1 -> đi thẳng vào học và kiểm tra Hiragana (chữ tiếp theo chưa thuộc)
-                        val nextRow = uiState.allLessons.firstOrNull {
-                            it.script == "hiragana" && !it.isCompleted && it.characters.firstOrNull()?.category == "basic"
-                        } ?: uiState.allLessons.firstOrNull { it.script == "hiragana" }
-                        if (nextRow != null) {
-                            onStartRowLesson(nextRow.rowName, nextRow.script)
-                        }
-                    }
-
-                    RoadmapStageType.KATAKANA_BASIC,
-                    RoadmapStageType.DAKUTEN_AND_YOON,
-                    RoadmapStageType.N5_KANJI_1,
-                    RoadmapStageType.N5_KANJI_2_FINAL -> {
-                        // Các chặng tiếp theo mở Bảng chữ cái của Chặng đó
-                        overlayMode = RoadmapOverlayMode.StageAlphabetBoard(cur)
-                    }
-
-                    RoadmapStageType.N5_VOCAB_SENTENCES -> {
-                        onOpenTabWithFilter(CurriculumTab.HIRAGANA_BASIC)
-                    }
-
-                    RoadmapStageType.N5_GRAMMAR_1 -> {
-                        overlayMode = RoadmapOverlayMode.GrammarLesson(
-                            stageNumber = 5,
-                            points = N5GrammarCatalog.stage5Points
-                        )
-                    }
-
-                    RoadmapStageType.N5_GRAMMAR_2 -> {
-                        overlayMode = RoadmapOverlayMode.GrammarLesson(
-                            stageNumber = 7,
-                            points = N5GrammarCatalog.stage7Points
-                        )
-                    }
-                }
-            },
-            onStartStageCheckpointTest = {
-                val qs = buildCheckpointQuestions(cur)
-                if (qs.isNotEmpty()) {
-                    overlayMode = RoadmapOverlayMode.StageCheckpointTest(
-                        stage = cur,
-                        questions = qs
-                    )
-                }
-            },
-            onStartN5MockExam = {
-                val examQs = buildN5MockExamQuestions()
-                if (examQs.isNotEmpty()) {
-                    overlayMode = RoadmapOverlayMode.StageCheckpointTest(
-                        stage = cur,
-                        questions = examQs
-                    )
-                }
-            }
-        )
     }
 }
 
@@ -958,9 +976,11 @@ private fun SCurveInfographicRoadMap(
                         )
                         Text(
                             text = when {
+                                isSelected && stage.isUnlocked -> "Chạm lần nữa để mở bài học →"
+                                isSelected && !stage.isUnlocked -> "Chạm lần nữa để Kiểm tra Bypass →"
                                 stage.isCompleted -> "Đã hoàn thành ✓"
                                 stage.isUnlocked -> "Đang mở (${stage.completedItems}/${stage.totalItems})"
-                                else -> "Bấm để kiểm tra mở khoá"
+                                else -> "Đang khoá • Chạm 2 lần để Bypass"
                             },
                             style = MaterialTheme.typography.labelMedium,
                             color = if (isSelected) MaterialTheme.colorScheme.onPrimary
@@ -1086,6 +1106,114 @@ private fun SelectedStageActionCard(
 }
 
 /**
+ * Màn hình Danh sách các bài học Ngữ pháp trong Chặng 05 / Chặng 07:
+ * Hiển thị rõ từng điểm ngữ pháp, cấu trúc và ví dụ để người học chọn bài muốn học (hoặc bấm Bypass).
+ */
+@Composable
+private fun N5GrammarLessonListView(
+    stage: RoadmapStageNode,
+    points: List<N5GrammarPoint>,
+    onSpeak: (String) -> Unit,
+    onSelectPoint: (Int) -> Unit,
+    onStartBypassTest: () -> Unit,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            RoadmapActionBtn(text = "← Lộ trình N5", filled = false, onClick = onBack)
+            Text(
+                text = "CHẶNG ${stage.numberFormatted}: ${stage.titleVi.uppercase()}",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
+        Text(
+            text = "Chọn từng điểm ngữ pháp bên dưới để học chi tiết & luyện điền trợ từ:",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            points.forEachIndexed { idx, pt ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(1.dp, MaterialTheme.colorScheme.outline)
+                        .background(MaterialTheme.colorScheme.surface)
+                        .clickable { onSelectPoint(idx) }
+                        .padding(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = pt.titleVi,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            text = "Học →",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.primary)
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
+                    Text(
+                        text = "Cấu trúc: ${pt.patternJp}",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = pt.explanationVi,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "Ví dụ: ${pt.exampleJp} — ${pt.exampleVi}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.clickable { onSpeak(pt.exampleJp) }
+                    )
+                }
+            }
+        }
+
+        RoadmapActionBtn(
+            text = "Kiểm tra Bypass / Mở khoá chặng →",
+            filled = false,
+            onClick = onStartBypassTest,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+/**
  * Màn hình Học & Thực hành Ngữ pháp JLPT N5 (Chặng 05 & Chặng 07):
  * - Hiển thị cấu trúc, giải thích tiếng Việt, mẹo thi N5 và câu ví dụ có phát âm.
  * - Tích hợp bài tập viết chữ Kana/Trợ từ còn thiếu vào chỗ trống [ ? ] trực tiếp trên Canvas 1:1.
@@ -1094,6 +1222,7 @@ private fun SelectedStageActionCard(
 private fun N5GrammarInteractiveLessonView(
     stageNumber: Int,
     points: List<N5GrammarPoint>,
+    initialIndex: Int = 0,
     byChar: Map<String, KanaStrokeTemplate>,
     recognizer: KanaRecognizer?,
     strictnessLevel: vn.kana.recognizer.StrictnessLevel,
@@ -1104,7 +1233,7 @@ private fun N5GrammarInteractiveLessonView(
     modifier: Modifier = Modifier
 ) {
     val scope = rememberCoroutineScope()
-    var currentIndex by remember { mutableIntStateOf(0) }
+    var currentIndex by remember(initialIndex) { mutableIntStateOf(initialIndex) }
     val point = points.getOrNull(currentIndex) ?: return
 
     var userStrokes by remember(point.id) { mutableStateOf<List<Stroke>>(emptyList()) }
