@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -42,7 +43,7 @@ data class UserSettings(
     val reminderEnabled: Boolean = false,
     val reminderHour: Int = 20,
     val reminderMinute: Int = 0,
-    val omikujiDrawCount: Int = 0
+    val savedVocabWords: Set<String> = emptySet()
 )
 
 /**
@@ -66,7 +67,7 @@ class UserSettingsRepository(
         val REMINDER_ENABLED = booleanPreferencesKey("reminder_enabled")
         val REMINDER_HOUR = intPreferencesKey("reminder_hour")
         val REMINDER_MINUTE = intPreferencesKey("reminder_minute")
-        val OMIKUJI_DRAW_COUNT = intPreferencesKey("omikuji_draw_count")
+        val SAVED_VOCAB_WORDS = stringSetPreferencesKey("saved_vocab_words")
     }
 
     val settingsFlow: Flow<UserSettings> = appContext.dataStore.data.map { prefs ->
@@ -102,7 +103,7 @@ class UserSettingsRepository(
             reminderEnabled = prefs[Keys.REMINDER_ENABLED] ?: false,
             reminderHour = prefs[Keys.REMINDER_HOUR] ?: 20,
             reminderMinute = prefs[Keys.REMINDER_MINUTE] ?: 0,
-            omikujiDrawCount = prefs[Keys.OMIKUJI_DRAW_COUNT] ?: 0
+            savedVocabWords = prefs[Keys.SAVED_VOCAB_WORDS] ?: emptySet()
         )
     }
 
@@ -184,10 +185,10 @@ class UserSettingsRepository(
         }
     }
 
-    suspend fun recordOmikujiDraw() {
+    suspend fun toggleSavedVocabWord(word: String) {
         appContext.dataStore.edit { prefs ->
-            val current = prefs[Keys.OMIKUJI_DRAW_COUNT] ?: 0
-            prefs[Keys.OMIKUJI_DRAW_COUNT] = current + 1
+            val current = prefs[Keys.SAVED_VOCAB_WORDS] ?: emptySet()
+            prefs[Keys.SAVED_VOCAB_WORDS] = if (word in current) current - word else current + word
         }
     }
 

@@ -140,7 +140,6 @@ fun N5RoadmapScreen(
     onOpenFlashcardsAndConfusables: () -> Unit = {},
     onOpenDictionary: () -> Unit = {},
     onOpenCountersDrill: () -> Unit = {},
-    onOpenOmikujiAndStamps: () -> Unit = {},
     onOpenProgressStats: () -> Unit = {},
     onOpenMenu: () -> Unit = {},
     modifier: Modifier = Modifier

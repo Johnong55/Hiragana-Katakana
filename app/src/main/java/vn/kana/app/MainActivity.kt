@@ -79,7 +79,7 @@ import vn.kana.app.ui.reference.KanaReferenceScreen
 import vn.kana.app.ui.review.ReviewScreen
 import vn.kana.app.ui.review.ReviewViewModel
 import vn.kana.app.ui.roadmap.N5RoadmapScreen
-import vn.kana.app.ui.shrine.OmikujiAndStampsScreen
+import vn.kana.app.ui.conjugation.ConjugationDojoScreen
 import vn.kana.app.ui.stats.ProgressStatsScreen
 import vn.kana.app.ui.tips.DailyTipMagazinePopup
 import vn.kana.app.ui.tips.TipsMagazineScreen
@@ -101,7 +101,7 @@ private enum class AppDestination(val isMainTab: Boolean, val tabLabelVi: String
     FLASHCARDS_CONFUSABLES(isMainTab = false),
     DICTIONARY(isMainTab = false),
     COUNTERS_DRILL(isMainTab = false),
-    OMIKUJI_AND_STAMPS(isMainTab = false),
+    CONJUGATION_DOJO(isMainTab = false),
     PROGRESS_STATS(isMainTab = false),
     DEBUG_RECOGNIZER(isMainTab = false),
     LICENSES(isMainTab = false)
@@ -160,7 +160,7 @@ class MainActivity : ComponentActivity() {
                         AppDestination.FLASHCARDS_CONFUSABLES,
                         AppDestination.DICTIONARY,
                         AppDestination.COUNTERS_DRILL,
-                        AppDestination.OMIKUJI_AND_STAMPS,
+                        AppDestination.CONJUGATION_DOJO,
                         AppDestination.PROGRESS_STATS -> returnTab
                         else -> AppDestination.ROADMAP_N5
                     }
@@ -242,7 +242,7 @@ class MainActivity : ComponentActivity() {
                                 )
 
                                 val items = listOf(
-                                    GlobalDrawerItem(R.drawable.meme_omikuji_king, "Rút quẻ Omikuji & Sổ dấu", "Bói quẻ đền mèo & đóng dấu đỏ Hanko", AppDestination.OMIKUJI_AND_STAMPS),
+                                    GlobalDrawerItem(R.drawable.meme_cat_reading, "Võ đường Chia thể N5", "Động từ ます/て/ない/た & Tính từ い/な", AppDestination.CONJUGATION_DOJO),
                                     GlobalDrawerItem(R.drawable.meme_capybara, "Đọc hiểu & Ghép câu", "8 bài đọc có Kana/dịch & 10 câu ★", AppDestination.READING_PRACTICE),
                                     GlobalDrawerItem(R.drawable.meme_cat_surprised, "Thi thử JLPT N5", "Đề 24 câu (15 phút) đủ 3 phần", AppDestination.MOCK_TEST),
                                     GlobalDrawerItem(R.drawable.meme_duck, "Số đếm, Giờ & Trợ số từ", "Biến âm 〜時, 〜分, 〜日, 〜本", AppDestination.COUNTERS_DRILL),
@@ -408,10 +408,6 @@ class MainActivity : ComponentActivity() {
                                         onOpenCountersDrill = {
                                             returnTab = AppDestination.ROADMAP_N5
                                             destination = AppDestination.COUNTERS_DRILL
-                                        },
-                                        onOpenOmikujiAndStamps = {
-                                            returnTab = AppDestination.ROADMAP_N5
-                                            destination = AppDestination.OMIKUJI_AND_STAMPS
                                         },
                                         onOpenProgressStats = {
                                             returnTab = AppDestination.ROADMAP_N5
@@ -626,6 +622,8 @@ class MainActivity : ComponentActivity() {
                                     OfflineDictionaryScreen(
                                         allCharacters = mapState.allCurriculumCharacters,
                                         wordsByChar = mapState.wordsByChar,
+                                        savedVocabWords = mapState.settings.savedVocabWords,
+                                        onToggleSaveWord = { word -> mapViewModel.toggleSavedVocabWord(word) },
                                         onSpeak = { text, romaji -> mapViewModel.speak(text, romaji) },
                                         onPracticeCharacter = { rowName, script, targetChar ->
                                             returnTab = AppDestination.DICTIONARY
@@ -649,11 +647,9 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
 
-                                AppDestination.OMIKUJI_AND_STAMPS -> {
-                                    OmikujiAndStampsScreen(
-                                        uiState = mapState,
+                                AppDestination.CONJUGATION_DOJO -> {
+                                    ConjugationDojoScreen(
                                         onSpeak = { text -> mapViewModel.speak(text, null) },
-                                        onRecordOmikujiDraw = { mapViewModel.recordOmikujiDraw() },
                                         onBack = { destination = returnTab }
                                     )
                                 }

@@ -380,9 +380,9 @@ class LessonMapViewModel(
         }
     }
 
-    fun recordOmikujiDraw() {
+    fun toggleSavedVocabWord(word: String) {
         viewModelScope.launch {
-            settingsRepository.recordOmikujiDraw()
+            settingsRepository.toggleSavedVocabWord(word)
         }
     }
 

@@ -62,6 +62,8 @@ private sealed interface DictionaryEntry {
 fun OfflineDictionaryScreen(
     allCharacters: List<KanaStrokeTemplate>,
     wordsByChar: Map<String, List<KanaVocabWord>>,
+    savedVocabWords: Set<String> = emptySet(),
+    onToggleSaveWord: (String) -> Unit = {},
     onSpeak: (String, String?) -> Unit,
     onPracticeCharacter: (rowName: String, script: String, targetChar: String) -> Unit,
     onBack: () -> Unit,
@@ -285,13 +287,26 @@ fun OfflineDictionaryScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
-                            Text(
-                                text = "Nghe",
-                                style = MaterialTheme.typography.labelMedium,
-                                modifier = Modifier
-                                    .border(1.dp, MaterialTheme.colorScheme.outline)
-                                    .padding(horizontal = 8.dp, vertical = 5.dp)
-                            )
+                            val isSaved = v.word in savedVocabWords
+                            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                Text(
+                                    text = if (isSaved) "★ Đã lưu" else "☆ Lưu ôn",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = if (isSaved) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground,
+                                    modifier = Modifier
+                                        .background(if (isSaved) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant)
+                                        .border(1.dp, MaterialTheme.colorScheme.outline)
+                                        .clickable { onToggleSaveWord(v.word) }
+                                        .padding(horizontal = 8.dp, vertical = 5.dp)
+                                )
+                                Text(
+                                    text = "Nghe",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    modifier = Modifier
+                                        .border(1.dp, MaterialTheme.colorScheme.outline)
+                                        .padding(horizontal = 8.dp, vertical = 5.dp)
+                                )
+                            }
                         }
                     }
 

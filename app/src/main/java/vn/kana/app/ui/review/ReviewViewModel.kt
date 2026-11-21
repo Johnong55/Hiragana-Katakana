@@ -30,6 +30,21 @@ import vn.kana.recognizer.RecognizerConfig
 import vn.kana.recognizer.Stroke
 import kotlin.math.roundToInt
 
+enum class ReviewDeckType(val labelVi: String) {
+    MISTAKES("Sổ chữ hay sai"),
+    SRS_DUE("Đến hạn SRS"),
+    SAVED_VOCAB("Từ đã lưu"),
+    ALL_LEARNED("Ôn tổng hợp")
+}
+
+data class MistakeCharStat(
+    val char: String,
+    val romaji: String,
+    val script: String,
+    val mistakeCount: Int,
+    val lastScore: Int
+)
+
 enum class ReviewDrillStyle(val labelVi: String) {
     WRITE("Viết nét"),
     PICK_CHAR("Chọn chữ"),
@@ -43,6 +58,12 @@ enum class ReviewSessionFilter(val labelVi: String) {
 
 data class ReviewUiState(
     val isLoading: Boolean = true,
+    val isInHub: Boolean = true,
+    val activeDeck: ReviewDeckType = ReviewDeckType.MISTAKES,
+    val mistakeChars: List<MistakeCharStat> = emptyList(),
+    val dueSrsCount: Int = 0,
+    val savedVocabCount: Int = 0,
+    val learnedCharsCount: Int = 0,
     val settings: UserSettings = UserSettings(),
     val questions: List<QuizQuestion> = emptyList(),
     val drillStyles: List<ReviewDrillStyle> = emptyList(),
@@ -120,20 +141,90 @@ class ReviewViewModel(
 
     init {
         observeSettings()
-        buildNewReviewSession()
+        loadHubStats()
     }
 
     private fun observeSettings() {
         viewModelScope.launch {
             settingsRepository.settingsFlow.collect { s ->
-                _uiState.update { it.copy(settings = s) }
+                _uiState.update { it.copy(settings = s, savedVocabCount = s.savedVocabWords.size) }
             }
         }
     }
 
-    fun buildNewReviewSession() {
+    fun loadHubStats() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, isSessionCompleted = false) }
+            _uiState.update { it.copy(isLoading = true, isInHub = true, isSessionCompleted = false) }
+            val allChars = strokeRepository.getAllCharacters()
+            templatesByChar = allChars.associateBy { it.char }
+            recognizer = KanaRecognizer(allChars)
+
+            val settings = settingsRepository.settingsFlow.first()
+            val now = System.currentTimeMillis()
+            val allProgress = kanaDao.observeCharacterProgress().first()
+            val learnedProgress = allProgress.filter { it.learned }
+            val srsCards = kanaDao.observeSrsCards().first()
+            val srsByKey = srsCards.filter { it.cardType == "CHAR" }.associateBy { it.targetKey }
+            val progressByChar = allProgress.associateBy { it.char }
+
+            val dueCount = srsCards.count { it.dueAtEpochMs <= now }
+
+            // Tổng hợp danh sách chữ hay sai từ CharacterProgress (errorCount) + SRS (lapses)
+            val mistakeStats = (progressByChar.keys + srsByKey.keys)
+                .distinct()
+                .mapNotNull { ch ->
+                    val tmpl = templatesByChar[ch] ?: return@mapNotNull null
+                    val prog = progressByChar[ch]
+                    val card = srsByKey[ch]
+                    val totalMistakes = (prog?.errorCount ?: 0) + (card?.lapses ?: 0)
+                    if (totalMistakes <= 0) return@mapNotNull null
+                    MistakeCharStat(
+                        char = tmpl.char,
+                        romaji = tmpl.romaji,
+                        script = tmpl.script,
+                        mistakeCount = totalMistakes,
+                        lastScore = card?.lastScore ?: prog?.lastScore ?: 0
+                    )
+                }
+                .sortedWith(
+                    compareByDescending<MistakeCharStat> { it.mistakeCount }
+                        .thenBy { it.lastScore }
+                )
+
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    isInHub = true,
+                    settings = settings,
+                    mistakeChars = mistakeStats,
+                    dueSrsCount = dueCount,
+                    savedVocabCount = settings.savedVocabWords.size,
+                    learnedCharsCount = learnedProgress.size
+                )
+            }
+        }
+    }
+
+    fun returnToHub() {
+        autoAdvanceJob?.cancel()
+        loadHubStats()
+    }
+
+    fun buildNewReviewSession() {
+        startDeck(_uiState.value.activeDeck)
+    }
+
+    fun startDeck(deck: ReviewDeckType) {
+        viewModelScope.launch {
+            autoAdvanceJob?.cancel()
+            _uiState.update {
+                it.copy(
+                    isLoading = true,
+                    isInHub = false,
+                    activeDeck = deck,
+                    isSessionCompleted = false
+                )
+            }
             val allChars = strokeRepository.getAllCharacters()
             templatesByChar = allChars.associateBy { it.char }
             recognizer = KanaRecognizer(allChars)
@@ -142,15 +233,16 @@ class ReviewViewModel(
             val settings = settingsRepository.settingsFlow.first()
             val now = System.currentTimeMillis()
 
-            val learnedProgress = kanaDao.getLearnedCharacters()
+            val allProgress = kanaDao.observeCharacterProgress().first()
+            val learnedProgress = allProgress.filter { it.learned }
             val srsCards = kanaDao.observeSrsCards().first()
             val srsById = srsCards.associateBy { it.cardId }
-            val progressByChar = learnedProgress.associateBy { it.char }
+            val srsByCharKey = srsCards.filter { it.cardType == "CHAR" }.associateBy { it.targetKey }
+            val progressByChar = allProgress.associateBy { it.char }
 
             learnedCharsSet.clear()
             learnedProgress.forEach { learnedCharsSet.add(it.char) }
 
-            // Nếu người dùng chưa học bài nào mà bấm vào Ôn tập, lấy mặc định hàng あ行 để luyện tập
             if (learnedCharsSet.isEmpty()) {
                 allChars.filter { it.script == "hiragana" && it.row == "あ行" }
                     .forEach { learnedCharsSet.add(it.char) }
@@ -168,23 +260,20 @@ class ReviewViewModel(
 
             val questions = ArrayList<QuizQuestion>()
 
-            if (dueSrsCards.isNotEmpty()) {
-                // Tạo đúng 1 câu hỏi cho mỗi thẻ SRS đang đến hạn (ví dụ: 30 thẻ đến hạn -> đúng 30 câu hỏi)
-                for ((idx, card) in dueSrsCards.withIndex()) {
-                    if (card.cardType == "WORD") {
-                        val w = wordsByKey[card.targetKey] ?: wordsByWord[card.targetKey]
-                        if (w != null) {
-                            val wordType = if (idx % 2 == 0) {
-                                QuizQuestionType.MEANING_ROMAJI_TO_WORD
-                            } else {
-                                QuizQuestionType.LISTEN_TO_WORD
-                            }
-                            questions.add(QuizQuestion(type = wordType, targetWord = w))
-                            continue
+            when (deck) {
+                ReviewDeckType.MISTAKES -> {
+                    val weakTemplates = (progressByChar.keys + srsByCharKey.keys)
+                        .distinct()
+                        .mapNotNull { ch ->
+                            val tmpl = templatesByChar[ch] ?: return@mapNotNull null
+                            val mistakes = (progressByChar[ch]?.errorCount ?: 0) + (srsByCharKey[ch]?.lapses ?: 0)
+                            if (mistakes > 0) tmpl to mistakes else null
                         }
-                    }
-                    val tmpl = templatesByChar[card.targetKey]
-                    if (tmpl != null) {
+                        .sortedByDescending { it.second }
+                        .map { it.first }
+                        .take(20)
+
+                    for ((idx, tmpl) in weakTemplates.withIndex()) {
                         val singleType = if (idx % 2 == 0) {
                             QuizQuestionType.ROMAJI_TO_KANA
                         } else {
@@ -193,49 +282,94 @@ class ReviewViewModel(
                         questions.add(QuizQuestion(type = singleType, targetTemplate = tmpl))
                     }
                 }
-            }
 
-            // Nếu không có thẻ nào đến hạn (0 ôn) nhưng người dùng vẫn vào Ôn tập tự do -> tạo gói 6 chữ đã học
-            if (questions.isEmpty()) {
-                val candidateTemplates = learnedCharsSet
-                    .mapNotNull { templatesByChar[it] }
-                    .sortedWith(
-                        compareByDescending<KanaStrokeTemplate> { tmpl ->
-                            val card = srsById["CHAR_${tmpl.char}"]
-                            val prog = progressByChar[tmpl.char]
-                            (card?.lapses ?: 0) * 2 + (prog?.errorCount ?: 0)
-                        }.thenBy { tmpl ->
-                            val card = srsById["CHAR_${tmpl.char}"]
-                            val prog = progressByChar[tmpl.char]
-                            card?.lastScore ?: prog?.lastScore ?: 75
+                ReviewDeckType.SRS_DUE -> {
+                    for ((idx, card) in dueSrsCards.withIndex()) {
+                        if (card.cardType == "WORD") {
+                            val w = wordsByKey[card.targetKey] ?: wordsByWord[card.targetKey]
+                            if (w != null) {
+                                val wordType = if (idx % 2 == 0) {
+                                    QuizQuestionType.MEANING_ROMAJI_TO_WORD
+                                } else {
+                                    QuizQuestionType.LISTEN_TO_WORD
+                                }
+                                questions.add(QuizQuestion(type = wordType, targetWord = w))
+                                continue
+                            }
                         }
-                    )
-
-                val selectedChars = candidateTemplates.take(6)
-                for ((idx, tmpl) in selectedChars.withIndex()) {
-                    val singleType = if (idx % 2 == 0) {
-                        QuizQuestionType.ROMAJI_TO_KANA
-                    } else {
-                        QuizQuestionType.LISTEN_TO_KANA
+                        val tmpl = templatesByChar[card.targetKey]
+                        if (tmpl != null) {
+                            val singleType = if (idx % 2 == 0) {
+                                QuizQuestionType.ROMAJI_TO_KANA
+                            } else {
+                                QuizQuestionType.LISTEN_TO_KANA
+                            }
+                            questions.add(QuizQuestion(type = singleType, targetTemplate = tmpl))
+                        }
                     }
-                    questions.add(QuizQuestion(type = singleType, targetTemplate = tmpl))
+                }
 
-                    val wordsContainingChar = allWords.filter {
-                        it.script == tmpl.script && (it.introduces == tmpl.char || it.chars.contains(tmpl.char))
-                    }
-                    val chosenWord = wordsContainingChar.firstOrNull { w ->
-                        w.chars.all { c -> learnedCharsSet.contains(c) }
-                    } ?: wordsContainingChar.firstOrNull()
-
-                    if (chosenWord != null) {
+                ReviewDeckType.SAVED_VOCAB -> {
+                    val savedWords = settings.savedVocabWords
+                        .mapNotNull { wStr -> wordsByWord[wStr] ?: wordsByKey[wStr] }
+                        .shuffled()
+                    for ((idx, w) in savedWords.withIndex()) {
                         val wordType = if (idx % 2 == 0) {
                             QuizQuestionType.MEANING_ROMAJI_TO_WORD
                         } else {
                             QuizQuestionType.LISTEN_TO_WORD
                         }
-                        questions.add(QuizQuestion(type = wordType, targetWord = chosenWord))
+                        questions.add(QuizQuestion(type = wordType, targetWord = w))
                     }
                 }
+
+                ReviewDeckType.ALL_LEARNED -> {
+                    // Tạo gói 10 câu ôn tổng hợp nhanh từ chữ đã học (ưu tiên chữ hay sai/điểm thấp)
+                    val candidateTemplates = learnedCharsSet
+                        .mapNotNull { templatesByChar[it] }
+                        .sortedWith(
+                            compareByDescending<KanaStrokeTemplate> { tmpl ->
+                                val card = srsById["CHAR_${tmpl.char}"]
+                                val prog = progressByChar[tmpl.char]
+                                (card?.lapses ?: 0) * 2 + (prog?.errorCount ?: 0)
+                            }.thenBy { tmpl ->
+                                val card = srsById["CHAR_${tmpl.char}"]
+                                val prog = progressByChar[tmpl.char]
+                                card?.lastScore ?: prog?.lastScore ?: 75
+                            }
+                        )
+
+                    val selectedChars = candidateTemplates.take(6)
+                    for ((idx, tmpl) in selectedChars.withIndex()) {
+                        val singleType = if (idx % 2 == 0) {
+                            QuizQuestionType.ROMAJI_TO_KANA
+                        } else {
+                            QuizQuestionType.LISTEN_TO_KANA
+                        }
+                        questions.add(QuizQuestion(type = singleType, targetTemplate = tmpl))
+
+                        val wordsContainingChar = allWords.filter {
+                            it.script == tmpl.script && (it.introduces == tmpl.char || it.chars.contains(tmpl.char))
+                        }
+                        val chosenWord = wordsContainingChar.firstOrNull { w ->
+                            w.chars.all { c -> learnedCharsSet.contains(c) }
+                        } ?: wordsContainingChar.firstOrNull()
+
+                        if (chosenWord != null) {
+                            val wordType = if (idx % 2 == 0) {
+                                QuizQuestionType.MEANING_ROMAJI_TO_WORD
+                            } else {
+                                QuizQuestionType.LISTEN_TO_WORD
+                            }
+                            questions.add(QuizQuestion(type = wordType, targetWord = chosenWord))
+                        }
+                    }
+                }
+            }
+
+            if (questions.isEmpty()) {
+                loadHubStats()
+                return@launch
             }
 
             hadErrorOnCurrentItem = false
@@ -300,14 +434,21 @@ class ReviewViewModel(
                 }
             }
 
-            _uiState.update {
+            _uiState.update { prev ->
                 ReviewUiState(
                     isLoading = false,
+                    isInHub = false,
+                    activeDeck = deck,
+                    mistakeChars = prev.mistakeChars,
+                    dueSrsCount = dueCardsCount,
+                    savedVocabCount = settings.savedVocabWords.size,
+                    learnedCharsCount = learnedProgress.size,
                     settings = settings,
                     questions = questions,
                     drillStyles = drillStyles,
                     choiceOptionsByIndex = choiceOptionsByIndex,
                     correctChoiceIndexByIndex = correctChoiceIndexByIndex,
+                    sessionFilter = prev.sessionFilter,
                     currentIndex = 0,
                     dueCardsCountAtStart = dueCardsCount,
                     wordSlots = initialSlots,

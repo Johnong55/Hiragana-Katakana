@@ -6,12 +6,14 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.view.HapticFeedbackConstants
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +23,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -56,13 +60,28 @@ fun ReviewScreen(
     val localView = LocalView.current
     val context = LocalContext.current
 
+    BackHandler(enabled = !uiState.isInHub) {
+        viewModel.returnToHub()
+    }
+
+    if (uiState.isInHub) {
+        ReviewSmartHubContent(
+            uiState = uiState,
+            onStartDeck = viewModel::startDeck,
+            onToggleFilter = viewModel::toggleSessionFilter,
+            onBackHome = onExitReview,
+            modifier = modifier
+        )
+        return
+    }
+
     if (uiState.isSessionCompleted) {
         ReviewCompletedContent(
             totalReviewed = uiState.questions.size,
             firstAttemptCorrect = uiState.firstAttemptCorrectCount,
             averageScore = uiState.averageScore,
             onReviewMore = viewModel::buildNewReviewSession,
-            onBackHome = onExitReview,
+            onBackHome = viewModel::returnToHub,
             modifier = modifier
         )
         return
@@ -108,17 +127,17 @@ fun ReviewScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "← Trang chủ",
+                text = "← Bộ ôn",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                    .clickable(onClick = onExitReview)
+                    .clickable(onClick = viewModel::returnToHub)
                     .padding(horizontal = 10.dp, vertical = 6.dp)
             )
             Text(
-                text = "ÔN TẬP (${uiState.currentIndex + 1}/${uiState.questions.size})",
-                style = MaterialTheme.typography.titleMedium,
+                text = "${uiState.activeDeck.labelVi.uppercase()} (${uiState.currentIndex + 1}/${uiState.questions.size})",
+                style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Row(
@@ -550,5 +569,276 @@ private fun vibrateReviewError(context: Context) {
             v?.vibrate(VibrationEffect.createOneShot(70L, VibrationEffect.DEFAULT_AMPLITUDE))
         }
     } catch (_: Exception) {
+    }
+}
+
+@Composable
+private fun ReviewSmartHubContent(
+    uiState: ReviewUiState,
+    onStartDeck: (ReviewDeckType) -> Unit,
+    onToggleFilter: () -> Unit,
+    onBackHome: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        // Header
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                MemeBadge(resId = R.drawable.meme_cat_reading, size = 26.dp)
+                Text(
+                    text = "TRUNG TÂM ÔN TẬP",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                modifier = Modifier
+                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .clickable(onClick = onToggleFilter)
+                    .padding(horizontal = 8.dp, vertical = 5.dp)
+            ) {
+                MemeBadge(
+                    resId = if (uiState.sessionFilter == ReviewSessionFilter.MIXED) {
+                        R.drawable.meme_cat_blep
+                    } else {
+                        R.drawable.meme_shiba
+                    },
+                    size = 18.dp
+                )
+                Text(
+                    text = uiState.sessionFilter.labelVi,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            // 1. SỔ CHỮ HAY SAI (Tracking tự động từ lỗi thực tế)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(2.dp, MaterialTheme.colorScheme.onBackground)
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        MemeBadge(resId = R.drawable.meme_cat_angry, size = 28.dp)
+                        Column {
+                            Text(
+                                text = "SỔ CHỮ HAY SAI (${uiState.mistakeChars.size} chữ)",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            Text(
+                                text = "Tự động ghi danh chữ bạn viết sai hoặc quên nét nhiều nhất",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+
+                if (uiState.mistakeChars.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        uiState.mistakeChars.take(12).forEach { stat ->
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier
+                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                                    .padding(horizontal = 10.dp, vertical = 6.dp)
+                            ) {
+                                Text(
+                                    text = stat.char,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                Text(
+                                    text = "${stat.mistakeCount} lỗi",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
+                        }
+                    }
+
+                    ReviewActionButton(
+                        text = "Ôn ngay bộ chữ hay sai (${uiState.mistakeChars.size.coerceAtMost(20)} câu) →",
+                        filled = true,
+                        onClick = { onStartDeck(ReviewDeckType.MISTAKES) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    Text(
+                        text = "Chưa có chữ nào bị sai! Khi bạn viết nhầm chữ trong bài học, hệ thống sẽ tự gom vào đây để ôn riêng.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            // 2. THẺ SRS ĐẾN HẠN HÔM NAY
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    MemeBadge(resId = R.drawable.meme_hamster, size = 26.dp)
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "ĐẾN HẠN SRS (${uiState.dueSrsCount} thẻ)",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            text = "Ôn lặp lại ngắt quãng đúng thời điểm sắp quên theo lịch SRS",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                if (uiState.dueSrsCount > 0) {
+                    ReviewActionButton(
+                        text = "Ôn ${uiState.dueSrsCount} thẻ đến hạn →",
+                        filled = true,
+                        onClick = { onStartDeck(ReviewDeckType.SRS_DUE) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    Text(
+                        text = "Tuyệt vời! Hiện không có thẻ SRS nào quá hạn.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+
+            // 3. SỔ TỪ VỰNG ĐÃ LƯU TỪ TỪ ĐIỂN (★)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    MemeBadge(resId = R.drawable.meme_capybara, size = 26.dp)
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "SỔ TỪ VỰNG ĐÃ LƯU (${uiState.savedVocabCount} từ)",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            text = "Bộ từ vựng N5 bạn tự đánh dấu ★ Lưu ôn trong Từ điển Offline",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                if (uiState.savedVocabCount > 0) {
+                    ReviewActionButton(
+                        text = "Ôn ${uiState.savedVocabCount} từ đã lưu →",
+                        filled = true,
+                        onClick = { onStartDeck(ReviewDeckType.SAVED_VOCAB) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    Text(
+                        text = "Mở Từ điển Offline (vuốt từ cạnh trái) và bấm ★ Lưu ôn trên từ bạn muốn nhớ để tạo bộ ôn riêng.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            // 4. ÔN TỔNG HỢP NHANH (LUÔN SẴN SÀNG)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    MemeBadge(resId = R.drawable.meme_shiba, size = 26.dp)
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "ÔN TỔNG HỢP NHANH (${uiState.learnedCharsCount} chữ đã học)",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            text = "Trộn nhanh 10–12 câu Viết nét + Chọn chữ + Nghe từ các chữ bạn đã học",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                ReviewActionButton(
+                    text = "Bắt đầu ôn tổng hợp →",
+                    filled = false,
+                    onClick = { onStartDeck(ReviewDeckType.ALL_LEARNED) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
     }
 }
